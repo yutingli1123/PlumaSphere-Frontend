@@ -13,7 +13,7 @@ const tags = ref([
 
 <template>
   <el-container>
-    <el-header style="padding: 0; height: 100%">
+    <el-header style="padding: 0; height: 71px">
       <TopNavigation />
     </el-header>
     <el-main>
