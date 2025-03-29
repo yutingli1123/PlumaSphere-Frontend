@@ -12,24 +12,25 @@ const tags = ref([
 </script>
 
 <template>
-  <el-header style="padding: 0">
-    <TopNavigation />
-  </el-header>
-  <el-main>
-    <el-container>
-      <el-aside class="tag-sidebar" width="280px">
-        <h3 class="tag-title">Tags</h3>
-        <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
-          <el-menu-item class="tag-item">
-            <span>{{ tag.name }}</span>
-            <el-tag size="small" :type="tag.tagType" class="tag-count">{{ tag.count }}</el-tag>
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
-      <el-main>
-      </el-main>
-    </el-container>
-  </el-main>
+  <el-container>
+    <el-header style="padding: 0; height: 100%">
+      <TopNavigation />
+    </el-header>
+    <el-main>
+      <el-container>
+        <el-aside class="tag-sidebar" width="280px">
+          <h3 class="tag-title">Tags</h3>
+          <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
+            <el-menu-item class="tag-item">
+              <span>{{ tag.name }}</span>
+              <el-tag size="small" :type="tag.tagType" class="tag-count">{{ tag.count }}</el-tag>
+            </el-menu-item>
+          </el-menu>
+        </el-aside>
+        <el-main></el-main>
+      </el-container>
+    </el-main>
+  </el-container>
 </template>
 
 <style scoped>

@@ -27,7 +27,7 @@ import { Search } from '@element-plus/icons-vue'
   padding: 0 20px;
   height: 70px;
   border-bottom: 1px solid #eaeaea;
-  background-color: #fff;
+  background-color: white;
 }
 
 .title-section {
