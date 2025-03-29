@@ -2,6 +2,7 @@
 import TopNavigation from '@/components/TopNavigation.vue'
 import { ref } from 'vue'
 import { Calendar } from '@element-plus/icons-vue'
+import TagSidebar from '@/components/TagSidebar.vue'
 
 const tags = ref([
   { name: 'JavaScript', count: '99+', tagType: '' },
