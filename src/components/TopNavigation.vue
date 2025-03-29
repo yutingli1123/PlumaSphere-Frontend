@@ -5,7 +5,7 @@ import { Search } from '@element-plus/icons-vue'
 <template>
   <div class="top-navigation">
     <div class="title-section">
-      <h1 class="main-title">PlumaSphere</h1>
+      <RouterLink to="/" class="main-title">PlumaSphere</RouterLink>
       <p class="subtitle">Another Blog Application</p>
     </div>
     <div class="search-login-section">
@@ -40,6 +40,7 @@ import { Search } from '@element-plus/icons-vue'
   font-weight: bold;
   color: #333;
   margin: 0;
+  text-decoration: none;
 }
 
 .subtitle {
