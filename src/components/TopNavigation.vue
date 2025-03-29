@@ -1,34 +1,64 @@
 <script setup lang="ts">
-
+import { Search } from '@element-plus/icons-vue'
 </script>
 
 <template>
-  <el-row class="top-nav" justify="space-between">
-    <RouterLink to="/" class="blog-title">PlumaSphere</RouterLink>
-  </el-row>
+  <div class="top-navigation">
+    <div class="title-section">
+      <h1 class="main-title">PlumaSphere</h1>
+      <p class="subtitle">Another Blog Application</p>
+    </div>
+    <div class="search-login-section">
+      <el-input
+        class="search-input"
+        placeholder="Search..."
+        :prefix-icon="Search"
+      />
+      <el-button type="primary" class="login-button">Login</el-button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-@font-face {
-  font-family: 'AlimamaShuHeiTi';
-  src: url('@/assets/fonts/AlimamaShuHeiTi-Bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
+.top-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 70px;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #fff;
 }
 
-.top-nav {
-  background: linear-gradient(to left, #bfbfbf, #8c8c8c);
-  height: 150px;
-  align-items: end;
+.title-section {
+  display: flex;
+  flex-direction: column;
 }
 
-.blog-title {
-  align-self: center;
-  margin-left: 60px;
-  font-size: 48px;
+.main-title {
+  font-size: 24px;
   font-weight: bold;
-  font-family: 'AlimamaShuHeiTi', sans-serif;
-  color: #333333;
-  text-decoration: none;
+  color: #333;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.search-login-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-input {
+  width: 240px;
+}
+
+.login-button {
+  font-weight: normal;
 }
 </style>
