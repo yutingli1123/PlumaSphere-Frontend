@@ -58,6 +58,16 @@ const articles = ref([
     date: '2025-03-26',
     image: null,
   },
+  {
+    title: 'Article 5',
+    description:
+      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
+    tags: [
+      { name: 'Node.js', type: '' },
+    ],
+    date: '2025-03-25',
+    image: null,
+  },
 ])
 </script>
 
@@ -113,6 +123,7 @@ const articles = ref([
               </div>
             </div>
           </div>
+          <el-pagination layout="prev, pager, next, total, jumper" :total="50" :page-size="5" style="justify-content: center" />
         </el-main>
       </el-container>
     </el-main>
