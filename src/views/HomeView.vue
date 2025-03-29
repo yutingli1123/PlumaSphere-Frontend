@@ -62,9 +62,7 @@ const articles = ref([
     title: 'Article 5',
     description:
       'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [
-      { name: 'Node.js', type: '' },
-    ],
+    tags: [{ name: 'Node.js', type: '' }],
     date: '2025-03-25',
     image: null,
   },
@@ -90,7 +88,12 @@ const articles = ref([
           </div>
         </el-aside>
         <el-main style="padding-top: 10px">
-          <div v-for="(article, index) in articles" :key="index" class="article-card">
+          <router-link
+            v-for="(article, index) in articles"
+            :key="index"
+            class="article-card"
+            :to="`/articles/${index}`"
+          >
             <div v-if="article.image" class="article-image">
               <img :src="article.image" :alt="article.title" />
             </div>
@@ -122,8 +125,13 @@ const articles = ref([
                 </div>
               </div>
             </div>
-          </div>
-          <el-pagination layout="prev, pager, next, total, jumper" :total="50" :page-size="5" style="justify-content: center" />
+          </router-link>
+          <el-pagination
+            layout="prev, pager, next, total, jumper"
+            :total="50"
+            :page-size="5"
+            style="justify-content: center"
+          />
         </el-main>
       </el-container>
     </el-main>
@@ -169,7 +177,16 @@ const articles = ref([
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
 }
+
+.article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
 
 .article-image img {
   width: 100%;
