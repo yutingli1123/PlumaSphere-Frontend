@@ -77,15 +77,7 @@ const articles = ref([
     <el-main>
       <el-container>
         <el-aside width="280px" style="padding-right: 14px">
-          <div class="tag-sidebar">
-            <h3 class="tag-title">Tags</h3>
-            <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
-              <el-menu-item class="tag-item">
-                <span>{{ tag.name }}</span>
-                <el-tag size="small" :type="tag.tagType" class="tag-count">{{ tag.count }}</el-tag>
-              </el-menu-item>
-            </el-menu>
-          </div>
+          <TagSidebar :tags="tags" />
         </el-aside>
         <el-main style="padding-top: 10px">
           <router-link
@@ -186,7 +178,6 @@ const articles = ref([
   transform: translateY(-4px);
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
 }
-
 
 .article-image img {
   width: 100%;
