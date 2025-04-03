@@ -15,16 +15,14 @@ const router = createRouter({
       name: 'article',
       component: ArticleView,
       props: true,
-    }
+    },
   ],
   scrollBehavior: (to, from, savedPosition) => {
-    if (from.path == '/') {
-      return {
-        top: 0
-      }
+    if (to.path === '/' && from.path.startsWith('/articles/')) {
+      return savedPosition ?? { top: 0 }
     }
-    return savedPosition || { top: 0 }
-  }
+    return { top: 0 }
+  },
 })
 
 export default router
