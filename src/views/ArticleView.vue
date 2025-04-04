@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TopNavigation from '@/components/TopNavigation.vue'
-import { ArrowLeft, Calendar, ChatLineRound, Star, View } from '@element-plus/icons-vue'
+import { Calendar, ChatLineRound, View } from '@element-plus/icons-vue'
 
 defineProps({
   articleId: String,
@@ -11,9 +11,6 @@ defineProps({
   <el-container>
     <el-header style="padding: 0">
       <TopNavigation />
-      <div class="article-header">
-        <el-button text :icon="ArrowLeft">Return</el-button>
-      </div>
     </el-header>
     <el-main class="article-content">
       <div class="article-main">
@@ -103,18 +100,8 @@ defineProps({
 </template>
 
 <style scoped>
-.article-header {
-  display: flex;
-  background-color: white;
-  padding: 0;
-  align-items: center;
-  height: 40px;
-  border-bottom: 1px solid #eaeaea;
-}
-
 .article-content {
   display: flex;
-  margin-top: 40px;
   justify-content: center;
 }
 
@@ -146,13 +133,13 @@ defineProps({
 
 .author-title {
   font-size: 14px;
-  color: #666;
+  color: #666666;
 }
 
 .article-meta {
   display: flex;
   gap: 16px;
-  color: #666;
+  color: #666666;
   font-size: 14px;
   margin-bottom: 18px;
 }
@@ -173,7 +160,7 @@ defineProps({
 .article-body {
   font-size: 16px;
   line-height: 1.8;
-  color: #333;
+  color: #333333;
 }
 
 .article-body p {
@@ -192,7 +179,7 @@ defineProps({
 
 .image-caption {
   text-align: center;
-  color: #666;
+  color: #666666;
   font-size: 14px;
   padding: 8px 0 0 0;
   background-color: #f9f9f9;
@@ -239,7 +226,7 @@ defineProps({
 
 .comment-time {
   font-size: 12px;
-  color: #999;
+  color: #999999;
 }
 
 .comment-content {
