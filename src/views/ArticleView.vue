@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
 import { Calendar, ChatLineRound, View } from '@element-plus/icons-vue'
 
@@ -66,35 +67,39 @@ defineProps({
         </div>
       </div>
     </el-main>
-    <el-footer class="footer">
-      <!-- Comments Section -->
-      <div class="comments-section">
-        <h3 class="comments-section-title">Comments (238)</h3>
+    <el-footer style="padding: 0">
+      <div class="footer">
+        <!-- Comments Section -->
+        <div class="comments-section">
+          <h3 class="comments-section-title">Comments (238)</h3>
 
-        <div class="comment">
-          <div class="comment-author">
-            <el-avatar :size="36"></el-avatar>
-            <div class="comment-info">
-              <div class="comment-name">Name</div>
-              <div class="comment-time">2 Hours Ago</div>
+          <div class="comment">
+            <div class="comment-author">
+              <el-avatar :size="36"></el-avatar>
+              <div class="comment-info">
+                <div class="comment-name">Name</div>
+                <div class="comment-time">2 Hours Ago</div>
+              </div>
+            </div>
+            <div class="comment-content">
+              Comment content. Comment content. Comment content. Comment content. Comment content.
             </div>
           </div>
-          <div class="comment-content">
-            Comment content. Comment content. Comment content. Comment content. Comment content.
-          </div>
-        </div>
 
-        <div class="comment">
-          <div class="comment-author">
-            <el-avatar :size="36" />
-            <div class="comment-info">
-              <div class="comment-name">Name</div>
-              <div class="comment-time">3 Hours Ago</div>
+          <div class="comment">
+            <div class="comment-author">
+              <el-avatar :size="36" />
+              <div class="comment-info">
+                <div class="comment-name">Name</div>
+                <div class="comment-time">3 Hours Ago</div>
+              </div>
             </div>
+            <div class="comment-content">Comment content. Comment content. Comment content.</div>
           </div>
-          <div class="comment-content">Comment content. Comment content. Comment content.</div>
         </div>
       </div>
+      <!-- Page Footer -->
+      <PageFooter />
     </el-footer>
   </el-container>
 </template>

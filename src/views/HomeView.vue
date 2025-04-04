@@ -3,6 +3,7 @@ import TopNavigation from '@/components/TopNavigation.vue'
 import { ref } from 'vue'
 import TagSidebar from '@/components/TagSidebar.vue'
 import ArticleList from '@/components/ArticleList.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
 const tags = ref([
   { name: 'JavaScript', count: '99+', tagType: '' },
@@ -91,6 +92,9 @@ const articles = ref([
         </el-main>
       </el-container>
     </el-main>
+    <el-footer style="padding: 0">
+      <PageFooter />
+    </el-footer>
   </el-container>
 </template>
 
