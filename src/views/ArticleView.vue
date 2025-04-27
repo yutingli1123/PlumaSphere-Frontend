@@ -2,6 +2,7 @@
 import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
 import { Calendar, ChatLineRound, View } from '@element-plus/icons-vue'
+import CommentForm from '@/components/CommentForm.vue'
 
 defineProps({
   articleId: String,
@@ -71,6 +72,7 @@ defineProps({
       <div class="footer">
         <!-- Comments Section -->
         <div class="comments-section">
+          <CommentForm class="comment-form" />
           <h3 class="comments-section-title">Comments (238)</h3>
 
           <div class="comment">
@@ -107,11 +109,8 @@ defineProps({
 <style scoped>
 .article-content {
   display: flex;
-  justify-content: center;
-}
-
-.article-main {
-  width: 65%;
+  width: 75%;
+  margin: 0 auto;
 }
 
 .article-title {
@@ -191,13 +190,17 @@ defineProps({
 }
 
 .footer {
-  width: 65%;
+  width: 75%;
   margin: 0 auto;
-  padding: 0;
 }
 
 .comments-section {
+  padding: 0 20px 0 20px;
   border-top: 1px solid #eaeaea;
+}
+
+.comment-form {
+  margin-top: 16px;
 }
 
 .comments-section-title {
