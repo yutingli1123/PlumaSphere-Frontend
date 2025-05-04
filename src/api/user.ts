@@ -1,14 +1,15 @@
-import type { LoginParams, TokenPair, User } from '@/types'
+import type { User } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
+import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
 export const userApi = {
-  async login(params: LoginParams): Promise<TokenPair> {
-    const response = await axiosInstance.post('/login', params)
+  async getUserInfo(): Promise<User> {
+    const response = await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ME))
     return JSON.parse(response.data)
   },
 
-  async getUserInfo(): Promise<User> {
-    const response = await axiosInstance.get('/user/me')
+  async getAllUsers(): Promise<User[]> {
+    const response = await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ALL))
     return JSON.parse(response.data)
   },
 }

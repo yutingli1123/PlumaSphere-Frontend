@@ -1,0 +1,47 @@
+const baseEndpoint = '/api/v1'
+
+export enum ApiEndpoint {
+  LOGIN = '/login',
+  TOKEN_REFRESH = '/refresh-token',
+
+  SYSTEM_STATUS = '/status',
+  SYSTEM_INIT = '/init',
+  SYSTEM_INIT_CODE_VERIFY = `${SYSTEM_INIT}/verify-code`,
+
+  POST_BASE = '/post',
+  POST_GET_ALL = `${POST_BASE}`,
+  POST_GET_BY_ID = `${POST_BASE}/:id`,
+  POST_CREATE = `${POST_BASE}`,
+  POST_UPDATE = `${POST_BASE}/:id`,
+  POST_DELETE = `${POST_BASE}/:id`,
+
+  USER_BASE = '/user',
+  USER_GET_ALL = `${USER_BASE}`,
+  USER_GET_ME = `${USER_BASE}/me`,
+
+  COMMENT_BASE = '/comment',
+  COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,
+  COMMENT_GET_ALL_BY_POST_ID = `${POST_BASE}/:postId/comment`,
+  COMMENT_CREATE_BY_POST_ID = `${POST_BASE}/:postId/comment`,
+
+  LIKE_GET_ALL_BY_POST_ID = `${POST_BASE}/:postId/like`,
+  LIKE_GET_ALL_BY_COMMENT_ID = `${COMMENT_BASE}/:commentId/like`,
+  LIKE_POST = `${POST_BASE}/:postId/like`,
+  LIKE_COMMENT = `${COMMENT_BASE}/:commentId/like`,
+
+  TAG_BASE = '/tag',
+  TAG_GET_ALL = `${TAG_BASE}`,
+  TAG_ADD = `${TAG_BASE}`,
+}
+
+export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
+  let fullPath = `${baseEndpoint}${path}`
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      fullPath = fullPath.replace(`:${key}`, String(value))
+    })
+  }
+
+  return fullPath
+}
