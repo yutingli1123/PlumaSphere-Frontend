@@ -23,7 +23,7 @@ defineProps<{
     <router-link
       v-for="(article, index) in articles"
       :key="index"
-      :to="`/articles/${article.id}`"
+      :to="`/posts/${article.id}`"
       class="article-card"
     >
       <div class="article-content-part">
