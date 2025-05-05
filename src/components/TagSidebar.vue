@@ -6,7 +6,7 @@ interface Tag {
 }
 
 defineProps<{
-  tags: Tag[]
+  tags: Tag[] | undefined
 }>()
 </script>
 

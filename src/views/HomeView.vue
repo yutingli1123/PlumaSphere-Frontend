@@ -1,74 +1,23 @@
 <script setup lang="ts">
 import TopNavigation from '@/components/TopNavigation.vue'
-import { ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 import TagSidebar from '@/components/TagSidebar.vue'
 import ArticleList from '@/components/ArticleList.vue'
 import PageFooter from '@/components/PageFooter.vue'
+import type { Article, Tag } from '@/types'
+import { postApi } from '@/api/post.ts'
+import { tagApi } from '@/api/tag.ts'
 
-const tags = ref([
-  { name: 'JavaScript', count: '99+', tagType: '' },
-  { name: 'TypeScript', count: '99+', tagType: 'success' },
-  { name: 'Vue3', count: '99+', tagType: 'warning' },
-  { name: 'Node.js', count: '99+', tagType: '' },
-  { name: 'Spring Boot', count: '99+', tagType: 'danger' },
-  { name: 'Frontend', count: '99+', tagType: 'info' },
-])
+const currentPage: Ref<number> = ref(1)
 
-const articles = ref([
-  {
-    title: 'Article 1',
-    description:
-      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [
-      { name: 'Vue3', type: 'warning' },
-      { name: 'JavaScript', type: '' },
-      { name: 'Frontend', type: 'info' },
-    ],
-    date: '2025-03-29',
-    image: null,
-  },
-  {
-    title: 'Article 2',
-    description:
-      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [
-      { name: 'Spring Boot', type: 'danger' },
-      { name: 'Frontend', type: 'info' },
-    ],
-    date: '2025-03-28',
-    image: null,
-  },
-  {
-    title: 'Article 3',
-    description:
-      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [
-      { name: 'Vue3', type: 'warning' },
-      { name: 'JavaScript', type: '' },
-    ],
-    date: '2025-03-27',
-    image: 'template-img.png',
-  },
-  {
-    title: 'Article 4',
-    description:
-      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [
-      { name: 'TypeScript', type: 'success' },
-      { name: 'Frontend', type: 'info' },
-    ],
-    date: '2025-03-26',
-    image: null,
-  },
-  {
-    title: 'Article 5',
-    description:
-      'Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
-    tags: [{ name: 'Node.js', type: '' }],
-    date: '2025-03-25',
-    image: null,
-  },
-])
+const tags: Ref<Tag[] | undefined> = ref()
+
+const articles: Ref<Article[] | undefined> = ref()
+
+onMounted(async () => {
+  articles.value = await postApi.getAllPosts()
+  tags.value = await tagApi.getAllTags()
+})
 </script>
 
 <template>
@@ -84,6 +33,7 @@ const articles = ref([
         <el-main style="padding-top: 10px">
           <ArticleList :articles="articles" />
           <el-pagination
+            v-model:current-page="currentPage"
             layout="prev, pager, next, total, jumper"
             :total="50"
             :page-size="5"
