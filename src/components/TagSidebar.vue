@@ -11,7 +11,7 @@ const tagTypes = ['', 'success', 'warning', 'danger', 'info']
 <template>
   <div class="tag-sidebar">
     <h3 class="tag-title">Tags</h3>
-    <div v-if="tags === undefined">
+    <div v-if="tags === undefined || tags.length === 0">
       <el-empty :image-size="100" />
     </div>
     <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
