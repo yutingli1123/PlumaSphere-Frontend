@@ -4,15 +4,26 @@ import type { Article } from '@/types'
 
 defineProps<{
   articles: Article[] | undefined
+  refresh: () => void
 }>()
 </script>
 
 <template>
   <div style="min-height: 80dvh">
+    <div v-if="articles === undefined">
+      <el-card>
+        <el-empty :image-size="100">
+          <template #description>
+            <p>No Article</p>
+          </template>
+          <el-button :onclick="refresh" type="primary">Refresh</el-button>
+        </el-empty>
+      </el-card>
+    </div>
     <router-link
       v-for="(article, index) in articles"
       :key="index"
-      :to="`/articles/${index}`"
+      :to="`/articles/${article.id}`"
       class="article-card"
     >
       <div class="article-content-part">

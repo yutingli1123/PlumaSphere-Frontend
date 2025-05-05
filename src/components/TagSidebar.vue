@@ -4,15 +4,22 @@ import type { Tag } from '@/types'
 defineProps<{
   tags: Tag[] | undefined
 }>()
+
+const tagTypes = ['', 'success', 'warning', 'danger', 'info']
 </script>
 
 <template>
   <div class="tag-sidebar">
     <h3 class="tag-title">Tags</h3>
+    <div v-if="tags === undefined">
+      <el-empty :image-size="100" />
+    </div>
     <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
       <el-menu-item class="tag-item">
         <span>{{ tag.name }}</span>
-        <el-tag :type="tag.tagType" class="tag-count" size="small">{{ tag.count }}</el-tag>
+        <el-tag :type="tagTypes[index % tagTypes.length]" class="tag-count" size="small"
+          >{{ tag.postCount }}
+        </el-tag>
       </el-menu-item>
     </el-menu>
   </div>

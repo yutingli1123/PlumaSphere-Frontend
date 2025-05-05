@@ -12,6 +12,7 @@ export interface Article {
 export interface Tag {
   id: number
   name: string
+  postCount?: number
 }
 
 export interface TokenDetails {

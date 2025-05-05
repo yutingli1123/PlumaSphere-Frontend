@@ -14,12 +14,23 @@ const totalPosts: Ref<number> = ref(0)
 const tags: Ref<Tag[] | undefined> = ref()
 const articles: Ref<Article[] | undefined> = ref()
 
-onMounted(async () => {
+const getArticles = async () => {
   articles.value = await postApi.getAllPosts()
+}
+
+const getTags = async () => {
   tags.value = await tagApi.getAllTags()
+}
+
+const refreshContent = async () => {
+  await Promise.all([getArticles(), getTags()])
   if (articles.value) {
     totalPosts.value = articles.value.length
   }
+}
+
+onMounted(() => {
+  refreshContent()
 })
 </script>
 
@@ -34,7 +45,7 @@ onMounted(async () => {
           <TagSidebar :tags="tags" />
         </el-aside>
         <el-main style="padding-top: 10px">
-          <ArticleList :articles="articles" />
+          <ArticleList :articles="articles" :refresh="refreshContent" />
           <el-pagination
             v-if="totalPosts != 0"
             v-model:current-page="currentPage"
