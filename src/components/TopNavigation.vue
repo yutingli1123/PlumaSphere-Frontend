@@ -9,11 +9,7 @@ import { Search } from '@element-plus/icons-vue'
       <p class="subtitle">Another Blog Application</p>
     </div>
     <div class="search-login-section">
-      <el-input
-        class="search-input"
-        placeholder="Search..."
-        :prefix-icon="Search"
-      />
+      <el-input :prefix-icon="Search" class="search-input" placeholder="Search..." />
       <el-button type="primary" class="login-button">Login</el-button>
     </div>
   </div>
