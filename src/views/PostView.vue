@@ -215,22 +215,10 @@ onMounted(async () => {
   min-height: 40dvh;
 }
 
-.article-image {
-  margin: 20px 0 0 0;
-}
-
 .article-image img {
   width: 100%;
   border-radius: 8px;
   display: block;
-}
-
-.image-caption {
-  text-align: center;
-  color: #666666;
-  font-size: 14px;
-  padding: 8px 0 0 0;
-  background-color: #f9f9f9;
 }
 
 .footer {
