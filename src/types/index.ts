@@ -61,9 +61,16 @@ export interface InitSystemParams {
   blogSubtitle: string
   adminUsername: string
   adminPassword: string
+  adminNickname: string
 }
 
 export interface Like {
   id: number
   userNickname: string
+}
+
+export enum ConfigFiled {
+  INITIALIZED = 'INITIALIZED',
+  BLOG_TITLE = 'BLOG_TITLE',
+  BLOG_SUBTITLE = 'BLOG_SUBTITLE',
 }

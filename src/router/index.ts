@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PostView from '@/views/PostView.vue'
+import SetupView from '@/views/SetupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       name: 'post',
       component: PostView,
       props: true,
+    },
+    {
+      path: '/setup',
+      name: 'setup',
+      component: SetupView,
     },
   ],
   scrollBehavior: (to, from, savedPosition) => {
