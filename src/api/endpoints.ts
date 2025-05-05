@@ -16,6 +16,7 @@ export enum ApiEndpoint {
   USER_BASE = '/user',
   USER_GET_ALL = `${USER_BASE}`,
   USER_GET_ME = `${USER_BASE}/me`,
+  USER_GET_BY_ID = `${USER_BASE}/:userId`,
 
   COMMENT_BASE = '/comment',
   COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,

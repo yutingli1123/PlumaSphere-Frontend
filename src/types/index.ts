@@ -29,6 +29,7 @@ export interface User {
   id: number
   username: string
   nickname: string
+  bio: string
   avatarUrl: string
   dob: string
   createdAt: string
@@ -50,6 +51,7 @@ export interface Comment {
   id: number
   content: string
   authorId: number
+  authorNickname: string
   createdAt: number
 }
 

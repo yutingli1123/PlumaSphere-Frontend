@@ -57,5 +57,6 @@ const commentContent = ref('')
   font-weight: normal;
   border-radius: 4px;
   background-color: #409eff;
+  margin-bottom: 20px;
 }
 </style>
