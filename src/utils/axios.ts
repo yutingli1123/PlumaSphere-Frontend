@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosResponse } from 'axios'
+import type { AxiosInstance } from 'axios'
 import axios, { type AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.ts'
 
@@ -54,12 +54,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-
-export function getResponseData<T>(response: AxiosResponse): T | undefined {
-  if (response?.data) {
-    return JSON.parse(response.data)
-  }
-  return undefined
-}
 
 export default axiosInstance
