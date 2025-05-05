@@ -2,18 +2,21 @@ import { defineStore } from 'pinia'
 import type { TokenPair } from '@/types'
 import { computed, ref } from 'vue'
 import { authApi } from '@/api/auth.ts'
+import { DateTime } from 'luxon'
 
 export const useAuthStore = defineStore('auth', () => {
   const tokenPair = ref<TokenPair | null>(null)
 
   const isAccessTokenExpired = computed(() => {
     if (!tokenPair.value?.accessToken.expiresAt) return true
-    return Date.now() >= tokenPair.value.accessToken.expiresAt
+    const expireTime: DateTime = DateTime.fromISO(tokenPair.value.accessToken.expiresAt)
+    return expireTime.diffNow().milliseconds <= 0
   })
 
   const isRefreshTokenExpired = computed(() => {
     if (!tokenPair.value?.refreshToken.expiresAt) return true
-    return Date.now() >= tokenPair.value.refreshToken.expiresAt
+    const expireTime: DateTime = DateTime.fromISO(tokenPair.value.refreshToken.expiresAt)
+    return expireTime.diffNow().milliseconds <= 0
   })
 
   const getRefreshToken = computed(() => {
@@ -27,7 +30,9 @@ export const useAuthStore = defineStore('auth', () => {
       clearTokens()
       return null
     }
-    return (await refreshTokens()).accessToken.token
+    const newTokenPair = await refreshTokens()
+    if (!newTokenPair) return null
+    return newTokenPair.accessToken.token
   })
 
   const setTokenPair = (newTokenPair: TokenPair) => {
@@ -52,18 +57,24 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('tokenPair')
   }
 
-  const refreshTokens = async (): Promise<TokenPair> => {
+  const refreshTokens = async (): Promise<TokenPair | null> => {
     if (!getRefreshToken.value) {
       clearTokens()
-      return Promise.reject(new Error('No refresh token or expired'))
+      console.error('No refresh token or expired')
+      return null
     }
     try {
       const response = await authApi.refreshToken(getRefreshToken.value)
+      if (!response) {
+        console.error('Refresh token failed')
+        return null
+      }
       setTokenPair(response)
       return response
     } catch (error) {
       clearTokens()
-      return Promise.reject(error)
+      console.error(error)
+      return null
     }
   }
 
