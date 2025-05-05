@@ -16,7 +16,7 @@ defineProps<{
           <template #description>
             <p>No Article</p>
           </template>
-          <el-button :onclick="refresh" type="primary">Refresh</el-button>
+          <el-button type="primary" @click="refresh">Refresh</el-button>
         </el-empty>
       </el-card>
     </div>

@@ -58,7 +58,7 @@ onMounted(async () => {
           <el-empty style="margin-top: 100px">
             <template #description>
               <p>Not Found</p>
-              <el-button :onclick="goHome" style="margin-top: 10px">Go Home</el-button>
+              <el-button style="margin-top: 10px" @click="goHome">Go Home</el-button>
             </template>
           </el-empty>
         </el-main>
