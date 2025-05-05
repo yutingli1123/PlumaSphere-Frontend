@@ -3,7 +3,7 @@ import { Calendar } from '@element-plus/icons-vue'
 import type { Article } from '@/types'
 
 defineProps<{
-  articles: Article[]
+  articles: Article[] | undefined
 }>()
 </script>
 

@@ -1,5 +1,3 @@
-const baseEndpoint = '/api/v1'
-
 export enum ApiEndpoint {
   LOGIN = '/login',
   TOKEN_REFRESH = '/refresh-token',
@@ -35,13 +33,13 @@ export enum ApiEndpoint {
 }
 
 export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
-  let fullPath = `${baseEndpoint}${path}`
+  let pathString: string = path.toString()
 
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      fullPath = fullPath.replace(`:${key}`, String(value))
+      pathString = pathString.replace(`:${key}`, String(value))
     })
   }
 
-  return fullPath
+  return pathString
 }

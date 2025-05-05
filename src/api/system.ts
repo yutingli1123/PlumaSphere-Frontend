@@ -1,11 +1,11 @@
-import axiosInstance from '@/utils/axios.ts'
+import axiosInstance, { getResponseData } from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 import type { Config, InitSystemParams } from '@/types'
 
 export const systemApi = {
-  async getStatus(): Promise<Config[]> {
+  async getStatus(): Promise<Config[] | undefined> {
     const response = await axiosInstance.get(getPath(ApiEndpoint.SYSTEM_STATUS))
-    return JSON.parse(response.data)
+    return getResponseData(response)
   },
 
   async initSystem(params: InitSystemParams): Promise<void> {
