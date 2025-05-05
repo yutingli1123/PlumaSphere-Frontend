@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-interface Tag {
-  name: string
-  count: string
-  tagType: string
-}
+import type { Tag } from '@/types'
 
 defineProps<{
   tags: Tag[] | undefined
