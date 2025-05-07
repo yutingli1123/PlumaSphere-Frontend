@@ -1,12 +1,12 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { TokenPair, User } from '@/types'
+import type { User } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { userApi } from '@/api/user.ts'
 
 export const useUserStore = defineStore('user', () => {
-  const authStore = useAuthStore()
   const userInfo = ref<User | null>(null)
+  const authStore = useAuthStore()
 
   const isLoggedIn = computed(() => !!authStore.getAccessToken)
 
@@ -19,27 +19,12 @@ export const useUserStore = defineStore('user', () => {
     return await fetchUserInfo()
   })
 
-  const login = async (username: string, password: string): Promise<TokenPair> => {
-    try {
-      const response = await userApi.login({ username, password })
-      authStore.setTokenPair(response)
-      await fetchUserInfo()
-      return response
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
-
-  const logout = () => {
-    userInfo.value = null
-    authStore.clearTokens()
-  }
-
   const fetchUserInfo = async () => {
     if (!authStore.getAccessToken) return null
 
     try {
       const info = await userApi.getUserInfo()
+      if (!info) return Promise.reject(new Error('Get user info failed'))
       setUserInfo(info)
       return info
     } catch (error) {
@@ -47,10 +32,14 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const clearUserInfo = () => {
+    userInfo.value = null
+  }
+
   return {
+    fetchUserInfo,
+    clearUserInfo,
     isLoggedIn,
     getUserInfo,
-    login,
-    logout,
   }
 })

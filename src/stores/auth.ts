@@ -3,9 +3,11 @@ import type { TokenPair } from '@/types'
 import { computed, ref } from 'vue'
 import { authApi } from '@/api/auth.ts'
 import { DateTime } from 'luxon'
+import { useUserStore } from '@/stores/user.ts'
 
 export const useAuthStore = defineStore('auth', () => {
   const tokenPair = ref<TokenPair | null>(null)
+  const userStore = useUserStore()
 
   const isAccessTokenExpired = computed(() => {
     if (!tokenPair.value?.accessToken.expiresAt) return true
@@ -78,11 +80,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const login = async (username: string, password: string): Promise<TokenPair> => {
+    try {
+      const response = await authApi.login({ username, password })
+      if (!response) return Promise.reject(new Error('Login failed'))
+      setTokenPair(response)
+      await userStore.fetchUserInfo()
+      return response
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+
+  const logout = () => {
+    userStore.clearUserInfo()
+    clearTokens()
+  }
+
   initializeTokens()
 
   return {
     getAccessToken,
-    setTokenPair,
-    clearTokens,
+    login,
+    logout,
   }
 })
