@@ -30,7 +30,12 @@ onMounted(() => {
 <template>
   <div class="comment-form-container">
     <!-- Identity button -->
-    <el-button class="identity-button" :disabled="!!userInfo" v-loading="loadingIdentity" @click="getNewIdentity">
+    <el-button
+      class="identity-button"
+      :disabled="!!userInfo"
+      v-loading="loadingIdentity"
+      @click="getNewIdentity"
+    >
       <el-icon class="identity-icon">
         <User />
       </el-icon>
@@ -39,6 +44,7 @@ onMounted(() => {
 
     <!-- Comment input textarea -->
     <el-input
+      :disabled="!userInfo"
       v-model="commentContent"
       :rows="4"
       class="comment-textarea"
@@ -48,7 +54,7 @@ onMounted(() => {
     />
 
     <!-- Submit button -->
-    <el-button :disabled="!commentContent.trim()" class="submit-button" type="primary">
+    <el-button :disabled="!commentContent.trim() || !userInfo" class="submit-button" type="primary">
       Post Comment
     </el-button>
   </div>
