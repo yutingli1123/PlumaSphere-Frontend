@@ -10,4 +10,8 @@ export const authApi = {
   async login(params: LoginParams): Promise<TokenPair | undefined> {
     return await axiosInstance.post(getPath(ApiEndpoint.LOGIN), params)
   },
+
+  async getIdentity(): Promise<TokenPair | undefined> {
+    return await axiosInstance.get(getPath(ApiEndpoint.IDENTITY))
+  },
 }

@@ -97,11 +97,23 @@ export const useAuthStore = defineStore('auth', () => {
     clearTokens()
   }
 
+  const getIdentity = async () => {
+    try {
+      const response = await authApi.getIdentity()
+      if (!response) return Promise.reject(new Error('Get identity failed'))
+      setTokenPair(response)
+      return response
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+
   initializeTokens()
 
   return {
     getAccessToken,
     login,
     logout,
+    getIdentity,
   }
 })
