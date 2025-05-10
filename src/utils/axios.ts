@@ -1,6 +1,19 @@
 import type { AxiosInstance } from 'axios'
 import axios, { type AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.ts'
+import { useUserStore } from '@/stores/user.ts'
+
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    requiresTokenValidCheck?: boolean
+    requiresAuth?: boolean
+  }
+
+  interface InternalAxiosRequestConfig {
+    requiresTokenValidCheck?: boolean
+    requiresAuth?: boolean
+  }
+}
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
@@ -11,11 +24,23 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const authStore = useAuthStore()
-    const token = await authStore.getAccessToken
+    const requiresTokenValidCheck = config.requiresTokenValidCheck !== false
+    const requiresAuth = config.requiresAuth === true
+    if (requiresAuth) {
+      const authStore = useAuthStore()
+      const token = await authStore.getAccessToken
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      if (token) {
+        if (requiresTokenValidCheck) {
+          if (await authStore.tokenValid) {
+            config.headers.Authorization = `Bearer ${token}`
+          } else {
+            authStore.logout()
+          }
+        } else {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+      }
     }
 
     return config

@@ -17,7 +17,7 @@ export interface Tag {
 
 export interface TokenDetails {
   token: string
-  expiresAt: string
+  expiresAt: string | null
 }
 
 export interface TokenPair {

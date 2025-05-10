@@ -10,6 +10,8 @@ export const commentApi = {
     return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId }))
   },
   async addComment(comment: Comment, postId: number): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.COMMENT_CREATE_BY_POST_ID, { postId }), comment)
+    await axiosInstance.post(getPath(ApiEndpoint.COMMENT_CREATE_BY_POST_ID, { postId }), comment, {
+      requiresAuth: true,
+    })
   },
 }

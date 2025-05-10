@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TokenPair } from '@/types'
-import { computed, ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 import { authApi } from '@/api/auth.ts'
 import { DateTime } from 'luxon'
 import { useUserStore } from '@/stores/user.ts'
@@ -10,15 +10,25 @@ export const useAuthStore = defineStore('auth', () => {
   const userStore = useUserStore()
 
   const isLoggedIn = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
+  const isTokenValid: Ref<boolean | undefined> = ref()
+
+  const tokenValid = computed(async () => {
+    if (isTokenValid.value !== undefined) return isTokenValid.value
+    else {
+      const valid = await authApi.checkTokenValidation()
+      isTokenValid.value = valid
+      return valid
+    }
+  })
 
   const isAccessTokenExpired = computed(() => {
-    if (!tokenPair.value?.accessToken.expiresAt) return true
+    if (!tokenPair.value?.accessToken.expiresAt) return false
     const expireTime: DateTime = DateTime.fromISO(tokenPair.value.accessToken.expiresAt)
     return expireTime.diffNow().milliseconds <= 0
   })
 
   const isRefreshTokenExpired = computed(() => {
-    if (!tokenPair.value?.refreshToken.expiresAt) return true
+    if (!tokenPair.value?.refreshToken.expiresAt) return false
     const expireTime: DateTime = DateTime.fromISO(tokenPair.value.refreshToken.expiresAt)
     return expireTime.diffNow().milliseconds <= 0
   })
@@ -31,7 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
   const getAccessToken = computed(async () => {
     if (!isAccessTokenExpired.value && tokenPair.value) return tokenPair.value.accessToken.token
     if (isRefreshTokenExpired.value) {
-      clearTokens()
+      logout()
       return null
     }
     const newTokenPair = await refreshTokens()
@@ -49,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
     if (!tokenPairJson) return
 
     const parsedTokenPair = JSON.parse(tokenPairJson)
-    if (Date.now() >= parsedTokenPair.refreshToken.expiresAt) {
+    if (parsedTokenPair.refreshToken.expiresAt != null && Date.now() >= parsedTokenPair.refreshToken.expiresAt) {
       clearTokens()
     } else {
       tokenPair.value = parsedTokenPair
@@ -63,7 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const refreshTokens = async (): Promise<TokenPair | null> => {
     if (!getRefreshToken.value) {
-      clearTokens()
+      logout()
       console.error('No refresh token or expired')
       return null
     }
@@ -76,7 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
       setTokenPair(response)
       return response
     } catch (error) {
-      clearTokens()
+      logout()
       console.error(error)
       return null
     }
@@ -97,6 +107,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     userStore.clearUserInfo()
     clearTokens()
+    isTokenValid.value = undefined
   }
 
   const getNewIdentity = async () => {
@@ -118,6 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     getNewIdentity,
-    isLoggedIn
+    isLoggedIn,
+    tokenValid,
   }
 })

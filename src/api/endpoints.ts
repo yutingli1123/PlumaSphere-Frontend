@@ -2,6 +2,7 @@ export enum ApiEndpoint {
   LOGIN = '/login',
   TOKEN_REFRESH = '/refresh-token',
   IDENTITY = '/get-identity',
+  TOKEN_VALIDATION = '/check-token-validation',
 
   SYSTEM_STATUS = '/status',
   SYSTEM_INIT = '/init',

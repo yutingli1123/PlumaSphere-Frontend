@@ -12,6 +12,6 @@ export const systemApi = {
   },
 
   async verifySystemInitCode(code: string): Promise<boolean> {
-    return await axiosInstance.post(getPath(ApiEndpoint.SYSTEM_INIT_CODE_VERIFY), code)
+    return await axiosInstance.post(getPath(ApiEndpoint.SYSTEM_INIT_CODE_VERIFY), { value: code })
   },
 }

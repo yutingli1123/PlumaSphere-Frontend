@@ -4,7 +4,9 @@ import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
 export const userApi = {
   async getUserInfo(): Promise<User | undefined> {
-    return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ME))
+    return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ME), {
+      requiresAuth: true,
+    })
   },
   async getAllUsers(): Promise<User[] | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ALL))

@@ -10,6 +10,8 @@ export const postApi = {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_BY_ID, { id }))
   },
   async createPost(post: Article): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.POST_CREATE), post)
+    await axiosInstance.post(getPath(ApiEndpoint.POST_CREATE), post, {
+      requiresAuth: true,
+    })
   },
 }

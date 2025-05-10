@@ -7,6 +7,8 @@ export const tagApi = {
     return await axiosInstance.get(getPath(ApiEndpoint.TAG_GET_ALL))
   },
   async addTag(tag: Tag): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.TAG_ADD), tag)
+    await axiosInstance.post(getPath(ApiEndpoint.TAG_ADD), tag, {
+      requiresAuth: true,
+    })
   },
 }

@@ -10,9 +10,13 @@ export const likeApi = {
     return await axiosInstance.get(getPath(ApiEndpoint.LIKE_GET_ALL_BY_COMMENT_ID, { commentId }))
   },
   async likePost(postId: number): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.LIKE_POST, { postId }))
+    await axiosInstance.post(getPath(ApiEndpoint.LIKE_POST, { postId }), null, {
+      requiresAuth: true,
+    })
   },
   async likeComment(commentId: number): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.LIKE_COMMENT, { commentId }))
+    await axiosInstance.post(getPath(ApiEndpoint.LIKE_COMMENT, { commentId }), null, {
+      requiresAuth: true,
+    })
   },
 }
