@@ -1,17 +1,40 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { User } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/user.ts'
+import type { User as UserInfo } from '@/types'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const commentContent = ref('')
+const userStore = useUserStore()
+const authStore = useAuthStore()
+const userInfo: Ref<UserInfo | undefined> = ref()
+const loadingIdentity: Ref<boolean> = ref(false)
+
+const getNewIdentity = async () => {
+  loadingIdentity.value = true
+  await authStore.getNewIdentity()
+  await refreshUserInfo()
+  loadingIdentity.value = false
+}
+
+const refreshUserInfo = async () => {
+  const userInfoResponse = await userStore.getUserInfo
+  if (userInfoResponse) userInfo.value = userInfoResponse
+}
+
+onMounted(() => {
+  refreshUserInfo()
+})
 </script>
 <template>
   <div class="comment-form-container">
     <!-- Identity button -->
-    <el-button class="identity-button">
+    <el-button class="identity-button" :disabled="!!userInfo" v-loading="loadingIdentity" @click="getNewIdentity">
       <el-icon class="identity-icon">
         <User />
       </el-icon>
-      Get Identity
+      {{ userInfo ? `Comment as: ${userInfo.nickname}` : 'Get Identity' }}
     </el-button>
 
     <!-- Comment input textarea -->
