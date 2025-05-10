@@ -85,7 +85,6 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await authApi.login({ username, password })
       if (!response) return Promise.reject(new Error('Login failed'))
       setTokenPair(response)
-      await userStore.fetchUserInfo()
       return response
     } catch (error) {
       return Promise.reject(error)
