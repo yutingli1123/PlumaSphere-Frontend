@@ -8,8 +8,6 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = ref<User | null>(null)
   const authStore = useAuthStore()
 
-  const isLoggedIn = computed(() => !!authStore.getAccessToken)
-
   const setUserInfo = (newUserInfo: User) => {
     userInfo.value = newUserInfo
   }
@@ -20,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
   })
 
   const fetchUserInfo = async () => {
-    if (!isLoggedIn.value) return null
+    if (!authStore.isLoggedIn) return null
 
     try {
       const info = await userApi.getUserInfo()
@@ -38,7 +36,6 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     clearUserInfo,
-    isLoggedIn,
     getUserInfo,
   }
 })

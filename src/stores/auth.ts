@@ -9,6 +9,8 @@ export const useAuthStore = defineStore('auth', () => {
   const tokenPair = ref<TokenPair | null>(null)
   const userStore = useUserStore()
 
+  const isLoggedIn = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
+
   const isAccessTokenExpired = computed(() => {
     if (!tokenPair.value?.accessToken.expiresAt) return true
     const expireTime: DateTime = DateTime.fromISO(tokenPair.value.accessToken.expiresAt)
@@ -81,6 +83,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (username: string, password: string): Promise<TokenPair> => {
+    if (isLoggedIn.value) return Promise.reject(new Error('Already logged in'))
     try {
       const response = await authApi.login({ username, password })
       if (!response) return Promise.reject(new Error('Login failed'))
@@ -96,7 +99,8 @@ export const useAuthStore = defineStore('auth', () => {
     clearTokens()
   }
 
-  const getIdentity = async () => {
+  const getNewIdentity = async () => {
+    if (isLoggedIn.value) return Promise.reject(new Error('Already logged in'))
     try {
       const response = await authApi.getIdentity()
       if (!response) return Promise.reject(new Error('Get identity failed'))
@@ -113,6 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
     getAccessToken,
     login,
     logout,
-    getIdentity,
+    getNewIdentity,
+    isLoggedIn
   }
 })
