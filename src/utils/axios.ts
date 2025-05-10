@@ -5,12 +5,10 @@ import { useUserStore } from '@/stores/user.ts'
 
 declare module 'axios' {
   interface AxiosRequestConfig {
-    requiresTokenValidCheck?: boolean
     requiresAuth?: boolean
   }
 
   interface InternalAxiosRequestConfig {
-    requiresTokenValidCheck?: boolean
     requiresAuth?: boolean
   }
 }
@@ -24,22 +22,13 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const requiresTokenValidCheck = config.requiresTokenValidCheck !== false
     const requiresAuth = config.requiresAuth === true
     if (requiresAuth) {
       const authStore = useAuthStore()
       const token = await authStore.getAccessToken
 
       if (token) {
-        if (requiresTokenValidCheck) {
-          if (await authStore.tokenValid) {
-            config.headers.Authorization = `Bearer ${token}`
-          } else {
-            authStore.logout()
-          }
-        } else {
-          config.headers.Authorization = `Bearer ${token}`
-        }
+        config.headers.Authorization = `Bearer ${token}`
       }
     }
 
@@ -57,6 +46,7 @@ axiosInstance.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           ElMessage.error('Unauthorized')
+          useAuthStore().logout()
           break
         case 403:
           ElMessage.error('Forbidden')

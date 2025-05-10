@@ -14,16 +14,4 @@ export const authApi = {
   async getIdentity(): Promise<TokenPair | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.IDENTITY))
   },
-
-  async checkTokenValidation(): Promise<boolean> {
-    try {
-      await axiosInstance.get(getPath(ApiEndpoint.TOKEN_VALIDATION), {
-        requiresTokenValidCheck: false,
-        requiresAuth: true,
-      })
-    } catch (e) {
-      return false
-    }
-    return true
-  },
 }

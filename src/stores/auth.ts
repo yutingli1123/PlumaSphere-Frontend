@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TokenPair } from '@/types'
-import { computed, type Ref, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { authApi } from '@/api/auth.ts'
 import { DateTime } from 'luxon'
 import { useUserStore } from '@/stores/user.ts'
@@ -10,16 +10,6 @@ export const useAuthStore = defineStore('auth', () => {
   const userStore = useUserStore()
 
   const isLoggedIn = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
-  const isTokenValid: Ref<boolean | undefined> = ref()
-
-  const tokenValid = computed(async () => {
-    if (isTokenValid.value !== undefined) return isTokenValid.value
-    else {
-      const valid = await authApi.checkTokenValidation()
-      isTokenValid.value = valid
-      return valid
-    }
-  })
 
   const isAccessTokenExpired = computed(() => {
     if (!tokenPair.value?.accessToken.expiresAt) return false
@@ -59,7 +49,10 @@ export const useAuthStore = defineStore('auth', () => {
     if (!tokenPairJson) return
 
     const parsedTokenPair = JSON.parse(tokenPairJson)
-    if (parsedTokenPair.refreshToken.expiresAt != null && Date.now() >= parsedTokenPair.refreshToken.expiresAt) {
+    if (
+      parsedTokenPair.refreshToken.expiresAt != null &&
+      Date.now() >= parsedTokenPair.refreshToken.expiresAt
+    ) {
       clearTokens()
     } else {
       tokenPair.value = parsedTokenPair
@@ -107,7 +100,6 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     userStore.clearUserInfo()
     clearTokens()
-    isTokenValid.value = undefined
   }
 
   const getNewIdentity = async () => {
@@ -130,6 +122,5 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     getNewIdentity,
     isLoggedIn,
-    tokenValid,
   }
 })
