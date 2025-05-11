@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
   })
 
   const fetchUserInfo = async () => {
-    if (!authStore.isLoggedIn) return null
+    if (!authStore.hasToken) return null
 
     try {
       const info = await userApi.getUserInfo()

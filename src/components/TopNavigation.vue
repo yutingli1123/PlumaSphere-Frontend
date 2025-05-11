@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
+import LoginDialog from '@/components/LoginDialog.vue'
+import { ref } from 'vue'
+
+const loginDialogVisible = ref(false)
 </script>
 
 <template>
@@ -10,9 +14,13 @@ import { Search } from '@element-plus/icons-vue'
     </div>
     <div class="search-login-section">
       <el-input :prefix-icon="Search" class="search-input" placeholder="Search..." />
-      <el-button type="primary" class="login-button">Login</el-button>
+      <el-button class="login-button" type="primary" @click="loginDialogVisible = true"
+        >Login</el-button
+      >
     </div>
   </div>
+
+  <LoginDialog v-model:visible="loginDialogVisible" />
 </template>
 
 <style scoped>
@@ -34,14 +42,14 @@ import { Search } from '@element-plus/icons-vue'
 .main-title {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: #333333;
   margin: 0;
   text-decoration: none;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #666;
+  color: #666666;
   margin: 0;
 }
 

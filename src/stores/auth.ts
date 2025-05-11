@@ -9,7 +9,11 @@ export const useAuthStore = defineStore('auth', () => {
   const tokenPair = ref<TokenPair | null>(null)
   const userStore = useUserStore()
 
-  const isLoggedIn = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
+  const loggedIn = ref(false)
+
+  const isLoggedIn = computed(() => hasToken.value && loggedIn.value)
+
+  const hasToken = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
 
   const isAccessTokenExpired = computed(() => {
     if (!tokenPair.value?.accessToken.expiresAt) return false
@@ -85,12 +89,16 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const login = async (username: string, password: string): Promise<TokenPair> => {
-    if (isLoggedIn.value) return Promise.reject(new Error('Already logged in'))
+  const login = async (username: string, password: string): Promise<TokenPair | null> => {
+    if (hasToken.value) {
+      loggedIn.value = true
+      return tokenPair.value
+    }
     try {
       const response = await authApi.login({ username, password })
       if (!response) return Promise.reject(new Error('Login failed'))
       setTokenPair(response)
+      loggedIn.value = true
       return response
     } catch (error) {
       return Promise.reject(error)
@@ -103,7 +111,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const getNewIdentity = async () => {
-    if (isLoggedIn.value) return Promise.reject(new Error('Already logged in'))
+    if (hasToken.value) {
+      loggedIn.value = true
+      return tokenPair.value
+    }
     try {
       const response = await authApi.getIdentity()
       if (!response) return Promise.reject(new Error('Get identity failed'))
@@ -122,5 +133,6 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     getNewIdentity,
     isLoggedIn,
+    hasToken,
   }
 })
