@@ -3,11 +3,17 @@ import { Search } from '@element-plus/icons-vue'
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 const loginDialogVisible = ref(false)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
+
+const navigateToCreatePost = () => {
+  router.push({ path: '/create-post' })
+}
 </script>
 
 <template>
@@ -25,9 +31,12 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
         @click="loginDialogVisible = true"
         >Login
       </el-button>
-      <el-button v-else class="login-button" type="danger" @click="authStore.logout()"
-        >Logout
-      </el-button>
+      <div v-else>
+        <el-button type="primary" @click="navigateToCreatePost"> New Post </el-button>
+        <el-button class="login-button" type="danger" @click="authStore.logout()"
+          >Logout
+        </el-button>
+      </div>
     </div>
   </div>
 
