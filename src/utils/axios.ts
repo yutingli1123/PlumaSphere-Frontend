@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
       showError('Something went wrong')
     }
 
-    return Promise.reject(error)
+    return null
   },
 )
 

@@ -6,9 +6,9 @@ import router from '@/router'
 import { type Config, ConfigFiled } from '@/types'
 
 onMounted(async () => {
-  const systemStatus: Config[] | undefined = await systemApi.getStatus()
+  const systemStatus: Config[] | undefined | null = await systemApi.getStatus()
   if (
-    systemStatus === undefined ||
+    !!systemStatus &&
     !systemStatus.some((value) => value.configKey === ConfigFiled.INITIALIZED.toLowerCase())
   ) {
     await router.push('/setup')
