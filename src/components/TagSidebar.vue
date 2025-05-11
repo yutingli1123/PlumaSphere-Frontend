@@ -9,9 +9,9 @@ const tagTypes = ['', 'success', 'warning', 'danger', 'info']
 </script>
 
 <template>
-  <div class="tag-sidebar">
+  <el-card class="tag-sidebar">
     <h3 class="tag-title">Tags</h3>
-    <div v-if="tags === undefined || tags.length === 0">
+    <div v-if="!tags || tags.length === 0">
       <el-empty :image-size="100" />
     </div>
     <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
@@ -22,16 +22,12 @@ const tagTypes = ['', 'success', 'warning', 'danger', 'info']
         </el-tag>
       </el-menu-item>
     </el-menu>
-  </div>
+  </el-card>
 </template>
 
 <style scoped>
 .tag-sidebar {
-  background-color: white;
-  border-radius: 4px;
-  padding: 24px;
   margin-top: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
 }
 
 .tag-title {
