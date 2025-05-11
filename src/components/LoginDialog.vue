@@ -19,8 +19,11 @@ const dialogVisible = computed({
   },
 })
 
-const username = ref('')
-const password = ref('')
+const loginParams = ref({
+  username: '',
+  password: '',
+})
+
 const loading = ref(false)
 const authStore = useAuthStore()
 
@@ -35,7 +38,7 @@ const handleLogin = async () => {
     if (!valid) return
     loading.value = true
     try {
-      await authStore.login(username.value, password.value)
+      await authStore.login(loginParams.value.username, loginParams.value.password)
       ElMessage.success('Login successful')
       emit('update:visible', false)
       resetForm()
@@ -49,8 +52,8 @@ const handleLogin = async () => {
 
 const resetForm = () => {
   formRef.value?.resetFields()
-  username.value = ''
-  password.value = ''
+  loginParams.value.username = ''
+  loginParams.value.password = ''
 }
 
 const closeDialog = () => {
@@ -68,12 +71,17 @@ const closeDialog = () => {
     width="400px"
   >
     <div class="dialog-content">
-      <el-form ref="formRef" :model="{ username, password }" :rules="rules" label-width="80px">
+      <el-form ref="formRef" :model="loginParams" :rules="rules" label-width="80px">
         <el-form-item label="Username" prop="username">
-          <el-input v-model="username" placeholder="Enter username" />
+          <el-input v-model="loginParams.username" placeholder="Enter username" />
         </el-form-item>
         <el-form-item label="Password" prop="password">
-          <el-input v-model="password" placeholder="Enter password" show-password type="password" />
+          <el-input
+            v-model="loginParams.password"
+            placeholder="Enter password"
+            show-password
+            type="password"
+          />
         </el-form-item>
       </el-form>
     </div>
