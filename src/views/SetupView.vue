@@ -9,6 +9,7 @@ const router = useRouter()
 
 const currentStep = ref(1)
 const formRef = ref<FormInstance>()
+const setupLoading = ref(false)
 
 const initInfo = reactive<InitSystemParams>({
   verificationCode: '',
@@ -87,16 +88,18 @@ const nextStep = () => {
   formRef.value?.validate(async (valid) => {
     if (valid) {
       if (currentStep.value === 1) {
-        if (await systemApi.verifySystemInitCode(initInfo.verificationCode!)) {
+        if (!(await systemApi.verifySystemInitCode(initInfo.verificationCode!))) {
           ElMessage.error('Wrong verification code')
           return
         }
       }
 
       if (currentStep.value === 3) {
+        setupLoading.value = true
         await systemApi.initSystem(initInfo)
         ElMessage.success('Blog system setup completed')
         await router.push('/')
+        setupLoading.value = false
         return
       }
       currentStep.value++
@@ -191,7 +194,11 @@ const prevStep = () => {
           <el-button v-if="currentStep > 1 && currentStep < 3" type="primary" @click="nextStep"
             >Next
           </el-button>
-          <el-button v-if="currentStep === 3" type="primary" @click="nextStep"
+          <el-button
+            v-if="currentStep === 3"
+            :loading="setupLoading"
+            type="primary"
+            @click="nextStep"
             >Finish Setup
           </el-button>
         </div>
