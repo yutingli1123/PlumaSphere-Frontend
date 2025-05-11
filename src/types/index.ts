@@ -48,11 +48,11 @@ export interface Config {
 }
 
 export interface Comment {
-  id: number
+  id: number | null
   content: string
-  authorId: number
-  authorNickname: string
-  createdAt: number
+  authorId: number | null
+  authorNickname: string | null
+  createdAt: number | null
 }
 
 export interface InitSystemParams {

@@ -2,14 +2,20 @@
 import { computed, onMounted, type Ref, ref, watch } from 'vue'
 import { User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user.ts'
-import type { User as UserInfo } from '@/types'
+import type { Comment, User as UserInfo } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
+import { commentApi } from '@/api/comment.ts'
+
+const { postId } = defineProps<{
+  postId: number
+}>()
 
 const commentContent = ref('')
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const userInfo: Ref<UserInfo | undefined | null> = ref()
 const loadingIdentity: Ref<boolean> = ref(false)
+const postingComment: Ref<boolean> = ref(false)
 
 const getNewIdentity = async () => {
   loadingIdentity.value = true
@@ -20,6 +26,21 @@ const getNewIdentity = async () => {
 
 const refreshUserInfo = async () => {
   userInfo.value = await userStore.getUserInfo
+}
+
+const postComment = async () => {
+  if (commentContent.value.trim().length === 0) return
+  postingComment.value = true
+  const comment: Comment = {
+    id: null,
+    content: commentContent.value,
+    authorId: null,
+    authorNickname: null,
+    createdAt: null,
+  }
+  await commentApi.addComment(comment, postId)
+  commentContent.value = ''
+  postingComment.value = false
 }
 
 const hasToken = computed(() => authStore.hasToken)
@@ -66,7 +87,13 @@ onMounted(() => {
     />
 
     <!-- Submit button -->
-    <el-button :disabled="!commentContent.trim() || !userInfo" class="submit-button" type="primary">
+    <el-button
+      :disabled="!commentContent.trim() || !userInfo"
+      :loading="postingComment"
+      class="submit-button"
+      type="primary"
+      @click="postComment"
+    >
       Post Comment
     </el-button>
   </div>

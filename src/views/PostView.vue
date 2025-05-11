@@ -135,7 +135,7 @@ onMounted(async () => {
                   {{ comment.content }}
                 </div>
               </div>
-              <CommentForm class="comment-form" />
+              <CommentForm :post-id="postId" class="comment-form" />
             </div>
           </div>
           <!-- Page Footer -->
