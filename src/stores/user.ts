@@ -22,11 +22,11 @@ export const useUserStore = defineStore('user', () => {
 
     try {
       const info = await userApi.getUserInfo()
-      if (!info) return Promise.reject(new Error('Get user info failed'))
+      if (!info) return null
       setUserInfo(info)
       return info
     } catch (error) {
-      return Promise.reject(error)
+      return null
     }
   }
 
@@ -37,5 +37,6 @@ export const useUserStore = defineStore('user', () => {
   return {
     clearUserInfo,
     getUserInfo,
+    fetchUserInfo,
   }
 })
