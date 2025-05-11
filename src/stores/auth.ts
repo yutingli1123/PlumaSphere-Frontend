@@ -43,6 +43,11 @@ export const useAuthStore = defineStore('auth', () => {
     return newTokenPair.accessToken.token
   })
 
+  const setLoggedIn = () => {
+    loggedIn.value = true
+    localStorage.setItem('loggedIn', 'true')
+  }
+
   const setTokenPair = (newTokenPair: TokenPair) => {
     tokenPair.value = newTokenPair
     localStorage.setItem('tokenPair', JSON.stringify(newTokenPair))
@@ -50,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const initializeTokens = () => {
     const tokenPairJson = localStorage.getItem('tokenPair')
+    loggedIn.value = localStorage.getItem('loggedIn') === 'true'
     if (!tokenPairJson) return
 
     const parsedTokenPair = JSON.parse(tokenPairJson)
@@ -91,14 +97,14 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (username: string, password: string): Promise<TokenPair | null> => {
     if (hasToken.value) {
-      loggedIn.value = true
+      setLoggedIn()
       return tokenPair.value
     }
     try {
       const response = await authApi.login({ username, password })
       if (!response) return Promise.reject(new Error('Login failed'))
       setTokenPair(response)
-      loggedIn.value = true
+      setLoggedIn()
       return response
     } catch (error) {
       return Promise.reject(error)
@@ -112,7 +118,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getNewIdentity = async () => {
     if (hasToken.value) {
-      loggedIn.value = true
       return tokenPair.value
     }
     try {
