@@ -39,7 +39,13 @@ onMounted(() => {
       <el-icon class="identity-icon">
         <User />
       </el-icon>
-      {{ userInfo ? `Comment as: ${userInfo.nickname}` : 'Get Identity' }}
+      {{
+        userInfo
+          ? userInfo.nickname
+            ? `Comment as: ${userInfo.nickname}`
+            : `Comment as: ${userInfo.username}`
+          : 'Get Identity'
+      }}
     </el-button>
 
     <!-- Comment input textarea -->
