@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, type Ref, ref, watch } from 'vue'
 import { User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user.ts'
 import type { User as UserInfo } from '@/types'
@@ -8,7 +8,7 @@ import { useAuthStore } from '@/stores/auth.ts'
 const commentContent = ref('')
 const userStore = useUserStore()
 const authStore = useAuthStore()
-const userInfo: Ref<UserInfo | undefined> = ref()
+const userInfo: Ref<UserInfo | undefined | null> = ref()
 const loadingIdentity: Ref<boolean> = ref(false)
 
 const getNewIdentity = async () => {
@@ -19,9 +19,15 @@ const getNewIdentity = async () => {
 }
 
 const refreshUserInfo = async () => {
-  const userInfoResponse = await userStore.getUserInfo
-  if (userInfoResponse) userInfo.value = userInfoResponse
+  userInfo.value = await userStore.getUserInfo
 }
+
+const hasToken = computed(() => authStore.hasToken)
+const isLoggedIn = computed(() => authStore.isLoggedIn)
+
+watch([hasToken, isLoggedIn], async () => {
+  await refreshUserInfo()
+})
 
 onMounted(() => {
   refreshUserInfo()
