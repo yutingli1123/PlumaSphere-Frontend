@@ -27,7 +27,7 @@ const authStore = useAuthStore()
 const formRef = ref()
 const rules = {
   username: [{ required: true, message: 'Please enter username', trigger: 'blur' }],
-  password: [{ required: true, message: 'Please enter password', trigger: 'blur' },
+  password: [{ required: true, message: 'Please enter password', trigger: 'blur' }],
 }
 
 const handleLogin = async () => {
