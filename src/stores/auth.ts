@@ -51,6 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setTokenPair = (newTokenPair: TokenPair) => {
     tokenPair.value = newTokenPair
     localStorage.setItem('tokenPair', JSON.stringify(newTokenPair))
+    userStore.fetchUserInfo().catch(console.error)
   }
 
   const initializeTokens = () => {
@@ -96,7 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (username: string, password: string): Promise<TokenPair | null> => {
-    if (hasToken.value) {
+    if (isLoggedIn.value) {
       setLoggedIn()
       return tokenPair.value
     }
@@ -114,6 +115,8 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     userStore.clearUserInfo()
     clearTokens()
+    loggedIn.value = false
+    localStorage.removeItem('loggedIn')
   }
 
   const getNewIdentity = async () => {
