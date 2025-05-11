@@ -13,7 +13,10 @@ const emit = defineEmits(['update:visible'])
 
 const dialogVisible = computed({
   get: () => props.visible,
-  set: (value) => emit('update:visible', value),
+  set: (value) => {
+    resetForm()
+    emit('update:visible', value)
+  },
 })
 
 const username = ref('')
@@ -21,26 +24,31 @@ const password = ref('')
 const loading = ref(false)
 const authStore = useAuthStore()
 
-const handleLogin = async () => {
-  if (!username.value || !password.value) {
-    ElMessage.warning('Please enter username and password')
-    return
-  }
+const formRef = ref()
+const rules = {
+  username: [{ required: true, message: 'Please enter username', trigger: 'blur' }],
+  password: [{ required: true, message: 'Please enter password', trigger: 'blur' },
+}
 
-  loading.value = true
-  try {
-    await authStore.login(username.value, password.value)
-    ElMessage.success('Login successful')
-    emit('update:visible', false)
-    resetForm()
-  } catch {
-    ElMessage.error('Login failed, please check your username and password')
-  } finally {
-    loading.value = false
-  }
+const handleLogin = async () => {
+  formRef.value?.validate(async (valid: boolean) => {
+    if (!valid) return
+    loading.value = true
+    try {
+      await authStore.login(username.value, password.value)
+      ElMessage.success('Login successful')
+      emit('update:visible', false)
+      resetForm()
+    } catch {
+      ElMessage.error('Login failed, please check your username and password')
+    } finally {
+      loading.value = false
+    }
+  })
 }
 
 const resetForm = () => {
+  formRef.value?.resetFields()
   username.value = ''
   password.value = ''
 }
@@ -60,11 +68,11 @@ const closeDialog = () => {
     width="400px"
   >
     <div class="dialog-content">
-      <el-form :model="{ username, password }" label-width="80px">
-        <el-form-item label="Username">
+      <el-form ref="formRef" :model="{ username, password }" :rules="rules" label-width="80px">
+        <el-form-item label="Username" prop="username">
           <el-input v-model="username" placeholder="Enter username" />
         </el-form-item>
-        <el-form-item label="Password">
+        <el-form-item label="Password" prop="password">
           <el-input v-model="password" placeholder="Enter password" show-password type="password" />
         </el-form-item>
       </el-form>
