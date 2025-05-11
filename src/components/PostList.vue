@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <div style="min-height: 80dvh">
-    <div v-if="articles === undefined">
+    <div v-if="!articles || articles.length === 0">
       <el-card>
         <el-empty :image-size="100">
           <template #description>
