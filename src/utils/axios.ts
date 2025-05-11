@@ -1,7 +1,6 @@
 import type { AxiosInstance } from 'axios'
 import axios, { type AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.ts'
-import { useUserStore } from '@/stores/user.ts'
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -11,6 +10,11 @@ declare module 'axios' {
   interface InternalAxiosRequestConfig {
     requiresAuth?: boolean
   }
+}
+
+const showError = (errorMessage: string) => {
+  ElMessage.closeAll()
+  ElMessage.error(errorMessage)
 }
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -45,25 +49,25 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          ElMessage.error('Unauthorized')
+          showError('Unauthorized')
           useAuthStore().logout()
           break
         case 403:
-          ElMessage.error('Forbidden')
+          showError('Forbidden')
           break
         case 404:
-          ElMessage.error('Not Found')
+          showError('Not Found')
           break
         case 500:
-          ElMessage.error('Internal Server Error')
+          showError('Internal Server Error')
           break
         default:
-          ElMessage.error('Something went wrong')
+          showError('Something went wrong')
       }
     } else if (error.request) {
-      ElMessage.error('Network Error')
+      showError('Network Error')
     } else {
-      ElMessage.error('Something went wrong')
+      showError('Something went wrong')
     }
 
     return Promise.reject(error)
