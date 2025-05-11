@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
 import LoginDialog from '@/components/LoginDialog.vue'
-import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth.ts'
+import { computed, ref } from 'vue'
+
+const authStore = useAuthStore()
 
 const loginDialogVisible = ref(false)
+const isLoggedIn = computed(() => authStore.isLoggedIn)
 </script>
 
 <template>
@@ -14,9 +18,16 @@ const loginDialogVisible = ref(false)
     </div>
     <div class="search-login-section">
       <el-input :prefix-icon="Search" class="search-input" placeholder="Search..." />
-      <el-button class="login-button" type="primary" @click="loginDialogVisible = true"
-        >Login</el-button
-      >
+      <el-button
+        v-if="!isLoggedIn"
+        class="login-button"
+        type="primary"
+        @click="loginDialogVisible = true"
+        >Login
+      </el-button>
+      <el-button v-else class="login-button" type="danger" @click="authStore.logout()"
+        >Logout
+      </el-button>
     </div>
   </div>
 
