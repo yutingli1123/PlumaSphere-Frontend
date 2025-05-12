@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Calendar } from '@element-plus/icons-vue'
 import type { Article } from '@/types'
+import { DateTime } from 'luxon'
 
 defineProps<{
   articles: Article[] | undefined
@@ -44,7 +45,11 @@ defineProps<{
                 <el-icon>
                   <Calendar />
                 </el-icon>
-                <span>{{ article.createdAt }}</span>
+                <span>{{
+                  DateTime.fromISO(article.createdAt)
+                    .toLocal()
+                    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}</span>
               </div>
             </div>
           </div>
