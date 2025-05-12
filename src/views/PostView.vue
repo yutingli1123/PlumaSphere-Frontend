@@ -11,7 +11,7 @@ import { commentApi } from '@/api/comment.ts'
 import router from '@/router'
 
 const { postId } = defineProps<{
-  postId: string
+  postId: number
 }>()
 
 const tagTypes = ['', 'success', 'warning', 'danger', 'info']

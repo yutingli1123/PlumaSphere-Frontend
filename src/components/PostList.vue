@@ -20,40 +20,37 @@ defineProps<{
         </el-empty>
       </el-card>
     </div>
-    <router-link
-      v-for="(article, index) in articles"
-      :key="index"
-      :to="`/posts/${article.id}`"
-      class="article-card"
-    >
-      <div class="article-content-part">
-        <div class="article-content">
-          <h2 class="article-title">{{ article.title }}</h2>
-          <p class="article-description">{{ article.description }}</p>
+    <el-card v-for="(article, index) in articles" :key="index" class="article-card">
+      <router-link :to="`/posts/${article.id}`" class="router-link">
+        <div class="article-content-part">
+          <div class="article-content">
+            <h2 class="article-title">{{ article.title }}</h2>
+            <p class="article-description">{{ article.description }}</p>
 
-          <div class="article-meta">
-            <div class="article-tags">
-              <el-tag
-                v-for="(tag, tagIndex) in article.tags"
-                :key="tagIndex"
-                :type="tag.name"
-                class="article-tag"
-                size="small"
-              >
-                {{ tag.name }}
-              </el-tag>
-            </div>
+            <div class="article-meta">
+              <div class="article-tags">
+                <el-tag
+                  v-for="(tag, tagIndex) in article.tags"
+                  :key="tagIndex"
+                  :type="tag.name"
+                  class="article-tag"
+                  size="small"
+                >
+                  {{ tag.name }}
+                </el-tag>
+              </div>
 
-            <div class="article-date">
-              <el-icon>
-                <Calendar />
-              </el-icon>
-              <span>{{ article.createdAt }}</span>
+              <div class="article-date">
+                <el-icon>
+                  <Calendar />
+                </el-icon>
+                <span>{{ article.createdAt }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </router-link>
+      </router-link>
+    </el-card>
   </div>
 </template>
 
@@ -61,11 +58,10 @@ defineProps<{
 .article-card {
   margin-bottom: 20px;
   border-radius: 4px;
-  background-color: white;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
   transition: all 0.3s ease;
+}
+
+.router-link {
   text-decoration: none;
   color: inherit;
 }
