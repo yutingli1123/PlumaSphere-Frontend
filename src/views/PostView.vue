@@ -9,6 +9,7 @@ import { postApi } from '@/api/post.ts'
 import { userApi } from '@/api/user.ts'
 import { commentApi } from '@/api/comment.ts'
 import router from '@/router'
+import { DateTime } from 'luxon'
 
 const { postId } = defineProps<{
   postId: number
@@ -89,7 +90,12 @@ onMounted(async () => {
             <!-- Metadata -->
             <div class="article-meta">
               <span
-                ><el-icon><Calendar /></el-icon>Published: {{ article?.createdAt }}</span
+                ><el-icon><Calendar /></el-icon>Published:
+                {{
+                  DateTime.fromISO(article.createdAt)
+                    .toLocal()
+                    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}</span
               >
               <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
                 ><el-icon><Calendar /></el-icon>Updated: {{ article.updatedAt }}</span
