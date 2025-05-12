@@ -1,12 +1,12 @@
 export interface Article {
-  id: number
+  id: number | null
   title: string
   content?: string
-  description?: string
-  authorId: number
+  description?: string | null
+  authorId: number | null
   tags: Tag[]
-  createdAt: string
-  updatedAt: string
+  createdAt: string | null
+  updatedAt: string | null
 }
 
 export interface Tag {
