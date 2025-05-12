@@ -2,7 +2,7 @@
 import { ref, type Ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { postApi } from '@/api/post.ts'
-import type { Article } from '@/types'
+import type { ArticleRequest } from '@/types'
 import { useRouter } from 'vue-router'
 
 const posting = ref(false)
@@ -22,15 +22,10 @@ const createPost = () => {
   formRef.value?.validate(async (valid) => {
     if (valid) {
       posting.value = true
-      const post: Article = {
-        id: null,
+      const post: ArticleRequest = {
         title: newPostParams.value.title,
         content: newPostParams.value.content,
-        description: null,
-        authorId: null,
         tags: [],
-        createdAt: null,
-        updatedAt: null,
       }
       await postApi.createPost(post)
       newPostParams.value.title = ''
