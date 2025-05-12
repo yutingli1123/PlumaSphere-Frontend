@@ -2,7 +2,7 @@
 import { computed, onMounted, type Ref, ref, watch } from 'vue'
 import { User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user.ts'
-import type { Comment, User as UserInfo } from '@/types'
+import type { CommentRequest, User as UserInfo } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
 
@@ -31,12 +31,8 @@ const refreshUserInfo = async () => {
 const postComment = async () => {
   if (commentContent.value.trim().length === 0) return
   postingComment.value = true
-  const comment: Comment = {
-    id: null,
+  const comment: CommentRequest = {
     content: commentContent.value,
-    authorId: null,
-    authorNickname: null,
-    createdAt: null,
   }
   await commentApi.addComment(comment, postId)
   commentContent.value = ''

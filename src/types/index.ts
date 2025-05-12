@@ -54,11 +54,15 @@ export interface Config {
 }
 
 export interface Comment {
-  id: number | null
+  id: number
   content: string
-  authorId: number | null
-  authorNickname: string | null
-  createdAt: number | null
+  authorId: number
+  authorNickname: string
+  createdAt: number
+}
+
+export interface CommentRequest {
+  content: string
 }
 
 export interface InitSystemParams {
