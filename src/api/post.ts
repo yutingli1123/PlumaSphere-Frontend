@@ -1,4 +1,4 @@
-import type { Article } from '@/types'
+import type { Article, ArticleRequest } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
@@ -9,7 +9,7 @@ export const postApi = {
   async getPostById(id: string): Promise<Article | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_BY_ID, { id }))
   },
-  async createPost(post: Article): Promise<void> {
+  async createPost(post: ArticleRequest): Promise<void> {
     await axiosInstance.post(getPath(ApiEndpoint.POST_CREATE), post, {
       requiresAuth: true,
     })
