@@ -15,20 +15,22 @@ const loaded: Ref<boolean> = ref(false)
 const tags: Ref<Tag[] | undefined> = ref()
 const articles: Ref<Article[] | undefined> = ref()
 
-const getArticles = async () => {
-  articles.value = await postApi.getAllPosts()
+const refreshArticles = async () => {
+  totalPosts.value = await postApi.getPostsCount()
+  articles.value = await postApi.getAllPosts(0)
 }
 
-const getTags = async () => {
+const refreshTags = async () => {
   tags.value = await tagApi.getAllTags()
 }
 
 const refreshContent = async () => {
-  await Promise.all([getArticles(), getTags()])
-  if (articles.value) {
-    totalPosts.value = articles.value.length
-  }
+  await Promise.all([refreshArticles(), refreshTags()])
   loaded.value = true
+}
+
+const getArticles = async (page: number) => {
+  articles.value = await postApi.getAllPosts(page - 1)
 }
 
 onMounted(() => {
@@ -55,6 +57,7 @@ onMounted(() => {
             :total="totalPosts"
             :page-size="5"
             style="justify-content: center"
+            @current-change="getArticles"
           />
         </el-main>
       </el-container>
