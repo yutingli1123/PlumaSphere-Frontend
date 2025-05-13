@@ -1,4 +1,6 @@
 export enum ApiEndpoint {
+  BASE_API = '/api/v1',
+
   LOGIN = '/login',
   TOKEN_REFRESH = '/refresh-token',
   IDENTITY = '/get-identity',

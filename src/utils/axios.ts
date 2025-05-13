@@ -1,6 +1,7 @@
 import type { AxiosInstance } from 'axios'
 import axios, { type AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.ts'
+import { ApiEndpoint } from '@/api/endpoints.ts'
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -18,7 +19,7 @@ const showError = (errorMessage: string) => {
 }
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}`,
   headers: {
     'Content-Type': 'application/json',
   },
