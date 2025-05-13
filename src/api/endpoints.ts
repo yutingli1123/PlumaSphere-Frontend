@@ -1,5 +1,6 @@
 export enum ApiEndpoint {
   BASE_API = '/api/v1',
+  BASE_WEB_SOCKET = '/ws',
 
   LOGIN = '/login',
   TOKEN_REFRESH = '/refresh-token',
