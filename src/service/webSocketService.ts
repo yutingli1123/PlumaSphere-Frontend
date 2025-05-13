@@ -1,7 +1,6 @@
 import { ApiEndpoint } from '@/api/endpoints'
-import { WebSocket } from 'vite'
 
-enum WebSocketMessageType {
+export enum WebSocketMessageType {
   NEW_COMMENT,
 }
 
@@ -12,15 +11,15 @@ interface WebSocketMessage {
 type MessageListener = (type: WebSocketMessageType) => void
 
 class WebSocketService {
-  private webSockets: Map<number, WebSocket> = new Map()
+  private webSockets: Map<string, WebSocket> = new Map()
 
-  connectWebSocket(postId: number, onMessage: MessageListener) {
+  connectWebSocket(postId: string, onMessage: MessageListener) {
     if (this.webSockets.has(postId)) {
       return this.webSockets.get(postId)
     }
 
     const webSocket = new WebSocket(
-      `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_WEB_SOCKET}?postId=${postId}`,
+      `${import.meta.env.VITE_API_WS_BASE_URL}${ApiEndpoint.BASE_WEB_SOCKET}?postId=${postId}`,
     )
 
     webSocket.onmessage = (event) => {
@@ -40,7 +39,7 @@ class WebSocketService {
     return webSocket
   }
 
-  disconnectWebSocket(postId: number) {
+  disconnectWebSocket(postId: string) {
     const webSocket = this.webSockets.get(postId)
     if (webSocket) {
       webSocket.close()
@@ -49,4 +48,4 @@ class WebSocketService {
   }
 }
 
-export const webSocketService = new WebSocketService()
+export const WebSocketServiceInstance = new WebSocketService()

@@ -11,6 +11,7 @@ import { commentApi } from '@/api/comment.ts'
 import router from '@/router'
 import { DateTime } from 'luxon'
 import { useAuthStore } from '@/stores/auth.ts'
+import { WebSocketMessageType, WebSocketServiceInstance } from '@/service/webSocketService'
 
 const { postId } = defineProps<{
   postId: string
@@ -34,6 +35,19 @@ const deletePost = async () => {
   await router.push('/')
 }
 
+const refreshComment = async () => {
+  const commentEntity = await commentApi.getCommentsByPostId(postId)
+  if (commentEntity) {
+    comments.value = commentEntity
+  }
+}
+
+const onWebSocketMessage = async (type: WebSocketMessageType) => {
+  if (type === WebSocketMessageType.NEW_COMMENT) {
+    await refreshComment()
+  }
+}
+
 onMounted(async () => {
   const articleEntity = await postApi.getPostById(postId)
   if (!articleEntity) {
@@ -41,16 +55,15 @@ onMounted(async () => {
   }
   article.value = articleEntity
 
-  const commentEntity = await commentApi.getCommentsByPostId(postId)
-  if (commentEntity) {
-    comments.value = commentEntity
-  }
+  await refreshComment()
 
   const authorId = articleEntity.authorId
   const authorEntity = await userApi.getUserById(authorId)
   if (authorEntity) {
     author.value = authorEntity
   }
+
+  WebSocketServiceInstance.connectWebSocket(postId, onWebSocketMessage)
   loaded.value = true
 })
 </script>
