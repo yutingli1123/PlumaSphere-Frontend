@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
 
 const { postId } = defineProps<{
-  postId: number
+  postId: string
 }>()
 
 const commentContent = ref('')

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
-import { Calendar } from '@element-plus/icons-vue'
+import { Calendar, Delete, Edit } from '@element-plus/icons-vue'
 import CommentForm from '@/components/CommentForm.vue'
 import { onMounted, type Ref, ref } from 'vue'
 import type { Article, Comment, User } from '@/types'
@@ -12,7 +12,7 @@ import router from '@/router'
 import { DateTime } from 'luxon'
 
 const { postId } = defineProps<{
-  postId: number
+  postId: string
 }>()
 
 const tagTypes = ['', 'success', 'warning', 'danger', 'info']
@@ -23,6 +23,11 @@ const comments: Ref<Comment[] | undefined> = ref()
 const loaded: Ref<boolean> = ref(false)
 
 const goHome = () => {
+  router.push('/')
+}
+
+const deletePost = async () => {
+  await postApi.deletePost(postId)
   router.push('/')
 }
 
@@ -88,24 +93,35 @@ onMounted(async () => {
             </div>
 
             <!-- Metadata -->
-            <div class="article-meta">
-              <span
-                ><el-icon><Calendar /></el-icon>Published:
-                {{
-                  DateTime.fromISO(article.createdAt)
-                    .toLocal()
-                    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                }}</span
-              >
-              <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
-                ><el-icon><Calendar /></el-icon>Updated: {{ article.updatedAt }}</span
-              >
-              <!--            <span-->
-              <!--              ><el-icon><View /></el-icon> 12,483-->
-              <!--            </span>-->
-              <!--            <span-->
-              <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
-              <!--            </span>-->
+            <div class="article-info">
+              <div class="meta-info">
+                <span
+                  ><el-icon><Calendar /></el-icon>Published:
+                  {{
+                    DateTime.fromISO(article.createdAt)
+                      .toLocal()
+                      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                  }}</span
+                >
+                <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
+                  ><el-icon><Calendar /></el-icon>Updated:
+                  {{
+                    DateTime.fromISO(article.updatedAt)
+                      .toLocal()
+                      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                  }}</span
+                >
+                <!--            <span-->
+                <!--              ><el-icon><View /></el-icon> 12,483-->
+                <!--            </span>-->
+                <!--            <span-->
+                <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
+                <!--            </span>-->
+              </div>
+              <div class="article-action">
+                <el-button :icon="Edit" size="small" type="primary">Edit</el-button>
+                <el-button :icon="Delete" size="small" type="danger">Delete</el-button>
+              </div>
             </div>
 
             <!-- Tags -->
@@ -162,6 +178,10 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
+.article-main {
+  width: 100%;
+}
+
 .article-title {
   font-size: 28px;
   font-weight: bold;
@@ -189,19 +209,28 @@ onMounted(async () => {
   color: #666666;
 }
 
-.article-meta {
+.article-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.meta-info {
   display: flex;
   gap: 16px;
   color: #666666;
   font-size: 14px;
-  margin-bottom: 18px;
 }
 
-.article-meta span {
+.meta-info span {
   display: flex;
   line-height: 1;
   gap: 4px;
-  align-items: center;
+}
+
+.article-action {
+  display: flex;
+  margin-left: auto;
 }
 
 .article-tags {

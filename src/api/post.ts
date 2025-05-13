@@ -6,7 +6,7 @@ export const postApi = {
   async getAllPosts(page: number): Promise<Article[] | undefined> {
     return await axiosInstance.get(`${getPath(ApiEndpoint.POST_GET_ALL)}?page=${page}`)
   },
-  async getPostById(id: string): Promise<Article | undefined> {
+  async getPostById(id: string | number): Promise<Article | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_BY_ID, { id }))
   },
   async createPost(post: ArticleRequest): Promise<void> {
