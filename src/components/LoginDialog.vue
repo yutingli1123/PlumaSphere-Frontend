@@ -39,11 +39,11 @@ const handleLogin = async () => {
     loading.value = true
     try {
       await authStore.login(loginParams.value.username, loginParams.value.password)
-      ElMessage.success('Login successful')
+      ElNotification.success('Login successful')
       emit('update:visible', false)
       resetForm()
     } catch {
-      ElMessage.error('Login failed, please check your username and password')
+      ElNotification.error('Login failed, please check your username and password')
     } finally {
       loading.value = false
     }

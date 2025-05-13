@@ -13,8 +13,8 @@ declare module 'axios' {
 }
 
 const showError = (errorMessage: string) => {
-  ElMessage.closeAll()
-  ElMessage.error(errorMessage)
+  ElNotification.closeAll()
+  ElNotification.error(errorMessage)
 }
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          showError('Unauthorized')
+          // showError('Unauthorized')
           useAuthStore().logout()
           break
         case 403:

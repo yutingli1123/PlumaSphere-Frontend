@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import { systemApi } from '@/api/system.ts'
 import type { InitSystemParams } from '@/types'
 import { useRouter } from 'vue-router'
@@ -89,7 +89,7 @@ const nextStep = () => {
     if (valid) {
       if (currentStep.value === 1) {
         if (!(await systemApi.verifySystemInitCode(initInfo.verificationCode!))) {
-          ElMessage.error('Wrong verification code')
+          ElNotification.error('Wrong verification code')
           return
         }
       }
@@ -97,7 +97,7 @@ const nextStep = () => {
       if (currentStep.value === 3) {
         setupLoading.value = true
         await systemApi.initSystem(initInfo)
-        ElMessage.success('Blog system setup completed')
+        ElNotification.success('Blog system setup completed')
         await router.push('/')
         setupLoading.value = false
         return
