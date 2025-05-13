@@ -320,5 +320,6 @@ onMounted(async () => {
 .comment-content {
   font-size: 15px;
   line-height: 1.6;
+  margin-left: 48px;
 }
 </style>
