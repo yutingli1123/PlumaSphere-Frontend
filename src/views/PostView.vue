@@ -10,12 +10,14 @@ import { userApi } from '@/api/user.ts'
 import { commentApi } from '@/api/comment.ts'
 import router from '@/router'
 import { DateTime } from 'luxon'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const { postId } = defineProps<{
   postId: string
 }>()
 
 const tagTypes = ['', 'success', 'warning', 'danger', 'info']
+const authStore = useAuthStore()
 
 const article: Ref<Article | undefined> = ref()
 const author: Ref<User | undefined> = ref()
@@ -27,8 +29,9 @@ const goHome = () => {
 }
 
 const deletePost = async () => {
+  if (!authStore.isLoggedIn) return
   await postApi.deletePost(postId)
-  router.push('/')
+  await router.push('/')
 }
 
 onMounted(async () => {
@@ -118,9 +121,13 @@ onMounted(async () => {
                 <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
                 <!--            </span>-->
               </div>
-              <div class="article-action">
+              <div v-if="authStore.isLoggedIn" class="article-action">
                 <el-button :icon="Edit" size="small" type="primary">Edit</el-button>
-                <el-button :icon="Delete" size="small" type="danger">Delete</el-button>
+                <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
+                  <template #reference>
+                    <el-button :icon="Delete" size="small" type="danger">Delete</el-button>
+                  </template>
+                </el-popconfirm>
               </div>
             </div>
 
