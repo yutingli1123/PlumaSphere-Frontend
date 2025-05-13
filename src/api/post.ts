@@ -17,4 +17,9 @@ export const postApi = {
   async getPostsCount(): Promise<number> {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_COUNT))
   },
+  async deletePost(id: string): Promise<void> {
+    await axiosInstance.delete(getPath(ApiEndpoint.POST_DELETE, { id }), {
+      requiresAuth: true,
+    })
+  },
 }
