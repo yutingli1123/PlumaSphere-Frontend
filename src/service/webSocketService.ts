@@ -1,5 +1,4 @@
 import { ApiEndpoint } from '@/api/endpoints'
-import SockJS from 'sockjs-client'
 
 export enum WebSocketMessageType {
   NEW_COMMENT = 'NEW_COMMENT',
@@ -15,7 +14,7 @@ class WebSocketService {
       return this.webSockets.get(postId)
     }
 
-    const webSocket = new SockJS(
+    const webSocket = new WebSocket(
       `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_WEB_SOCKET}?postId=${postId}`,
     )
 
