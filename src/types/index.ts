@@ -58,7 +58,7 @@ export interface Comment {
   content: string
   authorId: number
   authorNickname: string
-  createdAt: number
+  createdAt: string
 }
 
 export interface CommentRequest {

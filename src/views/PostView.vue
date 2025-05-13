@@ -157,7 +157,13 @@ onMounted(async () => {
                   <el-avatar :size="36"></el-avatar>
                   <div class="comment-info">
                     <div class="comment-name">{{ comment.authorNickname }}</div>
-                    <div class="comment-time">{{ comment.createdAt }}</div>
+                    <div class="comment-time">
+                      {{
+                        DateTime.fromISO(comment.createdAt)
+                          .toLocal()
+                          .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                      }}
+                    </div>
                   </div>
                 </div>
                 <div class="comment-content">
