@@ -1,11 +1,8 @@
 import { ApiEndpoint } from '@/api/endpoints'
+import SockJS from 'sockjs-client'
 
 export enum WebSocketMessageType {
-  NEW_COMMENT,
-}
-
-interface WebSocketMessage {
-  type: WebSocketMessageType
+  NEW_COMMENT = 'NEW_COMMENT',
 }
 
 type MessageListener = (type: WebSocketMessageType) => void
@@ -18,14 +15,14 @@ class WebSocketService {
       return this.webSockets.get(postId)
     }
 
-    const webSocket = new WebSocket(
-      `${import.meta.env.VITE_API_WS_BASE_URL}${ApiEndpoint.BASE_WEB_SOCKET}?postId=${postId}`,
+    const webSocket = new SockJS(
+      `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_WEB_SOCKET}?postId=${postId}`,
     )
 
-    webSocket.onmessage = (event) => {
+    webSocket.onmessage = (event: MessageEvent) => {
       try {
-        const message: WebSocketMessage = JSON.parse(event.data as string)
-        onMessage(message.type)
+        const message: WebSocketMessageType = event.data
+        onMessage(message)
       } catch (error) {
         console.error(`WS: ${error}`)
       }

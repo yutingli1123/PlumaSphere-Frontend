@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@types/sockjs-client": "^1.5.4",
     "axios": "^1.9.0",
     "element-plus": "^2.9.9",
     "luxon": "^3.6.1",
     "pinia": "^3.0.2",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
   },
