@@ -167,7 +167,7 @@ onBeforeUnmount(() => {
             <div class="comments-section">
               <div class="comments-section-title">
                 <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
-                <el-button :icon="RefreshRight" circle class="refresh-button" />
+                <el-button :icon="RefreshRight" circle class="refresh-button" loading />
               </div>
 
               <div v-for="(comment, index) in comments" :key="index" class="comment">
@@ -324,7 +324,7 @@ onBeforeUnmount(() => {
   }
 }
 
-.comments-section-title .refresh-button.is-loading {
+.refresh-button.is-loading {
   animation: spin 1.5s linear infinite;
 }
 
