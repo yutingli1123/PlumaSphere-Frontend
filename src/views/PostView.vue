@@ -167,7 +167,7 @@ onBeforeUnmount(() => {
             <div class="comments-section">
               <div class="comments-section-title">
                 <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
-                <el-button :icon="RefreshRight" circle class="refresh-button" loading />
+                <el-button :icon="RefreshRight" circle class="refresh-button" />
               </div>
 
               <div v-for="(comment, index) in comments" :key="index" class="comment">
@@ -313,19 +313,6 @@ onBeforeUnmount(() => {
 
 .refresh-button:hover {
   transform: rotate(360deg);
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.refresh-button.is-loading {
-  animation: spin 1.5s linear infinite;
 }
 
 .comments-section h3 {
