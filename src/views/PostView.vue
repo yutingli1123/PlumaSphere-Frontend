@@ -24,6 +24,8 @@ const article: Ref<Article | undefined> = ref()
 const author: Ref<User | undefined> = ref()
 const comments: Ref<Comment[] | undefined> = ref()
 const loaded: Ref<boolean> = ref(false)
+const newCommentsCount: Ref<number> = ref(0)
+const commentRefreshing: Ref<boolean> = ref(false)
 
 const goHome = () => {
   router.push('/')
@@ -36,15 +38,18 @@ const deletePost = async () => {
 }
 
 const refreshComment = async () => {
+  commentRefreshing.value = true
   const commentEntity = await commentApi.getCommentsByPostId(postId)
   if (commentEntity) {
     comments.value = commentEntity
+    newCommentsCount.value = 0
   }
+  commentRefreshing.value = false
 }
 
-const onWebSocketMessage = async (type: WebSocketMessageType) => {
+const onWebSocketMessage = (type: WebSocketMessageType) => {
   if (type === WebSocketMessageType.NEW_COMMENT) {
-    await refreshComment()
+    newCommentsCount.value++
   }
 }
 
@@ -167,11 +172,17 @@ onBeforeUnmount(() => {
             <div class="comments-section">
               <div class="comments-section-title">
                 <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
-                <el-button class="refresh-button" type="success">
-                  <el-icon class="refresh-icon">
+                <el-button
+                  v-if="newCommentsCount > 0"
+                  :disabled="commentRefreshing"
+                  class="refresh-button"
+                  type="success"
+                  @click="refreshComment"
+                >
+                  <el-icon :class="{ 'is-refreshing': commentRefreshing }" class="refresh-icon">
                     <RefreshRight class="refresh-icon-content" />
                   </el-icon>
-                  6 New
+                  {{ newCommentsCount }} New
                 </el-button>
               </div>
 
