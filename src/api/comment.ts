@@ -14,6 +14,9 @@ export const commentApi = {
       `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId })}?page=${page}`,
     )
   },
+  async getCommentsCountByPostId(postId: number | string): Promise<number> {
+    return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_COUNT_BY_POST_ID, { postId }))
+  },
   async addComment(comment: CommentRequest, postId: number | string): Promise<void> {
     await axiosInstance.post(getPath(ApiEndpoint.COMMENT_CREATE_BY_POST_ID, { postId }), comment, {
       requiresAuth: true,

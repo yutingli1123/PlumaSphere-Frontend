@@ -28,6 +28,7 @@ const loaded: Ref<boolean> = ref(false)
 const newCommentsCount: Ref<number> = ref(0)
 const commentRefreshing: Ref<boolean> = ref(false)
 const commentPage: Ref<number> = ref(1)
+const totalComments: Ref<number> = ref(0)
 
 const goHome = () => {
   router.push('/')
@@ -39,9 +40,18 @@ const deletePost = async () => {
   await router.push('/')
 }
 
+const getComments = async (page: number) => {
+  const commentEntity = await commentApi.getCommentsByPostId(postId, page - 1)
+  if (commentEntity) {
+    comments.value = commentEntity
+  }
+}
+
 const refreshComment = async () => {
   commentRefreshing.value = true
-  const commentEntity = await commentApi.getCommentsByPostId(postId, commentPage.value)
+  commentPage.value = 1
+  totalComments.value = await commentApi.getCommentsCountByPostId(postId)
+  const commentEntity = await commentApi.getCommentsByPostId(postId, 0)
   if (commentEntity) {
     comments.value = commentEntity
     newCommentsCount.value = 0
@@ -173,7 +183,7 @@ onBeforeUnmount(() => {
             <!-- Comments Section -->
             <div class="comments-section">
               <div class="comments-section-title">
-                <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
+                <h3>Comments ({{ totalComments }})</h3>
                 <el-button
                   v-if="newCommentsCount > 0"
                   :disabled="commentRefreshing"
@@ -189,10 +199,13 @@ onBeforeUnmount(() => {
               </div>
               <CommentList :comments="comments" />
               <el-pagination
+                v-if="totalComments !== 0"
+                v-model:current-page="commentPage"
                 :page-size="5"
-                :total="10"
+                :total="totalComments"
                 layout="prev, pager, next, total, jumper"
                 style="justify-content: center; margin-top: 10px"
+                @current-change="getComments"
               />
               <CommentForm :post-id="postId" class="comment-form" />
             </div>
