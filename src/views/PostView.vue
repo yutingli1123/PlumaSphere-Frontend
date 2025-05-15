@@ -167,7 +167,12 @@ onBeforeUnmount(() => {
             <div class="comments-section">
               <div class="comments-section-title">
                 <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
-                <el-button :icon="RefreshRight" circle class="refresh-button" />
+                <el-button class="refresh-button" type="success">
+                  <el-icon class="refresh-icon">
+                    <RefreshRight class="refresh-icon-content" />
+                  </el-icon>
+                  6 New
+                </el-button>
               </div>
 
               <div v-for="(comment, index) in comments" :key="index" class="comment">
@@ -308,11 +313,52 @@ onBeforeUnmount(() => {
 }
 
 .refresh-button {
-  transition: transform 0.5s ease;
+  padding-left: 4px;
+  padding-right: 12px;
+  margin-left: 14px;
+  border-radius: 20px;
 }
 
 .refresh-button:hover {
-  transform: rotate(360deg);
+  .refresh-icon {
+    transform: rotate(360deg);
+  }
+
+  .refresh-icon-content {
+    opacity: 0.6;
+  }
+}
+
+.refresh-button:active {
+  .refresh-icon {
+    background-color: #eaeaea;
+  }
+}
+
+.refresh-icon {
+  background-color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  transition: transform 0.5s ease;
+}
+
+.refresh-icon-content {
+  color: black;
+}
+
+.refresh-icon.is-refreshing {
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .comments-section h3 {
