@@ -12,6 +12,7 @@ import router from '@/router'
 import { DateTime } from 'luxon'
 import { useAuthStore } from '@/stores/auth.ts'
 import { WebSocketMessageType, WebSocketServiceInstance } from '@/service/webSocketService'
+import CommentList from '@/components/CommentList.vue'
 
 const { postId } = defineProps<{
   postId: string
@@ -26,6 +27,7 @@ const comments: Ref<Comment[] | undefined> = ref()
 const loaded: Ref<boolean> = ref(false)
 const newCommentsCount: Ref<number> = ref(0)
 const commentRefreshing: Ref<boolean> = ref(false)
+const commentPage: Ref<number> = ref(1)
 
 const goHome = () => {
   router.push('/')
@@ -39,7 +41,7 @@ const deletePost = async () => {
 
 const refreshComment = async () => {
   commentRefreshing.value = true
-  const commentEntity = await commentApi.getCommentsByPostId(postId)
+  const commentEntity = await commentApi.getCommentsByPostId(postId, commentPage.value)
   if (commentEntity) {
     comments.value = commentEntity
     newCommentsCount.value = 0
@@ -185,25 +187,13 @@ onBeforeUnmount(() => {
                   {{ newCommentsCount }} New
                 </el-button>
               </div>
-
-              <div v-for="(comment, index) in comments" :key="index" class="comment">
-                <div class="comment-author">
-                  <el-avatar :size="36"></el-avatar>
-                  <div class="comment-info">
-                    <div class="comment-name">{{ comment.authorNickname }}</div>
-                    <div class="comment-time">
-                      {{
-                        DateTime.fromISO(comment.createdAt)
-                          .toLocal()
-                          .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div class="comment-content">
-                  {{ comment.content }}
-                </div>
-              </div>
+              <CommentList :comments="comments" />
+              <el-pagination
+                :page-size="5"
+                :total="10"
+                layout="prev, pager, next, total, jumper"
+                style="justify-content: center; margin-top: 10px"
+              />
               <CommentForm :post-id="postId" class="comment-form" />
             </div>
           </div>
@@ -375,35 +365,5 @@ onBeforeUnmount(() => {
 .comments-section h3 {
   font-size: 20px;
   margin-bottom: 20px;
-}
-
-.comment {
-  padding: 16px 0;
-  border-bottom: 1px solid #eaeaea;
-}
-
-.comment-author {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.comment-info {
-  margin-left: 12px;
-}
-
-.comment-name {
-  font-weight: bold;
-}
-
-.comment-time {
-  font-size: 12px;
-  color: #999999;
-}
-
-.comment-content {
-  font-size: 15px;
-  line-height: 1.6;
-  margin-left: 48px;
 }
 </style>
