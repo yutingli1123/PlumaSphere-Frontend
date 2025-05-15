@@ -3,7 +3,7 @@ import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
 import { Calendar, Delete, Edit } from '@element-plus/icons-vue'
 import CommentForm from '@/components/CommentForm.vue'
-import { onMounted, type Ref, ref } from 'vue'
+import { onBeforeUnmount, onMounted, type Ref, ref } from 'vue'
 import type { Article, Comment, User } from '@/types'
 import { postApi } from '@/api/post.ts'
 import { userApi } from '@/api/user.ts'
@@ -65,6 +65,10 @@ onMounted(async () => {
 
   WebSocketServiceInstance.connectWebSocket(postId, onWebSocketMessage)
   loaded.value = true
+})
+
+onBeforeUnmount(() => {
+  WebSocketServiceInstance.disconnectWebSocket(postId)
 })
 </script>
 
