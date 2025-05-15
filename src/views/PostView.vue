@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
-import { Calendar, Delete, Edit } from '@element-plus/icons-vue'
+import { Calendar, Delete, Edit, RefreshRight } from '@element-plus/icons-vue'
 import CommentForm from '@/components/CommentForm.vue'
 import { onBeforeUnmount, onMounted, type Ref, ref } from 'vue'
 import type { Article, Comment, User } from '@/types'
@@ -165,9 +165,10 @@ onBeforeUnmount(() => {
           <div class="footer">
             <!-- Comments Section -->
             <div class="comments-section">
-              <h3 class="comments-section-title">
-                Comments ({{ comments ? comments?.length : 0 }})
-              </h3>
+              <div class="comments-section-title">
+                <h3>Comments ({{ comments ? comments?.length : 0 }})</h3>
+                <el-button :icon="RefreshRight" circle />
+              </div>
 
               <div v-for="(comment, index) in comments" :key="index" class="comment">
                 <div class="comment-author">
@@ -301,13 +302,35 @@ onBeforeUnmount(() => {
 }
 
 .comments-section-title {
-  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.comments-section-title .el-button {
+  transition: transform 0.5s ease;
+}
+
+.comments-section-title .el-button:hover {
+  transform: rotate(360deg);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.comments-section-title .el-button.is-loading {
+  animation: spin 1.5s linear infinite;
 }
 
 .comments-section h3 {
   font-size: 20px;
   margin-bottom: 20px;
-  font-weight: 500;
 }
 
 .comment {
