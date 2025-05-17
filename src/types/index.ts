@@ -74,11 +74,6 @@ export interface InitSystemParams {
   adminNickname: string
 }
 
-export interface Like {
-  id: number
-  userNickname: string
-}
-
 export enum ConfigFiled {
   INITIALIZED = 'INITIALIZED',
   BLOG_TITLE = 'BLOG_TITLE',

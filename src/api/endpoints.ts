@@ -30,10 +30,12 @@ export enum ApiEndpoint {
   COMMENT_CREATE_BY_POST_ID = `${POST_BASE}/:postId/comment`,
   COMMENT_COUNT_BY_POST_ID = `${COMMENT_GET_ALL_BY_POST_ID}/count`,
 
-  LIKE_GET_ALL_BY_POST_ID = `${POST_BASE}/:postId/like`,
-  LIKE_GET_ALL_BY_COMMENT_ID = `${COMMENT_BASE}/:commentId/like`,
+  LIKE_COUNT_BY_POST_ID = `${POST_BASE}/:postId/like`,
+  LIKE_COUNT_BY_COMMENT_ID = `${COMMENT_BASE}/:commentId/like`,
   LIKE_POST = `${POST_BASE}/:postId/like`,
   LIKE_COMMENT = `${COMMENT_BASE}/:commentId/like`,
+  LIKE_POST_STATE = `${LIKE_POST}/state`,
+  LIKE_COMMENT_STATE = `${LIKE_COMMENT}/state`,
 
   TAG_BASE = '/tag',
   TAG_GET_ALL = `${TAG_BASE}`,
