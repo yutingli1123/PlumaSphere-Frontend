@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth.ts'
 
 const props = defineProps({

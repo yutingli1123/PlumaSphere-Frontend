@@ -2,7 +2,6 @@
 import { Search } from '@element-plus/icons-vue'
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useAuthStore } from '@/stores/auth.ts'
-import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()

@@ -1,4 +1,3 @@
-import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { User } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'

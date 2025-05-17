@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import { systemApi } from '@/api/system.ts'
 import type { InitSystemParams } from '@/types'

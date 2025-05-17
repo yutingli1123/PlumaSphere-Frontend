@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed, onMounted, type Ref, ref, watch } from 'vue'
 import { User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user.ts'
 import type { CommentRequest, User as UserInfo } from '@/types'

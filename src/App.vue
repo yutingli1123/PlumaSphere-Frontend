@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { onMounted } from 'vue'
 import { systemApi } from '@/api/system.ts'
 import router from '@/router'
 import { type Config, ConfigFiled } from '@/types'

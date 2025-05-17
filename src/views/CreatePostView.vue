@@ -2,7 +2,6 @@
 import TopNavigation from '@/components/TopNavigation.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import NewPost from '@/components/NewPost.vue'
-import { computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useRouter } from 'vue-router'
 

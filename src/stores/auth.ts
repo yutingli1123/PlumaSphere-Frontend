@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import type { TokenPair } from '@/types'
-import { computed, ref } from 'vue'
 import { authApi } from '@/api/auth.ts'
 import { DateTime } from 'luxon'
 import { useUserStore } from '@/stores/user.ts'

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TopNavigation from '@/components/TopNavigation.vue'
-import { onMounted, type Ref, ref } from 'vue'
 import TagSidebar from '@/components/TagSidebar.vue'
 import PostList from '@/components/PostList.vue'
 import PageFooter from '@/components/PageFooter.vue'

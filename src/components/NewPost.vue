@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref, type Ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { postApi } from '@/api/post.ts'
 import type { ArticleRequest } from '@/types'
