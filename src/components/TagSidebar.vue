@@ -5,7 +5,7 @@ defineProps<{
   tags: Tag[] | undefined
 }>()
 
-const tagTypes = ['', 'success', 'warning', 'danger', 'info']
+const tagTypes = [undefined, 'success', 'warning', 'danger', 'info', 'primary'] as const
 </script>
 
 <template>

@@ -11,14 +11,17 @@ import { DateTime } from 'luxon'
 import { useAuthStore } from '@/stores/auth.ts'
 import { WebSocketMessageType, WebSocketServiceInstance } from '@/service/webSocketService'
 import CommentList from '@/components/CommentList.vue'
-import IconEpEdit from '~icons/ep/edit'
-import IconEpDelete from '~icons/ep/delete'
+import IEpEdit from '~icons/ep/edit'
+import IEpDelete from '~icons/ep/delete'
+import IMdiThumbUp from '~icons/mdi/thumb-up'
+import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
+import { likeApi } from '@/api/like.ts'
 
 const { postId } = defineProps<{
   postId: string
 }>()
 
-const tagTypes = ['', 'success', 'warning', 'danger', 'info']
+const tagTypes = [undefined, 'success', 'warning', 'danger', 'info', 'primary'] as const
 const authStore = useAuthStore()
 
 const article: Ref<Article | undefined> = ref()
@@ -29,9 +32,27 @@ const newCommentsCount: Ref<number> = ref(0)
 const commentRefreshing: Ref<boolean> = ref(false)
 const commentPage: Ref<number> = ref(1)
 const totalComments: Ref<number> = ref(0)
+const isLiked: Ref<boolean> = ref(false)
+const likeCount: Ref<number> = ref(0)
+const likeLoading: Ref<boolean> = ref(false)
 
 const goHome = () => {
   router.push('/')
+}
+
+const getLikes = async () => {
+  likeLoading.value = true
+  likeCount.value = await likeApi.getLikesByPostId(postId)
+  if (authStore.hasToken) isLiked.value = await likeApi.checkPostLikeState(postId)
+  likeLoading.value = false
+}
+
+const toggleLike = async () => {
+  likeLoading.value = true
+  if (!authStore.hasToken) await authStore.getNewIdentity()
+  await likeApi.likePost(postId)
+  await getLikes()
+  likeLoading.value = false
 }
 
 const deletePost = async () => {
@@ -71,6 +92,8 @@ onMounted(async () => {
     return
   }
   article.value = articleEntity
+
+  await getLikes()
 
   await refreshComment()
 
@@ -156,10 +179,10 @@ onBeforeUnmount(() => {
                 <!--            </span>-->
               </div>
               <div v-if="authStore.isLoggedIn" class="article-action">
-                <el-button :icon="IconEpEdit" size="small" type="primary">Edit</el-button>
+                <el-button :icon="IEpEdit" size="small" type="primary">Edit</el-button>
                 <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
                   <template #reference>
-                    <el-button :icon="IconEpDelete" size="small" type="danger">Delete</el-button>
+                    <el-button :icon="IEpDelete" size="small" type="danger">Delete</el-button>
                   </template>
                 </el-popconfirm>
               </div>
@@ -167,7 +190,7 @@ onBeforeUnmount(() => {
 
             <!-- Tags -->
             <div v-for="(tag, index) in article.tags" :key="index" class="article-tags">
-              <el-tag :type="tagTypes[index % article.tags.length!]" size="small"
+              <el-tag :type="tagTypes[index % tagTypes.length]" size="small"
                 >{{ tag.name }}
               </el-tag>
             </div>
@@ -175,6 +198,18 @@ onBeforeUnmount(() => {
             <!-- Body -->
             <div class="article-body">
               <p>{{ article.content }}</p>
+            </div>
+            <div class="like-section">
+              <el-button
+                :icon="isLiked ? IMdiThumbUp : IMdiThumbUpOutline"
+                :loading="likeLoading"
+                :type="isLiked ? 'primary' : 'default'"
+                class="like-button"
+                size="large"
+                @click="toggleLike"
+              >
+                {{ likeCount }}
+              </el-button>
             </div>
           </div>
         </el-main>
@@ -378,5 +413,15 @@ onBeforeUnmount(() => {
 .comments-section h3 {
   font-size: 20px;
   margin-bottom: 20px;
+}
+
+.like-section {
+  display: flex;
+  justify-content: center;
+}
+
+.like-button {
+  min-width: 80px;
+  font-size: 16px;
 }
 </style>
