@@ -23,7 +23,7 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver(), IconsResolver()],
     }),
-    Icons({ compiler: 'vue3' },
+    Icons({ compiler: 'vue3' }),
   ],
   resolve: {
     alias: {
