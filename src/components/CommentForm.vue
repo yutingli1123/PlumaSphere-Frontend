@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user.ts'
 import type { CommentRequest, User as UserInfo } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
@@ -59,7 +58,7 @@ onMounted(() => {
       @click="getNewIdentity"
     >
       <el-icon class="identity-icon">
-        <User />
+        <IEpUser />
       </el-icon>
       {{
         userInfo

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Search } from '@element-plus/icons-vue'
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useRouter } from 'vue-router'
+import IEpSearch from '~icons/ep/search'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -22,7 +22,7 @@ const navigateToCreatePost = () => {
       <p class="subtitle">Another Blog Application</p>
     </div>
     <div class="search-login-section">
-      <el-input :prefix-icon="Search" class="search-input" placeholder="Search..." />
+      <el-input :prefix-icon="IEpSearch" class="search-input" placeholder="Search..." />
       <el-button
         v-if="!isLoggedIn"
         class="login-button"
@@ -31,7 +31,7 @@ const navigateToCreatePost = () => {
         >Login
       </el-button>
       <div v-else>
-        <el-button type="primary" @click="navigateToCreatePost"> New Post </el-button>
+        <el-button type="primary" @click="navigateToCreatePost">New Post</el-button>
         <el-button class="login-button" type="danger" @click="authStore.logout()"
           >Logout
         </el-button>

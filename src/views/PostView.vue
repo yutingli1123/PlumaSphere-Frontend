@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
-import { Calendar, Delete, Edit, RefreshRight } from '@element-plus/icons-vue'
 import CommentForm from '@/components/CommentForm.vue'
 import type { Article, Comment, User } from '@/types'
 import { postApi } from '@/api/post.ts'
@@ -12,6 +11,8 @@ import { DateTime } from 'luxon'
 import { useAuthStore } from '@/stores/auth.ts'
 import { WebSocketMessageType, WebSocketServiceInstance } from '@/service/webSocketService'
 import CommentList from '@/components/CommentList.vue'
+import IconEpEdit from '~icons/ep/edit'
+import IconEpDelete from '~icons/ep/delete'
 
 const { postId } = defineProps<{
   postId: string
@@ -132,7 +133,7 @@ onBeforeUnmount(() => {
             <div class="article-info">
               <div class="meta-info">
                 <span
-                  ><el-icon><Calendar /></el-icon>Published:
+                  ><el-icon><IEpCalendar /></el-icon>Published:
                   {{
                     DateTime.fromISO(article.createdAt)
                       .toLocal()
@@ -140,7 +141,7 @@ onBeforeUnmount(() => {
                   }}</span
                 >
                 <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
-                  ><el-icon><Calendar /></el-icon>Updated:
+                  ><el-icon><IEpCalendar /></el-icon>Updated:
                   {{
                     DateTime.fromISO(article.updatedAt)
                       .toLocal()
@@ -155,10 +156,10 @@ onBeforeUnmount(() => {
                 <!--            </span>-->
               </div>
               <div v-if="authStore.isLoggedIn" class="article-action">
-                <el-button :icon="Edit" size="small" type="primary">Edit</el-button>
+                <el-button :icon="IconEpEdit" size="small" type="primary">Edit</el-button>
                 <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
                   <template #reference>
-                    <el-button :icon="Delete" size="small" type="danger">Delete</el-button>
+                    <el-button :icon="IconEpDelete" size="small" type="danger">Delete</el-button>
                   </template>
                 </el-popconfirm>
               </div>
@@ -191,7 +192,7 @@ onBeforeUnmount(() => {
                   @click="refreshComment"
                 >
                   <el-icon :class="{ 'is-refreshing': commentRefreshing }" class="refresh-icon">
-                    <RefreshRight class="refresh-icon-content" />
+                    <IEpRefreshRight class="refresh-icon-content" />
                   </el-icon>
                   {{ newCommentsCount }} New
                 </el-button>
