@@ -31,6 +31,7 @@ const loaded: Ref<boolean> = ref(false)
 const newCommentsCount: Ref<number> = ref(0)
 const commentRefreshing: Ref<boolean> = ref(false)
 const commentPage: Ref<number> = ref(1)
+const totalCommentPages: Ref<number> = ref(0)
 const totalComments: Ref<number> = ref(0)
 const isLiked: Ref<boolean> = ref(false)
 const likeCount: Ref<number> = ref(0)
@@ -71,7 +72,8 @@ const getComments = async (page: number) => {
 const refreshComment = async () => {
   commentRefreshing.value = true
   commentPage.value = 1
-  totalComments.value = await commentApi.getCommentsCountByPostId(postId)
+  totalCommentPages.value = await commentApi.getCommentPagesByPostId(postId)
+  totalComments.value = await commentApi.getCommentCount(postId)
   const commentEntity = await commentApi.getCommentsByPostId(postId, 0)
   if (commentEntity) {
     comments.value = commentEntity
@@ -234,13 +236,13 @@ onBeforeUnmount(() => {
               </div>
               <CommentList :comments="comments" />
               <el-pagination
-                v-if="totalComments !== 0"
+                v-if="totalCommentPages !== 0"
                 v-model:current-page="commentPage"
-                :page-size="5"
+                :page-count="totalCommentPages"
                 :total="totalComments"
                 layout="prev, pager, next, total, jumper"
                 style="justify-content: center; margin-top: 10px"
-                @current-change="getComments"
+                @update:current-page="getComments"
               />
               <CommentForm :post-id="postId" class="comment-form" />
             </div>

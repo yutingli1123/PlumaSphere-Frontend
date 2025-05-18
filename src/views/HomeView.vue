@@ -8,14 +8,16 @@ import { postApi } from '@/api/post.ts'
 import { tagApi } from '@/api/tag.ts'
 
 const currentPage: Ref<number> = ref(1)
-const totalPosts: Ref<number> = ref(0)
+const totalPostPages: Ref<number> = ref(0)
+const totalPostCount: Ref<number> = ref(0)
 const loaded: Ref<boolean> = ref(false)
 
 const tags: Ref<Tag[] | undefined> = ref()
 const articles: Ref<Article[] | undefined> = ref()
 
 const refreshArticles = async () => {
-  totalPosts.value = await postApi.getPostsCount()
+  totalPostPages.value = await postApi.getPostPages()
+  totalPostCount.value = await postApi.getPostCount()
   articles.value = await postApi.getAllPosts(0)
 }
 
@@ -50,13 +52,13 @@ onMounted(() => {
         <el-main style="padding-top: 10px">
           <PostList :articles="articles" :refresh="refreshContent" />
           <el-pagination
-            v-if="totalPosts !== 0"
+            v-if="totalPostPages !== 0"
             v-model:current-page="currentPage"
             layout="prev, pager, next, total, jumper"
-            :total="totalPosts"
-            :page-size="5"
+            :page-count="totalPostPages"
+            :total="totalPostCount"
             style="justify-content: center"
-            @current-change="getArticles"
+            @update:current-page="getArticles"
           />
         </el-main>
       </el-container>

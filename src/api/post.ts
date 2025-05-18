@@ -14,8 +14,11 @@ export const postApi = {
       requiresAuth: true,
     })
   },
-  async getPostsCount(): Promise<number> {
-    return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_COUNT))
+  async getPostPages(): Promise<number> {
+    return await axiosInstance.get(getPath(ApiEndpoint.POST_PAGE_COUNT))
+  },
+  async getPostCount(): Promise<number> {
+    return await axiosInstance.get(getPath(ApiEndpoint.POST_COUNT))
   },
   async deletePost(id: string): Promise<void> {
     await axiosInstance.delete(getPath(ApiEndpoint.POST_DELETE, { id }), {
