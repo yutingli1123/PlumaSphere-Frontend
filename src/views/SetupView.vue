@@ -3,12 +3,14 @@ import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import { systemApi } from '@/api/system.ts'
 import type { InitSystemParams } from '@/types'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const router = useRouter()
 
 const currentStep = ref(1)
 const formRef = ref<FormInstance>()
 const setupLoading = ref(false)
+const authStore = useAuthStore()
 
 const initInfo = reactive<InitSystemParams>({
   verificationCode: '',
@@ -96,6 +98,7 @@ const nextStep = () => {
       if (currentStep.value === 3) {
         setupLoading.value = true
         await systemApi.initSystem(initInfo)
+        await authStore.login(initInfo.adminUsername, initInfo.adminPassword)
         ElNotification.success('Blog system setup completed')
         await router.push('/')
         setupLoading.value = false
@@ -112,6 +115,10 @@ const prevStep = () => {
     currentStep.value--
   }
 }
+
+onMounted(() => {
+  authStore.logout()
+})
 </script>
 <template>
   <div class="setup-guide-container">

@@ -5,7 +5,6 @@ import type { ArticleRequest, ArticleUpdateRequest, Tag } from '@/types'
 import { useRouter } from 'vue-router'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
-import { onBeforeUnmount } from 'vue'
 import { tagApi } from '@/api/tag.ts'
 import { tagTypes } from '@/constant'
 
