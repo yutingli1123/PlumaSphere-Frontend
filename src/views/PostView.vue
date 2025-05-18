@@ -16,6 +16,9 @@ import IEpDelete from '~icons/ep/delete'
 import IMdiThumbUp from '~icons/mdi/thumb-up'
 import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
 import { likeApi } from '@/api/like.ts'
+import MarkDownIt from 'markdown-it'
+
+const markDownIt = new MarkDownIt()
 
 const { postId } = defineProps<{
   postId: string
@@ -187,8 +190,8 @@ onBeforeUnmount(() => {
               </div>
               <div v-if="authStore.isLoggedIn" class="article-action">
                 <el-button :icon="IEpEdit" size="small" type="primary" @click="editPost"
-                  >Edit</el-button
-                >
+                  >Edit
+                </el-button>
                 <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
                   <template #reference>
                     <el-button :icon="IEpDelete" size="small" type="danger">Delete</el-button>
@@ -206,7 +209,7 @@ onBeforeUnmount(() => {
 
             <!-- Body -->
             <div class="article-body">
-              <p>{{ article.content }}</p>
+              <div v-html="markDownIt.render(article.content ? article.content : '')" />
             </div>
             <div class="like-section">
               <el-button
@@ -334,8 +337,8 @@ onBeforeUnmount(() => {
 }
 
 .article-body {
+  min-height: 30dvh;
   font-size: 16px;
-  line-height: 1.8;
   color: #333333;
 }
 
