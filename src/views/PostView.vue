@@ -62,6 +62,11 @@ const deletePost = async () => {
   await router.push('/')
 }
 
+const editPost = async () => {
+  if (!authStore.isLoggedIn) return
+  await router.push({ path: `/edit-post/${postId}` })
+}
+
 const getComments = async (page: number) => {
   const commentEntity = await commentApi.getCommentsByPostId(postId, page - 1)
   if (commentEntity) {
@@ -181,7 +186,9 @@ onBeforeUnmount(() => {
                 <!--            </span>-->
               </div>
               <div v-if="authStore.isLoggedIn" class="article-action">
-                <el-button :icon="IEpEdit" size="small" type="primary">Edit</el-button>
+                <el-button :icon="IEpEdit" size="small" type="primary" @click="editPost"
+                  >Edit</el-button
+                >
                 <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
                   <template #reference>
                     <el-button :icon="IEpDelete" size="small" type="danger">Delete</el-button>

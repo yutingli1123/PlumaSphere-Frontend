@@ -25,6 +25,7 @@ watch(isLoggedIn, (value: boolean) => {
 onMounted(async () => {
   if (!isLoggedIn.value) {
     await router.push({ path: '/' })
+    return
   }
   if (!!postId) {
     post.value = await postApi.getPostById(postId)
@@ -39,11 +40,13 @@ onMounted(async () => {
     </el-header>
     <el-main style="min-height: 90dvh">
       <CreateOrEditPost
-        :content-in="post?.content"
+        v-if="!!post"
+        :content-in="post.content"
         :post-id="postId"
-        :title-in="post?.title"
+        :title-in="post.title"
         style="max-width: 90%; margin: 40px auto 0 auto"
       />
+      <CreateOrEditPost v-else style="max-width: 90%; margin: 40px auto 0 auto" />
     </el-main>
     <el-footer style="padding: 0">
       <PageFooter />
