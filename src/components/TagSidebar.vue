@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import type { Tag } from '@/types'
+import { tagTypes } from '@/constant'
 
 defineProps<{
   tags: Tag[] | undefined
 }>()
-
-const tagTypes = ['primary', 'success', 'warning', 'danger', 'info'] as const
 </script>
 
 <template>

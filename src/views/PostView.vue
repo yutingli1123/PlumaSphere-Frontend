@@ -18,12 +18,12 @@ import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
 import { likeApi } from '@/api/like.ts'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
+import { tagTypes } from '@/constant'
 
 const { postId } = defineProps<{
   postId: string
 }>()
 
-const tagTypes = ['primary', 'success', 'warning', 'danger', 'info'] as const
 const authStore = useAuthStore()
 
 const article: Ref<Article | undefined> = ref()
@@ -209,9 +209,13 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Tags -->
-            <div v-for="(tag, index) in article.tags" :key="index" class="article-tags">
-              <el-tag :type="tagTypes[index % tagTypes.length]" size="small"
-                >{{ tag.name }}
+            <div class="article-tags">
+              <el-tag
+                v-for="(tag, index) in article.tags"
+                :key="index"
+                :type="tagTypes[index % tagTypes.length]"
+                size="small"
+                >{{ tag }}
               </el-tag>
             </div>
 
@@ -340,8 +344,8 @@ onBeforeUnmount(() => {
 
 .article-tags {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
 }
 
 .article-body {

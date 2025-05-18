@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Article } from '@/types'
 import { DateTime } from 'luxon'
+import { tagTypes } from '@/constant'
 
 defineProps<{
   articles: Article[] | undefined
@@ -32,11 +33,11 @@ defineProps<{
                 <el-tag
                   v-for="(tag, tagIndex) in article.tags"
                   :key="tagIndex"
-                  :type="tag.name"
+                  :type="tagTypes[tagIndex % tagTypes.length]"
                   class="article-tag"
                   size="small"
                 >
-                  {{ tag.name }}
+                  {{ tag }}
                 </el-tag>
               </div>
 

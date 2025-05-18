@@ -4,7 +4,7 @@ export interface Article {
   content?: string
   description?: string
   authorId: number
-  tags: Tag[]
+  tags: string[]
   createdAt: string
   updatedAt: string
 }
@@ -12,7 +12,7 @@ export interface Article {
 export interface ArticleRequest {
   title: string
   content: string
-  tags: number[]
+  tags: string[]
 }
 
 export interface ArticleUpdateRequest extends ArticleRequest {
