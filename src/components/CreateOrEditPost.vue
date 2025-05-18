@@ -3,6 +3,11 @@ import type { FormInstance } from 'element-plus'
 import { postApi } from '@/api/post.ts'
 import type { ArticleRequest, ArticleUpdateRequest } from '@/types'
 import { useRouter } from 'vue-router'
+import Vditor from 'vditor'
+import 'vditor/dist/index.css'
+import { onBeforeUnmount } from 'vue'
+
+const editor = ref<Vditor | undefined>()
 
 const posting = ref(false)
 const router = useRouter()
@@ -25,6 +30,10 @@ const rules = {
 }
 
 const submitPost = () => {
+  if (editor.value) {
+    newPostParams.value.content = editor.value.getValue()
+  }
+
   formRef.value?.validate(async (valid) => {
     if (valid) {
       posting.value = true
@@ -64,6 +73,23 @@ onMounted(() => {
   if (!!contentIn) {
     newPostParams.value.content = contentIn
   }
+  editor.value = new Vditor('editor', {
+    lang: 'en_US',
+    height: 600,
+    width: '100%',
+    after() {
+      if (newPostParams.value.content) {
+        editor.value?.setValue(newPostParams.value.content)
+      }
+    },
+    input(value: string) {
+      newPostParams.value.content = value
+    },
+  })
+})
+
+onBeforeUnmount(() => {
+  editor.value?.destroy()
 })
 </script>
 
@@ -73,12 +99,13 @@ onMounted(() => {
       <el-input v-model="newPostParams.title" placeholder="Enter the post title" />
     </el-form-item>
     <el-form-item label="Content" prop="content">
-      <el-input
-        v-model="newPostParams.content"
-        :rows="20"
-        placeholder="Enter the post content"
-        type="textarea"
-      />
+      <!--      <el-input-->
+      <!--        v-model="newPostParams.content"-->
+      <!--        :rows="20"-->
+      <!--        placeholder="Enter the post content"-->
+      <!--        type="textarea"-->
+      <!--      />-->
+      <div id="editor" />
     </el-form-item>
     <el-form-item>
       <div style="display: flex; justify-content: flex-end; width: 100%">

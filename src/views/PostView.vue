@@ -16,9 +16,8 @@ import IEpDelete from '~icons/ep/delete'
 import IMdiThumbUp from '~icons/mdi/thumb-up'
 import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
 import { likeApi } from '@/api/like.ts'
-import MarkDownIt from 'markdown-it'
-
-const markDownIt = new MarkDownIt()
+import Vditor from 'vditor'
+import 'vditor/dist/index.css'
 
 const { postId } = defineProps<{
   postId: string
@@ -39,6 +38,7 @@ const totalComments: Ref<number> = ref(0)
 const isLiked: Ref<boolean> = ref(false)
 const likeCount: Ref<number> = ref(0)
 const likeLoading: Ref<boolean> = ref(false)
+const articleContent = ref<HTMLDivElement | undefined>()
 
 const goHome = () => {
   router.push('/')
@@ -96,6 +96,17 @@ const onWebSocketMessage = (type: WebSocketMessageType) => {
   }
 }
 
+watch(articleContent, () => {
+  if (article.value?.content) {
+    if (articleContent.value) {
+      Vditor.preview(articleContent.value, article.value?.content || '', {
+        mode: 'light',
+        lang: 'en_US',
+      })
+    }
+  }
+})
+
 onMounted(async () => {
   const articleEntity = await postApi.getPostById(postId)
   if (!articleEntity) {
@@ -104,15 +115,12 @@ onMounted(async () => {
   article.value = articleEntity
 
   await getLikes()
-
   await refreshComment()
-
   const authorId = articleEntity.authorId
   const authorEntity = await userApi.getUserById(authorId)
   if (authorEntity) {
     author.value = authorEntity
   }
-
   WebSocketServiceInstance.connectWebSocket(postId, onWebSocketMessage)
   loaded.value = true
 })
@@ -209,7 +217,7 @@ onBeforeUnmount(() => {
 
             <!-- Body -->
             <div class="article-body">
-              <div v-html="markDownIt.render(article.content ? article.content : '')" />
+              <div ref="articleContent" />
             </div>
             <div class="like-section">
               <el-button
@@ -340,6 +348,7 @@ onBeforeUnmount(() => {
   min-height: 30dvh;
   font-size: 16px;
   color: #333333;
+  margin-bottom: 30px;
 }
 
 .article-body p {
