@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div v-else class="article-content" style="margin-top: 80px">
-      <el-skeleton :rows="20" animated />
+      <el-skeleton :rows="18" animated />
     </div>
   </el-container>
 </template>
