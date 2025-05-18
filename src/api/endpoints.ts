@@ -17,7 +17,7 @@ export enum ApiEndpoint {
   POST_COUNT = `${POST_BASE}/count`,
   POST_GET_BY_ID = `${POST_BASE}/:id`,
   POST_CREATE = `${POST_BASE}`,
-  POST_UPDATE = `${POST_BASE}/:id`,
+  POST_UPDATE = `${POST_BASE}`,
   POST_DELETE = `${POST_BASE}/:id`,
 
   USER_BASE = '/user',

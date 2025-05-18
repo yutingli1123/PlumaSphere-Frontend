@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 import TopNavigation from '@/components/TopNavigation.vue'
 import PageFooter from '@/components/PageFooter.vue'
-import NewPost from '@/components/NewPost.vue'
+import CreateOrEditPost from '@/components/CreateOrEditPost.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useRouter } from 'vue-router'
+import { postApi } from '@/api/post.ts'
+import type { Article } from '@/types'
+
+const { postId } = defineProps<{
+  postId?: string
+}>()
+
+const post: Ref<Article | undefined> = ref()
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -14,9 +22,12 @@ watch(isLoggedIn, (value: boolean) => {
     router.push({ path: '/' })
   }
 })
-onMounted(() => {
+onMounted(async () => {
   if (!isLoggedIn.value) {
-    router.push({ path: '/' })
+    await router.push({ path: '/' })
+  }
+  if (!!postId) {
+    post.value = await postApi.getPostById(postId)
   }
 })
 </script>
@@ -27,7 +38,12 @@ onMounted(() => {
       <TopNavigation />
     </el-header>
     <el-main style="min-height: 90dvh">
-      <NewPost style="max-width: 90%; margin: 40px auto 0 auto" />
+      <CreateOrEditPost
+        :content-in="post?.content"
+        :post-id="postId"
+        :title-in="post?.title"
+        style="max-width: 90%; margin: 40px auto 0 auto"
+      />
     </el-main>
     <el-footer style="padding: 0">
       <PageFooter />

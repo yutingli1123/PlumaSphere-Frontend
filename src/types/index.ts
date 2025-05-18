@@ -15,6 +15,10 @@ export interface ArticleRequest {
   tags: number[]
 }
 
+export interface ArticleUpdateRequest extends ArticleRequest {
+  id: string
+}
+
 export interface Tag {
   id: number
   name: string
