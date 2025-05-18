@@ -67,7 +67,7 @@ const submitPost = () => {
         const post: ArticleRequest = {
           title: newPostParams.value.title,
           content: newPostParams.value.content,
-          tags: newPostParams.value.tag,
+          tags: newPostParams.value.tags,
         }
         await postApi.createPost(post)
       }

@@ -12,7 +12,6 @@ const { postId } = defineProps<{
 }>()
 
 const post: Ref<Article | undefined> = ref()
-const tags: Ref<string[]> = ref([])
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -30,11 +29,6 @@ onMounted(async () => {
   }
   if (!!postId) {
     post.value = await postApi.getPostById(postId)
-    if (!!post.value) {
-      post.value.tags.map((tag) => {
-        tags.value.push(tag.name)
-      })
-    }
   }
 })
 </script>
@@ -50,7 +44,7 @@ onMounted(async () => {
         :content-in="post.content"
         :post-id="postId"
         :title-in="post.title"
-        :tags-in="tags"
+        :tags-in="post.tags"
         style="max-width: 90%; margin: 40px auto 0 auto"
       />
       <CreateOrEditPost v-else style="max-width: 90%; margin: 40px auto 0 auto" />
