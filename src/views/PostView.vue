@@ -23,7 +23,7 @@ const { postId } = defineProps<{
   postId: string
 }>()
 
-const tagTypes = [undefined, 'success', 'warning', 'danger', 'info', 'primary'] as const
+const tagTypes = ['primary', 'success', 'warning', 'danger', 'info'] as const
 const authStore = useAuthStore()
 
 const article: Ref<Article | undefined> = ref()
