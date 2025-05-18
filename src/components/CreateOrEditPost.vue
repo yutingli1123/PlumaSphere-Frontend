@@ -48,7 +48,11 @@ const submitPost = () => {
       newPostParams.value.title = ''
       newPostParams.value.content = ''
       posting.value = false
-      await router.push({ path: '/' })
+      if (isEditing) {
+        router.back()
+      } else {
+        await router.push({ path: '/' })
+      }
     }
   })
 }
