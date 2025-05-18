@@ -32,7 +32,7 @@ const router = createRouter({
       path: '/edit-post/:postId',
       name: 'edit-post',
       component: CreateOrEditPostView,
-      props: tru,
+      props: true,
     },
   ],
   scrollBehavior: (to, from, savedPosition) => {
