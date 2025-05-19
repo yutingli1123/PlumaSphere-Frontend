@@ -6,16 +6,39 @@ export enum ConfigFiled {
   INITIALIZED = 'INITIALIZED',
   BLOG_TITLE = 'BLOG_TITLE',
   BLOG_SUBTITLE = 'BLOG_SUBTITLE',
+  VERSION = 'VERSION',
 }
 
 export const useConfigStore = defineStore('config', () => {
   const config = ref<Config[] | undefined>()
 
   const initialConfig = async () => {
-    const configData = await systemApi.getStatus()
+    const configData = localStorage.getItem('config')
+    const version = await systemApi.getStatusVersion()
     if (configData) {
-      config.value = configData
+      const parsedConfig = JSON.parse(configData) as Config[]
+      const configVersion = parsedConfig.find(
+        (item) => item.configKey === ConfigFiled.VERSION.toLowerCase(),
+      )
+      if (!version || (configVersion && configVersion.configValue === version)) {
+        config.value = parsedConfig
+        return
+      }
     }
+    const newConfigData = await systemApi.getStatus()
+    if (newConfigData) {
+      config.value = newConfigData
+      newConfigData.push({
+        configKey: ConfigFiled.VERSION.toLowerCase(),
+        configValue: versio,
+      } as Config)
+      localStorage.setItem('config', JSON.stringify(newConfigData))
+    }
+  }
+
+  const resetConfig = () => {
+    config.value = undefined
+    localStorage.removeItem('config')
   }
 
   const loaded = computed(() => !!config.value)
@@ -30,5 +53,6 @@ export const useConfigStore = defineStore('config', () => {
     getConfig,
     loaded,
     initialConfig,
+    resetConfig,
   }
 })

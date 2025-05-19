@@ -8,6 +8,7 @@ export enum ApiEndpoint {
   TOKEN_VALIDATION = '/check-token-validation',
 
   SYSTEM_STATUS = '/status',
+  SYSTEM_STATUS_VERSION = '/status/version',
   SYSTEM_INIT = '/init',
   SYSTEM_INIT_CODE_VERIFY = `${SYSTEM_INIT}/verify-code`,
 
