@@ -22,8 +22,10 @@ const handleTagClick = (tagName: string) => {
     <div v-if="!tags || tags.length === 0">
       <el-empty :image-size="100" />
     </div>
-    <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
+    <el-menu class="tag-menu">
       <el-menu-item
+        v-for="(tag, index) in tags"
+        :key="index"
         :class="{ 'active-tag': tag.name === activeTag }"
         class="tag-item"
         @click="handleTagClick(tag.name)"
