@@ -11,10 +11,14 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = newUserInfo
   }
 
-  const getUserInfo = computed(async () => {
+  watch([authStore.isLoggedIn, authStore.hasToken], async () => {
+    await fetchUserInfo()
+  })
+
+  const getUserInfo = async () => {
     if (userInfo.value) return userInfo.value
     return await fetchUserInfo()
-  })
+  }
 
   const fetchUserInfo = async () => {
     if (!authStore.hasToken) return null

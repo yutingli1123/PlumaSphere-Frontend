@@ -11,19 +11,14 @@ const { postId } = defineProps<{
 const commentContent = ref('')
 const userStore = useUserStore()
 const authStore = useAuthStore()
-const userInfo: Ref<UserInfo | undefined | null> = ref()
+const userInfo: Ref<UserInfo | null> = ref(null)
 const loadingIdentity: Ref<boolean> = ref(false)
 const postingComment: Ref<boolean> = ref(false)
 
 const getNewIdentity = async () => {
   loadingIdentity.value = true
   await authStore.getNewIdentity()
-  await refreshUserInfo()
   loadingIdentity.value = false
-}
-
-const refreshUserInfo = async () => {
-  userInfo.value = await userStore.getUserInfo
 }
 
 const postComment = async () => {
@@ -37,15 +32,8 @@ const postComment = async () => {
   postingComment.value = false
 }
 
-const hasToken = computed(() => authStore.hasToken)
-const isLoggedIn = computed(() => authStore.isLoggedIn)
-
-watch([hasToken, isLoggedIn], async () => {
-  await refreshUserInfo()
-})
-
-onMounted(() => {
-  refreshUserInfo()
+watch(userStore.getUserInfo, async () => {
+  userInfo.value = await userStore.getUserInfo()
 })
 </script>
 <template>
