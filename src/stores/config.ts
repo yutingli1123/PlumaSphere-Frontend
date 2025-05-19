@@ -6,7 +6,7 @@ export enum ConfigFiled {
   INITIALIZED = 'INITIALIZED',
   BLOG_TITLE = 'BLOG_TITLE',
   BLOG_SUBTITLE = 'BLOG_SUBTITLE',
-  VERSION = 'VERSION',
+  CONFIG_VERSION = 'CONFIG_VERSION',
 }
 
 export const useConfigStore = defineStore('config', () => {
@@ -18,10 +18,12 @@ export const useConfigStore = defineStore('config', () => {
     if (configData) {
       const parsedConfig = JSON.parse(configData) as Config[]
       const configVersion = parsedConfig.find(
-        (item) => item.configKey === ConfigFiled.VERSION.toLowerCase(),
+        (item) => item.configKey === ConfigFiled.CONFIG_VERSION.toLowerCase(),
       )
       if (!version || (configVersion && configVersion.configValue === version)) {
-        config.value = parsedConfig
+        config.value = parsedConfig.filter(
+          (item) => item.configKey !== ConfigFiled.CONFIG_VERSION.toLowerCase(),
+        )
         return
       }
     }
@@ -29,7 +31,7 @@ export const useConfigStore = defineStore('config', () => {
     if (newConfigData) {
       config.value = newConfigData
       newConfigData.push({
-        configKey: ConfigFiled.VERSION.toLowerCase(),
+        configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
         configValue: version,
       } as Config)
       localStorage.setItem('config', JSON.stringify(newConfigData))
