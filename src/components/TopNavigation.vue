@@ -16,11 +16,9 @@ const navigateToCreatePost = () => {
   router.push({ path: '/create-post' })
 }
 
-const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? 'PlumaSphere')
-const subtitle = computed(
-  () => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? 'Another Blog Application',
-)
-</script>
+const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
+const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? undefined)
+<script>
 
 <template>
   <div class="top-navigation">
