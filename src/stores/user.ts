@@ -11,10 +11,6 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = newUserInfo
   }
 
-  watch([authStore.isLoggedIn, authStore.hasToken], async () => {
-    await fetchUserInfo()
-  })
-
   const getUserInfo = async () => {
     if (userInfo.value) return userInfo.value
     return await fetchUserInfo()

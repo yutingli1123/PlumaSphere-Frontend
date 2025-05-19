@@ -19,12 +19,14 @@ import { likeApi } from '@/api/like.ts'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import { tagTypes } from '@/constant'
+import { useUserStore } from '@/stores/user.ts'
 
 const { postId } = defineProps<{
   postId: string
 }>()
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const article: Ref<Article | undefined> = ref()
 const author: Ref<User | undefined> = ref()
@@ -47,7 +49,11 @@ const goHome = () => {
 const getLikes = async () => {
   likeLoading.value = true
   likeCount.value = await likeApi.getLikesByPostId(postId)
-  if (authStore.hasToken) isLiked.value = await likeApi.checkPostLikeState(postId)
+  if (authStore.hasToken) {
+    isLiked.value = await likeApi.checkPostLikeState(postId)
+  } else {
+    isLiked.value = false
+  }
   likeLoading.value = false
 }
 
@@ -105,6 +111,10 @@ watch(articleContent, () => {
       })
     }
   }
+})
+
+watch(userStore.getUserInfo, () => {
+  getLikes()
 })
 
 onMounted(async () => {
