@@ -51,17 +51,14 @@ const handleTagClick = (tagName: string) => {
   font-weight: bold;
 }
 
-:deep(.el-menu-item) {
-  white-space: normal !important;
-  line-height: 1.2;
-}
-
 .tag-menu {
   font-size: 16px;
   --el-menu-border-color: transparent;
 }
 
 .tag-item {
+  white-space: normal !important;
+  line-height: 1.2;
   display: flex;
   margin-left: -8px;
   justify-content: space-between;
