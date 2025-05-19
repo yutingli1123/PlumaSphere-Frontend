@@ -11,14 +11,21 @@ const currentPage: Ref<number> = ref(1)
 const totalPostPages: Ref<number> = ref(0)
 const totalPostCount: Ref<number> = ref(0)
 const loaded: Ref<boolean> = ref(false)
+const activeTag: Ref<string | undefined> = ref()
 
 const tags: Ref<Tag[] | undefined> = ref()
 const articles: Ref<Article[] | undefined> = ref()
 
 const refreshArticles = async () => {
-  totalPostPages.value = await postApi.getPostPages()
-  totalPostCount.value = await postApi.getPostCount()
-  articles.value = await postApi.getAllPosts(0)
+  if (activeTag.value) {
+    totalPostPages.value = await postApi.getPostPageCountByTag(activeTag.value)
+    totalPostCount.value = await postApi.getPostCountByTag(activeTag.value)
+    articles.value = await postApi.getAllPostsByTag(activeTag.value, 0)
+  } else {
+    totalPostPages.value = await postApi.getPostPages()
+    totalPostCount.value = await postApi.getPostCount()
+    articles.value = await postApi.getAllPosts(0)
+  }
 }
 
 const refreshTags = async () => {
@@ -31,7 +38,22 @@ const refreshContent = async () => {
 }
 
 const getArticles = async (page: number) => {
-  articles.value = await postApi.getAllPosts(page - 1)
+  if (activeTag.value) {
+    articles.value = await postApi.getAllPostsByTag(activeTag.value, page - 1)
+  } else {
+    articles.value = await postApi.getAllPosts(page - 1)
+  }
+}
+
+const handleTagClick = async (tagName: string) => {
+  currentPage.value = 1
+  if (activeTag.value === tagName) {
+    activeTag.value = undefined
+  } else {
+    activeTag.value = tagName
+  }
+
+  await refreshContent()
 }
 
 onMounted(() => {
@@ -47,7 +69,7 @@ onMounted(() => {
     <el-main v-if="loaded">
       <el-container>
         <el-aside width="280px" style="padding-right: 14px">
-          <TagSidebar :tags="tags" />
+          <TagSidebar :activeTag="activeTag" :tags="tags" @tagClick="handleTagClick" />
         </el-aside>
         <el-main style="padding-top: 10px">
           <PostList :articles="articles" :refresh="refreshContent" />

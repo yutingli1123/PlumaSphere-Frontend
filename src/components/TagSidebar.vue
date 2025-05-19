@@ -3,8 +3,17 @@ import type { Tag } from '@/types'
 import { tagTypes } from '@/constant'
 
 defineProps<{
-  tags: Tag[] | undefined
+  tags?: Tag[]
+  activeTag?: string
 }>()
+
+const emit = defineEmits<{
+  (e: 'tagClick', tagName: string): void
+}>()
+
+const handleTagClick = (tagName: string) => {
+  emit('tagClick', tagName)
+}
 </script>
 
 <template>
@@ -14,8 +23,12 @@ defineProps<{
       <el-empty :image-size="100" />
     </div>
     <el-menu v-for="(tag, index) in tags" :key="index" class="tag-menu">
-      <el-menu-item class="tag-item">
-        <span>{{ tag.name }}</span>
+      <el-menu-item
+        :class="{ 'active-tag': tag.name === activeTag }"
+        class="tag-item"
+        @click="handleTagClick(tag.name)"
+      >
+        <span class="tag-name">{{ tag.name }}</span>
         <el-tag :type="tagTypes[index % tagTypes.length]" class="tag-count" size="small"
           >{{ tag.postCount }}
         </el-tag>
@@ -36,6 +49,11 @@ defineProps<{
   font-weight: bold;
 }
 
+:deep(.el-menu-item) {
+  white-space: normal !important;
+  line-height: 1.2;
+}
+
 .tag-menu {
   font-size: 16px;
   --el-menu-border-color: transparent;
@@ -46,6 +64,18 @@ defineProps<{
   margin-left: -8px;
   justify-content: space-between;
   align-items: center;
+}
+
+.tag-name {
+  word-break: break-word;
+  padding-right: 10px;
+}
+
+.active-tag {
+  font-weight: bold;
+  background-color: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+  border-left: 3px solid var(--el-color-primary);
 }
 
 .tag-count {
