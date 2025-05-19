@@ -30,4 +30,19 @@ export const postApi = {
       requiresAuth: true,
     })
   },
+  async getAllPostsByTag(tagName: string, page: number): Promise<Article[] | undefined> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_GET_ALL_BY_TAG_NAME)}?tagName=${tagName}&page=${page}`,
+    )
+  },
+  async getPostCountByTag(tagName: string): Promise<number> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_COUNT_BY_TAG_NAME)}?tagName=${tagName}`,
+    )
+  },
+  async getPostPageCountByTag(tagName: string): Promise<number> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_PAGE_COUNT_BY_TAG_NAME)}?tagName=${tagName}`,
+    )
+  },
 }
