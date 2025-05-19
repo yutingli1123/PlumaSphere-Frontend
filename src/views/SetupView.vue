@@ -4,6 +4,7 @@ import { systemApi } from '@/api/system.ts'
 import type { InitSystemParams } from '@/types'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.ts'
+import { useConfigStore } from '@/stores/config.ts'
 
 const router = useRouter()
 
@@ -11,6 +12,7 @@ const currentStep = ref(1)
 const formRef = ref<FormInstance>()
 const setupLoading = ref(false)
 const authStore = useAuthStore()
+const configStore = useConfigStore()
 
 const initInfo = reactive<InitSystemParams>({
   verificationCode: '',
@@ -99,6 +101,7 @@ const nextStep = () => {
         setupLoading.value = true
         await systemApi.initSystem(initInfo)
         await authStore.login(initInfo.adminUsername, initInfo.adminPassword)
+        await configStore.initialConfig()
         ElNotification.success('Blog system setup completed')
         await router.push('/')
         setupLoading.value = false
@@ -118,6 +121,7 @@ const prevStep = () => {
 
 onMounted(() => {
   authStore.logout()
+  configStore.resetConfig()
 })
 </script>
 <template>
