@@ -321,7 +321,7 @@ onBeforeUnmount(() => {
 .article-info {
   display: flex;
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .meta-info {
@@ -346,6 +346,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 8px;
 }
 
 .article-body {
