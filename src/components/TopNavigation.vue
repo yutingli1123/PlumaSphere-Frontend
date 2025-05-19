@@ -18,7 +18,7 @@ const navigateToCreatePost = () => {
 
 const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
 const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? undefined)
-<script>
+</script>
 
 <template>
   <div class="top-navigation">
