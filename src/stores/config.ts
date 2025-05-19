@@ -30,7 +30,7 @@ export const useConfigStore = defineStore('config', () => {
       config.value = newConfigData
       newConfigData.push({
         configKey: ConfigFiled.VERSION.toLowerCase(),
-        configValue: versio,
+        configValue: version,
       } as Config)
       localStorage.setItem('config', JSON.stringify(newConfigData))
     }
