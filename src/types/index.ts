@@ -77,9 +77,3 @@ export interface InitSystemParams {
   adminPassword: string
   adminNickname: string
 }
-
-export enum ConfigFiled {
-  INITIALIZED = 'INITIALIZED',
-  BLOG_TITLE = 'BLOG_TITLE',
-  BLOG_SUBTITLE = 'BLOG_SUBTITLE',
-}

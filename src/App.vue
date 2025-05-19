@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { systemApi } from '@/api/system.ts'
 import router from '@/router'
-import { type Config, ConfigFiled } from '@/types'
+import { ConfigFiled, useConfigStore } from '@/stores/config.ts'
 
 onMounted(async () => {
-  const systemStatus: Config[] | undefined | null = await systemApi.getStatus()
-  if (
-    !!systemStatus &&
-    !systemStatus.some((value) => value.configKey === ConfigFiled.INITIALIZED.toLowerCase())
-  ) {
+  const configStore = useConfigStore()
+  await configStore.initialConfig()
+  if (configStore.loaded && !configStore.getConfig(ConfigFiled.INITIALIZED)) {
     await router.push('/setup')
   }
 })
