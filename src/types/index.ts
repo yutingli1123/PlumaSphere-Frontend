@@ -80,7 +80,7 @@ export interface InitSystemParams {
   adminNickname: string
 }
 
-export interface WebSocketMessage<T = unknown> {
+export interface WebSocketMessage {
   type: WebSocketMessageType
-  data: T
+  data: object
 }
