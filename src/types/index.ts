@@ -1,3 +1,5 @@
+import type { WebSocketMessageType } from '@/constant'
+
 export interface Article {
   id: number
   title: string
@@ -76,4 +78,9 @@ export interface InitSystemParams {
   adminUsername: string
   adminPassword: string
   adminNickname: string
+}
+
+export interface WebSocketMessage<T = unknown> {
+  type: WebSocketMessageType
+  data: T
 }

@@ -1,10 +1,7 @@
 import { ApiEndpoint } from '@/api/endpoints'
+import type { WebSocketMessage } from '@/types'
 
-export enum WebSocketMessageType {
-  NEW_COMMENT = 'NEW_COMMENT',
-}
-
-type MessageListener = (type: WebSocketMessageType) => void
+type MessageListener = (msg: WebSocketMessage) => void
 
 class WebSocketService {
   private webSockets: Map<string, WebSocket> = new Map()
@@ -20,7 +17,7 @@ class WebSocketService {
 
     webSocket.onmessage = (event: MessageEvent) => {
       try {
-        const message: WebSocketMessageType = event.data
+        const message: WebSocketMessage = JSON.parse(event.data)
         onMessage(message)
       } catch (error) {
         console.error(`WS: ${error}`)

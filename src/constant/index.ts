@@ -1,1 +1,6 @@
 export const tagTypes = ['primary', 'success', 'warning', 'danger'] as const
+
+export enum WebSocketMessageType {
+  NEW_COMMENT = 'NEW_COMMENT',
+  LIKE_POST = 'LIKE_POST',
+}

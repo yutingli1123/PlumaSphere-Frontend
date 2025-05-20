@@ -2,14 +2,14 @@
 import PageFooter from '@/components/PageFooter.vue'
 import TopNavigation from '@/components/TopNavigation.vue'
 import CommentForm from '@/components/CommentForm.vue'
-import type { Article, Comment, User } from '@/types'
+import type { Article, Comment, User, WebSocketMessage } from '@/types'
 import { postApi } from '@/api/post.ts'
 import { userApi } from '@/api/user.ts'
 import { commentApi } from '@/api/comment.ts'
 import router from '@/router'
 import { DateTime } from 'luxon'
 import { useAuthStore } from '@/stores/auth.ts'
-import { WebSocketMessageType, WebSocketServiceInstance } from '@/service/webSocketService'
+import { WebSocketServiceInstance } from '@/service/webSocketService'
 import CommentList from '@/components/CommentList.vue'
 import IEpEdit from '~icons/ep/edit'
 import IEpDelete from '~icons/ep/delete'
@@ -18,7 +18,7 @@ import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
 import { likeApi } from '@/api/like.ts'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
-import { tagTypes } from '@/constant'
+import { tagTypes, WebSocketMessageType } from '@/constant'
 import { useUserStore } from '@/stores/user.ts'
 
 const { postId } = defineProps<{
@@ -96,9 +96,12 @@ const refreshComment = async () => {
   commentRefreshing.value = false
 }
 
-const onWebSocketMessage = (type: WebSocketMessageType) => {
+const onWebSocketMessage = (message: WebSocketMessage) => {
+  const { type } = message
   if (type === WebSocketMessageType.NEW_COMMENT) {
     newCommentsCount.value++
+  } else if (type === WebSocketMessageType.LIKE_POST) {
+    getLikes()
   }
 }
 
