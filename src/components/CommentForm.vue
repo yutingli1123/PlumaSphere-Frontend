@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/user.ts'
 import type { CommentRequest, User as UserInfo } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
+import { onMounted } from 'vue'
 
 const { postId } = defineProps<{
   postId: string
@@ -33,6 +34,10 @@ const postComment = async () => {
 }
 
 watch(userStore.getUserInfo, async () => {
+  userInfo.value = await userStore.getUserInfo()
+})
+
+onMounted(async () => {
   userInfo.value = await userStore.getUserInfo()
 })
 </script>
