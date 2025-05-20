@@ -41,6 +41,7 @@ const isLiked: Ref<boolean> = ref(false)
 const likeCount: Ref<number> = ref(0)
 const likeLoading: Ref<boolean> = ref(false)
 const articleContent = ref<HTMLDivElement | undefined>()
+const commentListRef = ref<InstanceType<typeof CommentList>>()
 
 const goHome = () => {
   router.push('/')
@@ -102,6 +103,11 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
     newCommentsCount.value++
   } else if (type === WebSocketMessageType.LIKE_POST) {
     getLikes()
+  } else if (type === WebSocketMessageType.LIKE_COMMENT) {
+    const { commentId } = message.data as { commentId: string }
+    if (commentListRef.value) {
+      commentListRef.value.fetchLike(commentId)
+    }
   }
 }
 
@@ -269,7 +275,7 @@ onBeforeUnmount(() => {
                   {{ newCommentsCount }} New
                 </el-button>
               </div>
-              <CommentList :comments="comments" />
+              <CommentList ref="commentListRef" :comments="comments" />
               <el-pagination
                 v-if="totalCommentPages !== 0"
                 v-model:current-page="commentPage"

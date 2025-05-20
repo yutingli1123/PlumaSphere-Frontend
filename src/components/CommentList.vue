@@ -1,10 +1,47 @@
 <script lang="ts" setup>
 import { DateTime } from 'luxon'
 import type { Comment } from '@/types'
+import { likeApi } from '@/api/like.ts'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const { comments } = defineProps<{
   comments: Comment[] | undefined
 }>()
+
+const authStore = useAuthStore()
+
+const likeCounts = ref<Record<string, number>>({})
+const likeLoading = ref<Record<string, boolean>>({})
+
+const fetchLikes = async () => {
+  if (!comments) return
+  for (const comment of comments) {
+    likeCounts.value[comment.id] = await getLike(comment.id)
+  }
+}
+
+const fetchLike = async (id: string) => {
+  likeCounts.value[id] = await getLike(id)
+}
+
+const getLike = async (commentId: number | string) => {
+  return (await likeApi.getLikesByCommentId(commentId)) ?? 0
+}
+
+const likeComment = async (commentId: number | string) => {
+  likeLoading.value[commentId] = true
+  if (!authStore.hasToken) await authStore.getNewIdentity()
+  await likeApi.likeComment(commentId)
+  likeLoading.value[commentId] = false
+}
+
+watch(() => comments, fetchLikes)
+
+onMounted(() => {
+  fetchLikes()
+})
+
+defineExpose({ fetchLike })
 </script>
 
 <template>
@@ -25,12 +62,24 @@ const { comments } = defineProps<{
     <div class="comment-content">
       {{ comment.content }}
     </div>
+    <div class="comment-action">
+      <el-link
+        :disabled="likeLoading[comment.id]"
+        :underline="'never'"
+        type="primary"
+        @click="likeComment(comment.id)"
+      >
+        <span v-if="likeLoading[comment.id]" class="like-loading"></span>
+        <span>Like ({{ likeCounts[comment.id] }})</span>
+      </el-link>
+      <!--            <el-link type="text">Reply</el-link>-->
+    </div>
   </div>
 </template>
 
 <style scoped>
 .comment {
-  padding: 16px 0;
+  padding: 16px 0 6px 0;
   border-bottom: 1px solid #eaeaea;
 }
 
@@ -59,5 +108,28 @@ const { comments } = defineProps<{
   font-size: 14px;
   line-height: 1.6;
   margin-left: 48px;
+}
+
+.comment-action {
+  margin-top: 4px;
+  margin-left: 48px;
+}
+
+.like-loading {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #409eff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
