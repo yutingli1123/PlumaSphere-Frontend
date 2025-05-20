@@ -79,7 +79,7 @@ defineExpose({ fetchLike })
 
 <style scoped>
 .comment {
-  padding: 16px 0 6px 0;
+  padding: 16px 0 10px 0;
   border-bottom: 1px solid #eaeaea;
 }
 
@@ -111,7 +111,7 @@ defineExpose({ fetchLike })
 }
 
 .comment-action {
-  margin-top: 4px;
+  margin-top: 8px;
   margin-left: 48px;
 }
 
