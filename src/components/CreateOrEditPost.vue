@@ -54,7 +54,7 @@ const submitPost = () => {
     if (valid) {
       posting.value = true
 
-      if (isEditing && !!postId) {
+      if (isEditing.value) {
         const post: ArticleUpdateRequest = {
           id: postId,
           title: newPostParams.value.title,
@@ -73,7 +73,7 @@ const submitPost = () => {
       newPostParams.value.title = ''
       newPostParams.value.content = ''
       posting.value = false
-      if (isEditing) {
+      if (isEditing.value) {
         router.back()
       } else {
         await router.push({ path: '/' })
