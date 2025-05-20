@@ -54,7 +54,7 @@ const submitPost = () => {
     if (valid) {
       posting.value = true
 
-      if (isEditing.value) {
+      if (isEditing.value && postId) {
         const post: ArticleUpdateRequest = {
           id: postId,
           title: newPostParams.value.title,
