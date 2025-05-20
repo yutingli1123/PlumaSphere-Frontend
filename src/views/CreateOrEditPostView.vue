@@ -27,7 +27,7 @@ onMounted(async () => {
     await router.push({ path: '/' })
     return
   }
-  if (!!postId) {
+  if (postId) {
     post.value = await postApi.getPostById(postId)
   }
 })

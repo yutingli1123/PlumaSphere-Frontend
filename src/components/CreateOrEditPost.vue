@@ -83,13 +83,13 @@ const submitPost = () => {
 }
 
 onMounted(async () => {
-  if (!!titleIn) {
+  if (titleIn) {
     newPostParams.value.title = titleIn
   }
-  if (!!contentIn) {
+  if (contentIn) {
     newPostParams.value.content = contentIn
   }
-  if (!!tagsIn) {
+  if (tagsIn) {
     newPostParams.value.tags = tagsIn
   }
 
