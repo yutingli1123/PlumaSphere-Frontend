@@ -25,4 +25,16 @@ export const commentApi = {
       requiresAuth: true,
     })
   },
+  async replyComment(comment: CommentRequest, commentId: number): Promise<void> {
+    await axiosInstance.post(
+      getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId }),
+      comment,
+      {
+        requiresAuth: true,
+      },
+    )
+  },
+  async getCommentReplies(commentId: string | number): Promise<Comment> {
+    return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId }))
+  },
 }
