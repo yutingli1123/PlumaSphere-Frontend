@@ -34,7 +34,9 @@ export const commentApi = {
       },
     )
   },
-  async getCommentReplies(commentId: string | number): Promise<Comment[] | []> {
-    return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId }))
+  async getCommentReplies(commentId: string | number, page: number): Promise<Comment[] | []> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId })}?page=${page}`,
+    )
   },
 }
