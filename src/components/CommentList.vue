@@ -80,7 +80,7 @@ defineExpose({ fetchLike })
         type="primary"
         @click="likeComment(comment.id)"
       >
-        <span v-if="likeLoading[comment.id]" class="like-loading"></span>
+        <span v-if="likeLoading[comment.id]" class="like-loading" />
         <span>Like ({{ likeCounts[comment.id] }})</span>
       </el-link>
       <el-link type="primary" underline="never" @click="switchReplyComment(comment.id)"
