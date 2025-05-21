@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
 import type { Comment } from '@/types'
 import { likeApi } from '@/api/like.ts'
 import { useAuthStore } from '@/stores/auth.ts'
+import { commentApi } from '@/api/comment.ts'
+import CommentReplyList from '@/components/CommentReplyList.vue'
 
 const { comments } = defineProps<{
   comments: Comment[] | undefined
@@ -12,6 +13,9 @@ const authStore = useAuthStore()
 
 const likeCounts = ref<Record<string, number>>({})
 const likeLoading = ref<Record<string, boolean>>({})
+const commentReplying = ref<Record<number, boolean>>({})
+const commentReplyingContent = ref<Record<number, string>>({})
+const replyLoading = ref<Record<number, boolean>>({})
 
 const fetchLikes = async () => {
   if (!comments) return
@@ -35,6 +39,28 @@ const likeComment = async (commentId: number | string) => {
   likeLoading.value[commentId] = false
 }
 
+const switchReplyComment = async (commentId: number) => {
+  if (commentReplying.value[commentId]) {
+    commentReplying.value[commentId] = false
+    commentReplyingContent.value[commentId] = ''
+  } else {
+    commentReplying.value[commentId] = true
+  }
+}
+
+const replyComment = async (commentId: number) => {
+  replyLoading.value[commentId] = true
+  if (!authStore.hasToken) await authStore.getNewIdentity()
+  await commentApi.replyComment(
+    {
+      content: commentReplyingContent.value[commentId],
+    },
+    commentId,
+  )
+  commentReplyingContent.value[commentId] = ''
+  replyLoading.value[commentId] = false
+}
+
 watch(() => comments, fetchLikes)
 
 onMounted(() => {
@@ -46,33 +72,38 @@ defineExpose({ fetchLike })
 
 <template>
   <div v-for="(comment, index) in comments" :key="index" class="comment">
-    <div class="comment-author">
-      <el-avatar :size="36"></el-avatar>
-      <div class="comment-info">
-        <div class="comment-name">{{ comment.authorNickname }}</div>
-        <div class="comment-time">
-          {{
-            DateTime.fromISO(comment.createdAt)
-              .toLocal()
-              .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-          }}
-        </div>
-      </div>
-    </div>
-    <div class="comment-content">
-      {{ comment.content }}
-    </div>
+    <CommentView :comment="comment" />
     <div class="comment-action">
       <el-link
         :disabled="likeLoading[comment.id]"
-        :underline="'never'"
+        underline="never"
         type="primary"
         @click="likeComment(comment.id)"
       >
         <span v-if="likeLoading[comment.id]" class="like-loading"></span>
         <span>Like ({{ likeCounts[comment.id] }})</span>
       </el-link>
-      <!--            <el-link type="text">Reply</el-link>-->
+      <el-link type="primary" underline="never" @click="switchReplyComment(comment.id)"
+        >Reply
+      </el-link>
+    </div>
+    <transition name="reply-expand">
+      <div v-if="commentReplying[comment.id]" class="comment-reply-container">
+        <el-input
+          v-model="commentReplyingContent[comment.id]"
+          :rows="4"
+          resize="none"
+          type="textarea"
+        />
+        <div class="comment-reply-button">
+          <el-button :loading="replyLoading[comment.id]" @click="replyComment(comment.id)"
+            >Reply
+          </el-button>
+        </div>
+      </div>
+    </transition>
+    <div class="comment-reply-list">
+      <CommentReplyList :comment-id="comment.id" />
     </div>
   </div>
 </template>
@@ -83,36 +114,11 @@ defineExpose({ fetchLike })
   border-bottom: 1px solid #eaeaea;
 }
 
-.comment-author {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.comment-info {
-  margin-left: 12px;
-}
-
-.comment-name {
-  font-weight: bold;
-}
-
-.comment-time {
-  margin-top: 2px;
-  font-size: 12px;
-  color: #999999;
-}
-
-.comment-content {
-  overflow-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.6;
-  margin-left: 48px;
-}
-
 .comment-action {
   margin-top: 8px;
   margin-left: 48px;
+  gap: 12px;
+  display: flex;
 }
 
 .like-loading {
@@ -131,5 +137,38 @@ defineExpose({ fetchLike })
   to {
     transform: rotate(360deg);
   }
+}
+
+.comment-reply-container {
+  margin-top: 14px;
+  margin-left: 48px;
+}
+
+.comment-reply-button {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.reply-expand-enter-active,
+.reply-expand-leave-active {
+  transition: max-height 0.3s linear;
+  overflow: hidden;
+}
+
+.reply-expand-enter-from,
+.reply-expand-leave-to {
+  max-height: 0;
+}
+
+.reply-expand-enter-to,
+.reply-expand-leave-from {
+  max-height: 200px;
+}
+
+.comment-reply-list {
+  margin-top: 14px;
+  margin-left: 48px;
 }
 </style>
