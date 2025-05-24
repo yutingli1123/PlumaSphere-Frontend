@@ -5,8 +5,10 @@ import { likeApi } from '@/api/like.ts'
 import { useAuthStore } from '@/stores/auth.ts'
 import { WebSocketMessageType } from '@/constant'
 import { WebSocketServiceInstance } from '@/service/webSocketService.ts'
+import { useUserStore } from '@/stores/user.ts'
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const page: Ref<number> = ref(0)
 const comments: Ref<Comment[]> = ref([])
@@ -16,6 +18,7 @@ const likeLoading: Ref<Record<number, boolean>> = ref({})
 const likeCounts: Ref<Record<number, number>> = ref({})
 const newReplyCounts: Ref<number> = ref(0)
 const replyRefreshing: Ref<boolean> = ref(false)
+const selfUserId: Ref<number | null | undefined> = ref()
 
 const { commentId } = defineProps<{
   commentId: string
@@ -80,6 +83,10 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
   }
 }
 
+const fetchUserId = async () => {
+  selfUserId.value = (await userStore.getUserInfo())?.id
+}
+
 watch(
   () => commentId,
   async () => {
@@ -90,8 +97,10 @@ watch(
 )
 
 watch(comments, async () => await fetchLikes(), { deep: true })
+watch(userStore.getUserInfo, async () => await fetchUserId())
 
 onMounted(async () => {
+  await fetchUserId()
   await refreshComment()
   WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
 })
@@ -137,6 +146,12 @@ onUnmounted(async () => {
         underline="never"
         @click="replyComment(comment.authorNickname.toString())"
         >Reply
+      </el-link>
+      <el-link
+        v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
+        type="primary"
+        underline="never"
+        >Delete
       </el-link>
     </div>
   </div>
