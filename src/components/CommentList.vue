@@ -75,13 +75,16 @@ const replyPost = async (commentId: number) => {
   if (!contentNotEmpty(commentId)) return
   replyLoading.value[commentId] = true
   if (!authStore.hasToken) await authStore.getNewIdentity()
-  await commentApi.replyComment(
-    {
-      content: commentReplyingContent.value[commentId],
-    },
-    commentId,
-  )
-  commentReplyingContent.value[commentId] = ''
+  if (
+    await commentApi.replyComment(
+      {
+        content: commentReplyingContent.value[commentId],
+      },
+      commentId,
+    )
+  ) {
+    commentReplyingContent.value[commentId] = ''
+  }
   replyLoading.value[commentId] = false
 }
 
