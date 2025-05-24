@@ -36,6 +36,7 @@ export enum ApiEndpoint {
   COMMENT_PAGE_COUNT_BY_POST_ID = `${COMMENT_GET_ALL_BY_POST_ID}/count-page`,
   COMMENT_COUNT_BY_POST_ID = `${POST_BASE}/:postId/comment/count`,
   COMMENT_REPLY_BY_COMMENT_ID = `${COMMENT_BASE}/:commentId/reply`,
+  COMMENT_DELETE = `${COMMENT_BASE}/:commentId`,
 
   LIKE_COUNT_BY_POST_ID = `${POST_BASE}/:postId/like`,
   LIKE_COUNT_BY_COMMENT_ID = `${COMMENT_BASE}/:commentId/like`,
