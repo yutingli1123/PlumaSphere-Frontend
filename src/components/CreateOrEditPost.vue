@@ -13,6 +13,7 @@ import { ApiEndpoint } from '@/api/endpoints.ts'
 const authStore = useAuthStore()
 const editor = ref<Vditor | undefined>()
 const allTags = ref<Tag[] | undefined>()
+const contentError: Ref<boolean> = ref(false)
 
 const posting = ref(false)
 const router = useRouter()
@@ -28,8 +29,10 @@ const isEditing = computed(() => !!postId)
 const validateContent: FormItemRule['validator'] = (rule, value, callback) => {
   const content = editor.value ? editor.value.getValue().trim() : value.trim()
   if (!content || content === '') {
+    contentError.value = true
     callback(new Error('Please enter the post content'))
   } else {
+    contentError.value = false
     callback()
   }
 }
@@ -171,7 +174,9 @@ onBeforeUnmount(() => {
       <el-input-tag v-model:model-value="newPostParams.tags" />
     </el-form-item>
     <el-form-item label="Content" prop="content">
-      <div id="editor" />
+      <div :class="{ 'editor-error': contentError }" class="editor-border" style="width: 100%">
+        <div id="editor" />
+      </div>
     </el-form-item>
     <el-form-item>
       <div style="display: flex; justify-content: flex-end; width: 100%">
@@ -196,5 +201,16 @@ onBeforeUnmount(() => {
 
 .selectable-tag {
   min-width: 30px;
+}
+
+.editor-border {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: border 0.3s;
+}
+
+.editor-error {
+  border: 1px solid #f56c6c;
+  border-radius: 4px;
 }
 </style>
