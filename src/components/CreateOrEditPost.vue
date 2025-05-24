@@ -6,7 +6,7 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import { tagApi } from '@/api/tag.ts'
 import { tagTypes } from '@/constant'
-import type { FormInstance } from 'element-plus'
+import type { FormInstance, FormItemRule, FormRules } from 'element-plus'
 import { useAuthStore } from '@/stores/auth.ts'
 import { ApiEndpoint } from '@/api/endpoints.ts'
 
@@ -25,15 +25,23 @@ const { titleIn, contentIn, postId, tagsIn } = defineProps<{
 
 const isEditing = computed(() => !!postId)
 
+const validateContent: FormItemRule['validator'] = (rule, value, callback) => {
+  const content = editor.value ? editor.value.getValue().trim() : value.trim()
+  if (!content || content === '') {
+    callback(new Error('Please enter the post content'))
+  } else {
+    callback()
+  }
+}
 const newPostParams: Ref<{ title: string; tags: string[]; content: string }> = ref({
   title: '',
   tags: [],
   content: '',
 })
 const formRef = ref<FormInstance>()
-const rules = {
+const rules: FormRules = {
   title: [{ required: true, message: 'Please enter the post title', trigger: 'blur' }],
-  content: [{ required: true, message: 'Please enter the post content', trigger: 'blur' }],
+  content: [{ trigger: 'blur', validator: validateContent }],
 }
 
 const loadAllTags = async () => {
@@ -118,6 +126,9 @@ onMounted(async () => {
     },
     input(value: string) {
       newPostParams.value.content = value
+    },
+    blur() {
+      formRef.value?.validateField('content')
     },
     preview: {
       actions: ['desktop', 'tablet', 'mobile'],
