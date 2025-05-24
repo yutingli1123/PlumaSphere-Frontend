@@ -14,6 +14,8 @@ const loading: Ref<boolean> = ref(false)
 const isMore: Ref<boolean> = ref(true)
 const likeLoading: Ref<Record<number, boolean>> = ref({})
 const likeCounts: Ref<Record<number, number>> = ref({})
+const newReplyCounts: Ref<number> = ref(0)
+const replyRefreshing: Ref<boolean> = ref(false)
 
 const { commentId } = defineProps<{
   commentId: string
@@ -36,10 +38,13 @@ const loadComment = async () => {
 }
 
 const refreshComment = async () => {
+  replyRefreshing.value = true
   page.value = 0
   isMore.value = true
   comments.value = []
   await loadComment()
+  newReplyCounts.value = 0
+  replyRefreshing.value = false
 }
 
 const likeComment = async (commentId: number) => {
@@ -69,6 +74,8 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
   if (type === WebSocketMessageType.LIKE_COMMENT) {
     const { commentId } = message.data as { commentId: string }
     fetchLike(commentId)
+  } else if (type === WebSocketMessageType.NEW_COMMENT) {
+    newReplyCounts.value++
   }
 }
 
@@ -77,21 +84,25 @@ watch(
   async () => refreshComment(),
 )
 
-watch(
-  () => comments.value,
-  () => {
-    fetchLikes()
-  },
-)
+watch(comments, async () => await fetchLikes(), { deep: true })
 
 onMounted(async () => {
   await refreshComment()
-  await fetchLikes()
   WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
 })
 </script>
 
 <template>
+  <el-link
+    v-if="newReplyCounts"
+    class="refresh-button"
+    type="primary"
+    underline="never"
+    @click="refreshComment"
+  >
+    <span v-if="replyRefreshing" class="loading" />
+    <span>New Replies ({{ newReplyCounts }})</span>
+  </el-link>
   <div
     v-for="(comment, index) in comments"
     :key="index"
@@ -123,6 +134,7 @@ onMounted(async () => {
 
 <style scoped>
 .comment {
+  margin-top: 16px;
   margin-bottom: 16px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eaeaea;
@@ -166,5 +178,9 @@ onMounted(async () => {
   margin-left: 48px;
   gap: 12px;
   display: flex;
+}
+
+.refresh-button {
+  margin-left: 48px;
 }
 </style>

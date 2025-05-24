@@ -168,7 +168,7 @@ defineExpose({ fetchLike })
 }
 
 .comment-reply-list {
-  margin-top: 14px;
+  margin-top: 10px;
   margin-left: 48px;
 }
 </style>
