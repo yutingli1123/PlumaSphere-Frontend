@@ -19,6 +19,7 @@ const replyRefreshing: Ref<boolean> = ref(false)
 
 const { commentId } = defineProps<{
   commentId: string
+  replyComment: (receiver: string) => void
 }>()
 
 const loadMore = async () => {
@@ -81,7 +82,11 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
 
 watch(
   () => commentId,
-  async () => refreshComment(),
+  async () => {
+    await refreshComment()
+    WebSocketServiceInstance.disconnectCommentWebSocket(commentId)
+    WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
+  },
 )
 
 watch(comments, async () => await fetchLikes(), { deep: true })
@@ -89,6 +94,10 @@ watch(comments, async () => await fetchLikes(), { deep: true })
 onMounted(async () => {
   await refreshComment()
   WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
+})
+
+onUnmounted(async () => {
+  WebSocketServiceInstance.disconnectCommentWebSocket(commentId)
 })
 </script>
 
@@ -123,7 +132,12 @@ onMounted(async () => {
         <span v-if="likeLoading[comment.id]" class="loading" />
         <span>Like ({{ likeCounts[comment.id] }})</span>
       </el-link>
-      <el-link type="primary" underline="never">Reply</el-link>
+      <el-link
+        type="primary"
+        underline="never"
+        @click="replyComment(comment.authorNickname.toString())"
+        >Reply
+      </el-link>
     </div>
   </div>
   <el-link v-if="isMore" class="load-button" type="primary" underline="never" @click="loadMore">

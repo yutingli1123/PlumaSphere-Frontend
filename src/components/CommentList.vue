@@ -16,6 +16,17 @@ const likeLoading = ref<Record<string, boolean>>({})
 const commentReplying = ref<Record<number, boolean>>({})
 const commentReplyingContent = ref<Record<number, string>>({})
 const replyLoading = ref<Record<number, boolean>>({})
+const inputRefList = ref<Record<number, HTMLInputElement | null>>({})
+
+const setInputRef = (commentId: number, inputRef: HTMLInputElement | null) => {
+  inputRefList.value[commentId] = inputRef
+}
+
+const scrollToInput = (commentId: number) => {
+  nextTick(() => {
+    inputRefList.value[commentId]?.$el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  })
+}
 
 const fetchLikes = async () => {
   if (!comments) return
@@ -48,7 +59,7 @@ const switchReplyComment = async (commentId: number) => {
   }
 }
 
-const replyComment = async (commentId: number) => {
+const replyPost = async (commentId: number) => {
   replyLoading.value[commentId] = true
   if (!authStore.hasToken) await authStore.getNewIdentity()
   await commentApi.replyComment(
@@ -59,6 +70,12 @@ const replyComment = async (commentId: number) => {
   )
   commentReplyingContent.value[commentId] = ''
   replyLoading.value[commentId] = false
+}
+
+const replyComment = (receiver: string, commentId: number) => {
+  commentReplying.value[commentId] = true
+  commentReplyingContent.value[commentId] = `> ${receiver}\n`
+  scrollToInput(commentId)
 }
 
 watch(() => comments, fetchLikes)
@@ -90,20 +107,24 @@ defineExpose({ fetchLike })
     <transition name="reply-expand">
       <div v-if="commentReplying[comment.id]" class="comment-reply-container">
         <el-input
+          :ref="(el) => setInputRef(comment.id, el)"
           v-model="commentReplyingContent[comment.id]"
           :rows="4"
           resize="none"
           type="textarea"
         />
         <div class="comment-reply-button">
-          <el-button :loading="replyLoading[comment.id]" @click="replyComment(comment.id)"
+          <el-button :loading="replyLoading[comment.id]" @click="replyPost(comment.id)"
             >Reply
           </el-button>
         </div>
       </div>
     </transition>
     <div class="comment-reply-list">
-      <CommentReplyList :comment-id="comment.id.toString()" />
+      <CommentReplyList
+        :comment-id="comment.id.toString()"
+        :reply-comment="(receiver: string) => replyComment(receiver, comment.id)"
+      />
     </div>
   </div>
 </template>
