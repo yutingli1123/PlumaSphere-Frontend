@@ -128,7 +128,7 @@ onMounted(async () => {
       newPostParams.value.content = value
     },
     blur() {
-      formRef.value?.validateField('content')
+      formRef.value?.validateField('content').catch(() => {})
     },
     preview: {
       actions: ['desktop', 'tablet', 'mobile'],
