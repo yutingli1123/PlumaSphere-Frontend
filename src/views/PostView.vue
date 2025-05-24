@@ -111,6 +111,13 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
   }
 }
 
+const deleteComment = async (commentId: number) => {
+  if (await commentApi.deleteComment(commentId)) {
+    comments.value = comments.value?.filter((c) => c.id !== commentId)
+    await refreshComment()
+  }
+}
+
 watch(articleContent, () => {
   if (article.value?.content) {
     if (articleContent.value) {
@@ -275,7 +282,11 @@ onBeforeUnmount(() => {
                   {{ newCommentsCount }} New
                 </el-button>
               </div>
-              <CommentList ref="commentListRef" :comments="comments" />
+              <CommentList
+                ref="commentListRef"
+                :comments="comments"
+                :delete-comment="deleteComment"
+              />
               <el-pagination
                 v-if="totalCommentPages !== 0"
                 v-model:current-page="commentPage"

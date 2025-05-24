@@ -152,13 +152,19 @@ onUnmounted(async () => {
         @click="replyComment(comment.authorNickname.toString())"
         >Reply
       </el-link>
-      <el-link
-        v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
-        type="primary"
-        underline="never"
-        @click="deleteComment(comment.id)"
-        >Delete
-      </el-link>
+      <el-popconfirm
+        title="Are you sure to delete this comment?"
+        @confirm="deleteComment(comment.id)"
+      >
+        <template #reference>
+          <el-link
+            v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
+            type="primary"
+            underline="never"
+            >Delete
+          </el-link>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
   <el-link v-if="isMore" class="load-button" type="primary" underline="never" @click="loadMore">

@@ -4,12 +4,15 @@ import { likeApi } from '@/api/like.ts'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
 import CommentReplyList from '@/components/CommentReplyList.vue'
+import { useUserStore } from '@/stores/user.ts'
 
 const { comments } = defineProps<{
   comments: Comment[] | undefined
+  deleteComment: (commentId: number) => void
 }>()
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const likeCounts = ref<Record<string, number>>({})
 const likeLoading = ref<Record<string, boolean>>({})
@@ -17,6 +20,7 @@ const commentReplying = ref<Record<number, boolean>>({})
 const commentReplyingContent = ref<Record<number, string>>({})
 const replyLoading = ref<Record<number, boolean>>({})
 const inputRefList = ref<Record<number, Element | ComponentPublicInstance | null>>({})
+const selfUserId = ref<number | null | undefined>()
 
 const setInputRef = (commentId: number, inputRef: Element | ComponentPublicInstance | null) => {
   inputRefList.value[commentId] = inputRef
@@ -94,10 +98,18 @@ const replyComment = (receiver: string, commentId: number) => {
   scrollToInput(commentId)
 }
 
-watch(() => comments, fetchLikes)
+const fetchSelfUserId = async () => {
+  selfUserId.value = (await userStore.getUserInfo())?.id
+}
 
-onMounted(() => {
-  fetchLikes()
+watch(() => comments, fetchLikes)
+watch(userStore.getUserInfo, async () => {
+  await fetchSelfUserId()
+})
+
+onMounted(async () => {
+  await fetchSelfUserId()
+  await fetchLikes()
 })
 
 defineExpose({ fetchLike })
@@ -119,6 +131,19 @@ defineExpose({ fetchLike })
       <el-link type="primary" underline="never" @click="switchReplyComment(comment.id)"
         >Reply
       </el-link>
+      <el-popconfirm
+        title="Are you sure to delete this comment?"
+        @confirm="deleteComment(comment.id)"
+      >
+        <template #reference>
+          <el-link
+            v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
+            type="primary"
+            underline="never"
+            >Delete
+          </el-link>
+        </template>
+      </el-popconfirm>
     </div>
     <transition name="reply-expand">
       <div v-if="commentReplying[comment.id]" class="comment-reply-container">
