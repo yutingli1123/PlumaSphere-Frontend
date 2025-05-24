@@ -140,12 +140,12 @@ onMounted(async () => {
   if (authorEntity) {
     author.value = authorEntity
   }
-  WebSocketServiceInstance.connectWebSocket(postId, onWebSocketMessage)
+  WebSocketServiceInstance.connectPostWebSocket(postId, onWebSocketMessage)
   loaded.value = true
 })
 
 onBeforeUnmount(() => {
-  WebSocketServiceInstance.disconnectWebSocket(postId)
+  WebSocketServiceInstance.disconnectPostWebSocket(postId)
 })
 </script>
 
