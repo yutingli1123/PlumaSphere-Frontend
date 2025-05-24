@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 import { commentApi } from '@/api/comment.ts'
-import type { Comment } from '@/types'
+import type { Comment, WebSocketMessage } from '@/types'
 import { likeApi } from '@/api/like.ts'
 import { useAuthStore } from '@/stores/auth.ts'
+import { WebSocketMessageType } from '@/constant'
+import { WebSocketServiceInstance } from '@/service/webSocketService.ts'
 
 const authStore = useAuthStore()
 
@@ -15,7 +16,7 @@ const likeLoading: Ref<Record<number, boolean>> = ref({})
 const likeCounts: Ref<Record<number, number>> = ref({})
 
 const { commentId } = defineProps<{
-  commentId: number
+  commentId: string
 }>()
 
 const loadMore = async () => {
@@ -55,12 +56,20 @@ const fetchLikes = async () => {
   }
 }
 
-const fetchLike = async (id: number) => {
-  likeCounts.value[id] = await getLike(id)
+const fetchLike = async (id: string) => {
+  likeCounts.value[Number.parseInt(id)] = await getLike(id)
 }
 
 const getLike = async (commentId: number | string) => {
   return (await likeApi.getLikesByCommentId(commentId)) ?? 0
+}
+
+const onWebSocketMessage = (message: WebSocketMessage) => {
+  const { type } = message
+  if (type === WebSocketMessageType.LIKE_COMMENT) {
+    const { commentId } = message.data as { commentId: string }
+    fetchLike(commentId)
+  }
 }
 
 watch(
@@ -78,6 +87,7 @@ watch(
 onMounted(async () => {
   await refreshComment()
   await fetchLikes()
+  WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
 })
 </script>
 

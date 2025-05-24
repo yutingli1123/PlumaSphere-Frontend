@@ -103,7 +103,7 @@ defineExpose({ fetchLike })
       </div>
     </transition>
     <div class="comment-reply-list">
-      <CommentReplyList :comment-id="comment.id" />
+      <CommentReplyList :comment-id="comment.id.toString()" />
     </div>
   </div>
 </template>
