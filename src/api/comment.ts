@@ -41,9 +41,11 @@ export const commentApi = {
       `${getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId })}?page=${page}`,
     )
   },
-  async deleteComment(commentId: number | string): Promise<void> {
-    await axiosInstance.delete(getPath(ApiEndpoint.COMMENT_DELETE, { commentId }), {
-      requiresAuth: true,
-    })
+  async deleteComment(commentId: number | string): Promise<boolean> {
+    return (
+      (await axiosInstance.delete(getPath(ApiEndpoint.COMMENT_DELETE, { commentId }), {
+        requiresAuth: true,
+      })) !== null
+    )
   },
 }

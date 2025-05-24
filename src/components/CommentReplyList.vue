@@ -87,6 +87,11 @@ const fetchUserId = async () => {
   selfUserId.value = (await userStore.getUserInfo())?.id
 }
 
+const deleteComment = async (commentId: number) => {
+  if (await commentApi.deleteComment(commentId))
+    comments.value = comments.value.filter((comment) => comment.id !== commentId)
+}
+
 watch(
   () => commentId,
   async () => {
@@ -151,6 +156,7 @@ onUnmounted(async () => {
         v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
         type="primary"
         underline="never"
+        @click="deleteComment(comment.id)"
         >Delete
       </el-link>
     </div>
