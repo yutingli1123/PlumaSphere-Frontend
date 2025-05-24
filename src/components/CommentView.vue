@@ -49,8 +49,9 @@ const { comment } = defineProps<{
 
 .comment-content {
   overflow-wrap: break-word;
+  white-space: pre-line;
   font-size: 14px;
-  line-height: 1.2;
+  line-height: 1.5;
   margin-left: 48px;
 }
 </style>

@@ -16,15 +16,17 @@ const likeLoading = ref<Record<string, boolean>>({})
 const commentReplying = ref<Record<number, boolean>>({})
 const commentReplyingContent = ref<Record<number, string>>({})
 const replyLoading = ref<Record<number, boolean>>({})
-const inputRefList = ref<Record<number, HTMLInputElement | null>>({})
+const inputRefList = ref<Record<number, Element | ComponentPublicInstance | null>>({})
 
-const setInputRef = (commentId: number, inputRef: HTMLInputElement | null) => {
+const setInputRef = (commentId: number, inputRef: Element | ComponentPublicInstance | null) => {
   inputRefList.value[commentId] = inputRef
 }
 
 const scrollToInput = (commentId: number) => {
   nextTick(() => {
-    inputRefList.value[commentId]?.$el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const ref = inputRefList.value[commentId]
+    const el = ref && '$el' in ref ? ref.$el : ref
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   })
 }
 
