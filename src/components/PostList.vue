@@ -95,6 +95,7 @@ defineProps<{
 }
 
 .article-description {
+  overflow-wrap: break-word;
   color: #666666;
   margin-bottom: 20px;
   line-height: 24px;
