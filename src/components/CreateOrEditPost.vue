@@ -6,7 +6,11 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import { tagApi } from '@/api/tag.ts'
 import { tagTypes } from '@/constant'
+import type { FormInstance } from 'element-plus'
+import { useAuthStore } from '@/stores/auth.ts'
+import { ApiEndpoint } from '@/api/endpoints.ts'
 
+const authStore = useAuthStore()
 const editor = ref<Vditor | undefined>()
 const allTags = ref<Tag[] | undefined>()
 
@@ -49,11 +53,11 @@ const submitPost = () => {
     newPostParams.value.content = editor.value.getValue()
   }
 
-  formRef.value?.validate(async (valid) => {
+  formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       posting.value = true
 
-      let success = false
+      let success
 
       if (isEditing.value && postId) {
         const post: ArticleUpdateRequest = {
@@ -104,6 +108,9 @@ onMounted(async () => {
     lang: 'en_US',
     height: 600,
     width: '100%',
+    counter: {
+      enable: true,
+    },
     after() {
       if (newPostParams.value.content) {
         editor.value?.setValue(newPostParams.value.content)
@@ -112,6 +119,16 @@ onMounted(async () => {
     input(value: string) {
       newPostParams.value.content = value
     },
+    preview: {
+      actions: ['desktop', 'tablet', 'mobile',
+    },
+    upload: {
+      url: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${ApiEndpoint.FILE_UPLOAD}`,
+      linkToImgUrl: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${ApiEndpoint.IMAGE_FETCH}`,
+      headers: {
+        Authorization: `Bearer ${await authStore.getAccessToken},
+      ,
+    ,
   })
 })
 

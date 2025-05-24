@@ -47,6 +47,9 @@ export enum ApiEndpoint {
   TAG_BASE = '/tag',
   TAG_GET_ALL = `${TAG_BASE}`,
   TAG_ADD = `${TAG_BASE}`,
+
+  FILE_UPLOAD = '/file/upload',
+  IMAGE_FETCH = '/file/fetch',
 }
 
 export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
