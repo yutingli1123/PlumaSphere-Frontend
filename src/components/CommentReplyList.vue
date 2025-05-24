@@ -34,6 +34,13 @@ const loadComment = async () => {
   comments.value.push(...commentsData)
 }
 
+const refreshComment = async () => {
+  page.value = 0
+  isMore.value = true
+  comments.value = []
+  await loadComment()
+}
+
 const likeComment = async (commentId: number) => {
   likeLoading.value[commentId] = true
   if (!authStore.hasToken) await authStore.getNewIdentity()
@@ -57,6 +64,11 @@ const getLike = async (commentId: number | string) => {
 }
 
 watch(
+  () => commentId,
+  async () => refreshComment(),
+)
+
+watch(
   () => comments.value,
   () => {
     fetchLikes()
@@ -64,7 +76,7 @@ watch(
 )
 
 onMounted(async () => {
-  await loadComment()
+  await refreshComment()
   await fetchLikes()
 })
 </script>
