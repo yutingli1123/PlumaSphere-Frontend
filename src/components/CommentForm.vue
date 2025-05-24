@@ -3,7 +3,6 @@ import { useUserStore } from '@/stores/user.ts'
 import type { CommentRequest, User as UserInfo } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
-import { onMounted } from 'vue'
 
 const { postId } = defineProps<{
   postId: string

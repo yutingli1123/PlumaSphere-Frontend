@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { FormInstance } from 'element-plus'
 import { postApi } from '@/api/post.ts'
 import type { ArticleRequest, ArticleUpdateRequest, Tag } from '@/types'
 import { useRouter } from 'vue-router'
@@ -54,6 +53,8 @@ const submitPost = () => {
     if (valid) {
       posting.value = true
 
+      let success = false
+
       if (isEditing.value && postId) {
         const post: ArticleUpdateRequest = {
           id: postId,
@@ -61,23 +62,27 @@ const submitPost = () => {
           content: newPostParams.value.content,
           tags: newPostParams.value.tags,
         }
-        await postApi.updatePost(post)
+        success = await postApi.updatePost(post)
       } else {
         const post: ArticleRequest = {
           title: newPostParams.value.title,
           content: newPostParams.value.content,
           tags: newPostParams.value.tags,
         }
-        await postApi.createPost(post)
+        success = await postApi.createPost(post)
       }
-      newPostParams.value.title = ''
-      newPostParams.value.content = ''
+
+      if (success) {
+        newPostParams.value.title = ''
+        newPostParams.value.content = ''
+
+        if (isEditing.value) {
+          router.back()
+        } else {
+          await router.push({ path: '/' })
+        }
+      }
       posting.value = false
-      if (isEditing.value) {
-        router.back()
-      } else {
-        await router.push({ path: '/' })
-      }
     }
   })
 }

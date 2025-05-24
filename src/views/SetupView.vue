@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import { systemApi } from '@/api/system.ts'
 import type { InitSystemParams } from '@/types'
 import { useRouter } from 'vue-router'

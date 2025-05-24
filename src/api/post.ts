@@ -9,15 +9,19 @@ export const postApi = {
   async getPostById(id: string | number): Promise<Article | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_GET_BY_ID, { id }))
   },
-  async createPost(post: ArticleRequest): Promise<void> {
-    await axiosInstance.post(getPath(ApiEndpoint.POST_CREATE), post, {
-      requiresAuth: true,
-    })
+  async createPost(post: ArticleRequest): Promise<boolean> {
+    return (
+      (await axiosInstance.post(getPath(ApiEndpoint.POST_CREATE), post, {
+        requiresAuth: true,
+      })) !== null
+    )
   },
-  async updatePost(post: ArticleUpdateRequest): Promise<void> {
-    await axiosInstance.put(getPath(ApiEndpoint.POST_UPDATE), post, {
-      requiresAuth: true,
-    })
+  async updatePost(post: ArticleUpdateRequest): Promise<boolean> {
+    return (
+      (await axiosInstance.put(getPath(ApiEndpoint.POST_UPDATE), post, {
+        requiresAuth: true,
+      })) !== null
+    )
   },
   async getPostPages(): Promise<number> {
     return await axiosInstance.get(getPath(ApiEndpoint.POST_PAGE_COUNT))
