@@ -61,7 +61,18 @@ const switchReplyComment = async (commentId: number) => {
   }
 }
 
+const contentNotEmpty = (commentId: number): boolean => {
+  const content = commentReplyingContent.value[commentId] || ''
+  const lines = content
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('>'))
+    .join('\n')
+    .trim()
+  return lines.length > 0
+}
+
 const replyPost = async (commentId: number) => {
+  if (!contentNotEmpty(commentId)) return
   replyLoading.value[commentId] = true
   if (!authStore.hasToken) await authStore.getNewIdentity()
   await commentApi.replyComment(
