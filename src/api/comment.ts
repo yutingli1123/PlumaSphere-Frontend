@@ -1,6 +1,7 @@
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
-import type { Comment, CommentRequest } from '@/types'
+import type { Comment } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
+import { SortBy } from '@/constant'
 
 export const commentApi = {
   async getCommentById(id: number): Promise<Comment | undefined> {
@@ -9,9 +10,10 @@ export const commentApi = {
   async getCommentsByPostId(
     postId: number | string,
     page: number | string,
+    sortBy: SortBy = SortBy.TIME,
   ): Promise<Comment[] | undefined> {
     return await axiosInstance.get(
-      `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId })}?page=${page}`,
+      `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId })}?page=${page}&sortBy=${sortBy.toLowerCase()},
     )
   },
   async getCommentPagesByPostId(postId: number | string): Promise<number> {
@@ -36,9 +38,13 @@ export const commentApi = {
       )) !== null
     )
   },
-  async getCommentReplies(commentId: string | number, page: number): Promise<Comment[] | []> {
+  async getCommentReplies(
+    commentId: string | number,
+    page: number,
+    sortBy: SortBy = SortBy.TIME,
+  ): Promise<Comment[] | []> {
     return await axiosInstance.get(
-      `${getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId })}?page=${page}`,
+      `${getPath(ApiEndpoint.COMMENT_REPLY_BY_COMMENT_ID, { commentId })}?page=${page}&sortBy=${sortBy.toLowerCase()}`,
     )
   },
   async deleteComment(commentId: number | string): Promise<boolean> {

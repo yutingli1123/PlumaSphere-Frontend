@@ -18,8 +18,9 @@ import IMdiThumbUpOutline from '~icons/mdi/thumb-up-outline'
 import { likeApi } from '@/api/like.ts'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
-import { tagTypes, WebSocketMessageType } from '@/constant'
+import { SortBy, tagTypes, WebSocketMessageType } from '@/constant'
 import { useUserStore } from '@/stores/user.ts'
+import ToggleSortTypeButton from '@/components/ToggleSortTypeButton.vue'
 
 const { postId } = defineProps<{
   postId: string
@@ -42,6 +43,7 @@ const likeCount: Ref<number> = ref(0)
 const likeLoading: Ref<boolean> = ref(false)
 const articleContent = ref<HTMLDivElement | undefined>()
 const commentListRef = ref<InstanceType<typeof CommentList>>()
+const sortBy: Ref<SortBy> = ref(SortBy.TIME)
 
 const goHome = () => {
   router.push('/')
@@ -78,7 +80,7 @@ const editPost = async () => {
 }
 
 const getComments = async (page: number) => {
-  const commentEntity = await commentApi.getCommentsByPostId(postId, page - 1)
+  const commentEntity = await commentApi.getCommentsByPostId(postId, page - 1, sortBy.value)
   if (commentEntity) {
     comments.value = commentEntity
   }
@@ -89,7 +91,7 @@ const refreshComment = async () => {
   commentPage.value = 1
   totalCommentPages.value = await commentApi.getCommentPagesByPostId(postId)
   totalComments.value = await commentApi.getCommentCount(postId)
-  const commentEntity = await commentApi.getCommentsByPostId(postId, 0)
+  const commentEntity = await commentApi.getCommentsByPostId(postId, 0, sortBy.value)
   if (commentEntity) {
     comments.value = commentEntity
     newCommentsCount.value = 0
@@ -116,6 +118,11 @@ const deleteComment = async (commentId: number) => {
     comments.value = comments.value?.filter((c) => c.id !== commentId)
     await refreshComment()
   }
+}
+
+const toggleSortBy = async () => {
+  sortBy.value = sortBy.value === SortBy.TIME ? SortBy.LIKE : SortBy.TIME
+  await refreshComment()
 }
 
 watch(articleContent, () => {
@@ -289,6 +296,7 @@ onBeforeUnmount(() => {
                   </el-icon>
                   {{ newCommentsCount }} New
                 </el-button>
+                <ToggleSortTypeButton :sort-by="sortBy" :toggle-sort-by="toggleSortBy" />
               </div>
               <CommentList
                 ref="commentListRef"

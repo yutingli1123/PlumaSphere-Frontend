@@ -5,3 +5,8 @@ export enum WebSocketMessageType {
   LIKE_POST = 'LIKE_POST',
   LIKE_COMMENT = 'LIKE_COMMENT',
 }
+
+export enum SortBy {
+  TIME = 'Time',
+  LIKE = 'Like',
+}

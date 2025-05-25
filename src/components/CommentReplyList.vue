@@ -3,7 +3,7 @@ import { commentApi } from '@/api/comment.ts'
 import type { Comment, WebSocketMessage } from '@/types'
 import { likeApi } from '@/api/like.ts'
 import { useAuthStore } from '@/stores/auth.ts'
-import { WebSocketMessageType } from '@/constant'
+import { SortBy, WebSocketMessageType } from '@/constant'
 import { WebSocketServiceInstance } from '@/service/webSocketService.ts'
 import { useUserStore } from '@/stores/user.ts'
 
@@ -19,11 +19,17 @@ const likeCounts: Ref<Record<number, number>> = ref({})
 const newReplyCounts: Ref<number> = ref(0)
 const replyRefreshing: Ref<boolean> = ref(false)
 const selfUserId: Ref<number | null | undefined> = ref()
+const sortBy: Ref<SortBy> = ref(SortBy.TIME)
 
 const { commentId } = defineProps<{
   commentId: string
   replyComment: (receiver: string) => void
 }>()
+
+const toggleSortBy = () => {
+  sortBy.value = sortBy.value === SortBy.TIME ? SortBy.LIKE : SortBy.TIME
+  refreshComment()
+}
 
 const loadMore = async () => {
   loading.value = true
@@ -33,12 +39,14 @@ const loadMore = async () => {
 }
 
 const loadComment = async () => {
-  const commentsData = await commentApi.getCommentReplies(commentId, page.value)
+  const commentsData = await commentApi.getCommentReplies(commentId, page.value, sortBy.value)
   if (commentsData.length === 0) {
     isMore.value = false
     return
   }
-  comments.value.push(...commentsData)
+  const existingIds = new Set(comments.value.map((c) => c.id))
+  const newComments = commentsData.filter((c) => !existingIds.has(c.id))
+  comments.value.push(...newComments)
 }
 
 const refreshComment = async () => {
@@ -126,41 +134,46 @@ onUnmounted(async () => {
     <span v-if="replyRefreshing" class="loading" />
     <span>New Replies ({{ newReplyCounts }})</span>
   </el-link>
-  <div
-    v-for="(comment, index) in comments"
-    :key="index"
-    :class="{
-      'last-child': comment.id === comments[comments.length - 1].id && !isMore,
-      'is-more': comment.id === comments[comments.length - 1].id && isMore,
-    }"
-    class="comment"
-  >
-    <CommentView :comment="comment" />
-    <div class="comment-action">
-      <el-link
-        :disabled="likeLoading[comment.id]"
-        type="primary"
-        underline="never"
-        @click="likeComment(comment.id)"
-      >
-        <span v-if="likeLoading[comment.id]" class="loading" />
-        <span>Like ({{ likeCounts[comment.id] }})</span>
-      </el-link>
-      <el-link
-        type="primary"
-        underline="never"
-        @click="replyComment(comment.authorNickname.toString())"
-        >Reply
-      </el-link>
-      <el-popconfirm
-        v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
-        title="Are you sure to delete this comment?"
-        @confirm="deleteComment(comment.id)"
-      >
-        <template #reference>
-          <el-link type="primary" underline="never">Delete</el-link>
-        </template>
-      </el-popconfirm>
+  <div class="comment-list-container">
+    <div v-if="comments.length > 0" class="sort-type-button-wrapper">
+      <ToggleSortTypeButton :sort-by="sortBy" :toggle-sort-by="toggleSortBy" />
+    </div>
+    <div
+      v-for="(comment, index) in comments"
+      :key="index"
+      :class="{
+        'last-child': comment.id === comments[comments.length - 1].id && !isMore,
+        'is-more': comment.id === comments[comments.length - 1].id && isMore,
+      }"
+      class="comment"
+    >
+      <CommentView :comment="comment" />
+      <div class="comment-action">
+        <el-link
+          :disabled="likeLoading[comment.id]"
+          type="primary"
+          underline="never"
+          @click="likeComment(comment.id)"
+        >
+          <span v-if="likeLoading[comment.id]" class="loading" />
+          <span>Like ({{ likeCounts[comment.id] }})</span>
+        </el-link>
+        <el-link
+          type="primary"
+          underline="never"
+          @click="replyComment(comment.authorNickname.toString())"
+          >Reply
+        </el-link>
+        <el-popconfirm
+          v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
+          title="Are you sure to delete this comment?"
+          @confirm="deleteComment(comment.id)"
+        >
+          <template #reference>
+            <el-link type="primary" underline="never">Delete</el-link>
+          </template>
+        </el-popconfirm>
+      </div>
     </div>
   </div>
   <el-link v-if="isMore" class="load-button" type="primary" underline="never" @click="loadMore">
@@ -219,5 +232,15 @@ onUnmounted(async () => {
 
 .refresh-button {
   margin-left: 48px;
+}
+
+.comment-list-container {
+  position: relative;
+}
+
+.sort-type-button-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>
