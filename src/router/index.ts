@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import PostView from '@/views/PostView.vue'
 import SetupView from '@/views/SetupView.vue'
 import CreateOrEditPostView from '@/views/CreateOrEditPostView.vue'
+import SearchView from '@/views/SearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,12 @@ const router = createRouter({
       name: 'edit-post',
       component: CreateOrEditPostView,
       props: true,
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchView,
+      props: (route) => ({ query: route.query.q }),
     },
   ],
   scrollBehavior: (to, from, savedPosition) => {

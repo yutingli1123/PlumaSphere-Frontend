@@ -11,6 +11,7 @@ const router = useRouter()
 
 const loginDialogVisible = ref(false)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
+const searchQuery = ref('')
 
 const navigateToCreatePost = () => {
   router.push({ path: '/create-post' })
@@ -18,6 +19,21 @@ const navigateToCreatePost = () => {
 
 const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
 const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? undefined)
+
+const handleSearch = async () => {
+  if (!searchQuery.value.trim()) return
+  await router.push({
+    path: '/search',
+    query: { q: searchQuery.value.trim() },
+  })
+  searchQuery.value = ''
+}
+
+const handleKeyPress = (event: Event | KeyboardEvent) => {
+  if ('key' in event && event.key === 'Enter') {
+    handleSearch()
+  }
+}
 </script>
 
 <template>
@@ -27,7 +43,26 @@ const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE)
       <p class="subtitle">{{ subtitle }}</p>
     </div>
     <div class="search-login-section">
-      <el-input :prefix-icon="IEpSearch" class="search-input" placeholder="Search..." />
+      <el-input
+        v-model="searchQuery"
+        :prefix-icon="IEpSearch"
+        class="search-input"
+        clearable
+        placeholder="Search..."
+        @keydown="handleKeyPress"
+      >
+        <template #suffix>
+          <el-button
+            v-if="searchQuery.trim()"
+            size="small"
+            style="font-weight: bold"
+            text
+            type="primary"
+            @click="handleSearch"
+            >Search
+          </el-button>
+        </template>
+      </el-input>
       <el-button
         v-if="!isLoggedIn"
         class="login-button"
@@ -89,5 +124,27 @@ const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE)
 
 .login-button {
   font-weight: normal;
+}
+
+.search-input :deep(.el-input__wrapper) {
+  transition: all 0.3s ease;
+  border-radius: 20px;
+  border: 1px solid #eaeaea;
+  box-shadow: none;
+  padding: 0 16px;
+  background: #fafafa;
+}
+
+.search-input :deep(.el-input__wrapper:hover) {
+  border-color: #e0e0e0;
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.search-input :deep(.el-input__wrapper.is-focus) {
+  border-color: #409eff;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.15);
 }
 </style>
