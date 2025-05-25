@@ -1,5 +1,5 @@
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
-import type { Comment } from '@/types'
+import type { Comment, CommentRequest } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
 import { SortBy } from '@/constant'
 
@@ -13,7 +13,7 @@ export const commentApi = {
     sortBy: SortBy = SortBy.TIME,
   ): Promise<Comment[] | undefined> {
     return await axiosInstance.get(
-      `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId })}?page=${page}&sortBy=${sortBy.toLowerCase()},
+      `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_POST_ID, { postId })}?page=${page}&sortBy=${sortBy.toLowerCase()}`,
     )
   },
   async getCommentPagesByPostId(postId: number | string): Promise<number> {
