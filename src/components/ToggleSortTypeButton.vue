@@ -37,6 +37,7 @@ defineProps<{
   max-width: 14px;
 }
 
+/*noinspection CssUnusedSymbol*/
 .sort-icon.rotated {
   transform: rotate(180deg);
 }
