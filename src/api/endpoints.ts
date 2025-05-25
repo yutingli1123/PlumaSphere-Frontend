@@ -23,6 +23,9 @@ export enum ApiEndpoint {
   POST_GET_ALL_BY_TAG_NAME = `${POST_BASE}/tag`,
   POST_COUNT_BY_TAG_NAME = `${POST_BASE}/tag/count`,
   POST_PAGE_COUNT_BY_TAG_NAME = `${POST_BASE}/tag/count-page`,
+  POST_GET_ALL_BY_SEARCH_QUERY = `${POST_BASE}/search`,
+  POST_PAGE_COUNT_BY_SEARCH_QUERY = `${POST_GET_ALL_BY_SEARCH_QUERY}/count-page`,
+  POST_COUNT_BY_SEARCH_QUERY = `${POST_GET_ALL_BY_SEARCH_QUERY}/count`,
 
   USER_BASE = '/user',
   USER_GET_ALL = `${USER_BASE}`,

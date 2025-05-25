@@ -49,4 +49,19 @@ export const postApi = {
       `${getPath(ApiEndpoint.POST_PAGE_COUNT_BY_TAG_NAME)}?tagName=${tagName}`,
     )
   },
+  async getPostPageCountBySearchQuery(query: string): Promise<number> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_PAGE_COUNT_BY_SEARCH_QUERY)}?query=${query}`,
+    )
+  },
+  async getPostCountBySearchQuery(query: string): Promise<number> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_COUNT_BY_SEARCH_QUERY)}?query=${query}`,
+    )
+  },
+  async getAllPostsBySearchQuery(query: string, page: number): Promise<Article[] | undefined> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.POST_GET_ALL_BY_SEARCH_QUERY)}?query=${query}&page=${page}`,
+    )
+  },
 }
