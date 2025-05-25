@@ -43,6 +43,8 @@ export interface User {
   nickname: string
   bio: string
   avatarUrl: string
+  avatarColor: string
+  initials: string
   dob: string
   createdAt: string
   updatedAt: string

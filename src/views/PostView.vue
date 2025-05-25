@@ -185,7 +185,15 @@ onBeforeUnmount(() => {
 
             <!-- Author Info -->
             <div class="author-info">
-              <el-avatar :size="40" />
+              <el-avatar
+                :size="40"
+                :src="author?.avatarUrl"
+                :style="{ backgroundColor: !author?.avatarUrl ? author?.avatarColor : undefined }"
+              >
+                <div class="comment-name">
+                  {{ !author?.avatarUrl ? author?.initials : undefined }}
+                </div>
+              </el-avatar>
               <div class="author-details">
                 <div class="author-name">
                   {{ author ? (author.nickname ?? author.username) : 'Unknown' }}
