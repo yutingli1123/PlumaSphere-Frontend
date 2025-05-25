@@ -153,16 +153,12 @@ onUnmounted(async () => {
         >Reply
       </el-link>
       <el-popconfirm
+        v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
         title="Are you sure to delete this comment?"
         @confirm="deleteComment(comment.id)"
       >
         <template #reference>
-          <el-link
-            v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
-            type="primary"
-            underline="never"
-            >Delete
-          </el-link>
+          <el-link type="primary" underline="never">Delete</el-link>
         </template>
       </el-popconfirm>
     </div>
