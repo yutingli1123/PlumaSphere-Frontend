@@ -34,7 +34,7 @@ export const postApi = {
       requiresAuth: true,
     })
   },
-  async getAllPostsByTag(tagName: string, page: number): Promise<Article[] | undefined> {
+  async getAllPostsByTag(tagName: string, page: number): Promise<Article[]> {
     return await axiosInstance.get(
       `${getPath(ApiEndpoint.POST_GET_ALL_BY_TAG_NAME)}?tagName=${tagName}&page=${page}`,
     )
@@ -59,7 +59,7 @@ export const postApi = {
       `${getPath(ApiEndpoint.POST_COUNT_BY_SEARCH_QUERY)}?query=${query}`,
     )
   },
-  async getAllPostsBySearchQuery(query: string, page: number): Promise<Article[] | undefined> {
+  async getAllPostsBySearchQuery(query: string, page: number): Promise<Article[]> {
     return await axiosInstance.get(
       `${getPath(ApiEndpoint.POST_GET_ALL_BY_SEARCH_QUERY)}?query=${query}&page=${page}`,
     )
