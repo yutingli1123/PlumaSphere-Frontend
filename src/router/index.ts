@@ -39,7 +39,7 @@ const router = createRouter({
       path: '/search',
       name: 'search',
       component: SearchView,
-      props: (route) => ({ query: route.query.q }),
+      props: (route) => ({ query: route.query.q, page: parseInt(route.query.page as string) || 1 }),
     },
   ],
   scrollBehavior: (to, from, savedPosition) => {
