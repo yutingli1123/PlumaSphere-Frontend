@@ -126,6 +126,7 @@ const handleKeyPress = (event: Event | KeyboardEvent) => {
   font-weight: normal;
 }
 
+/*noinspection CssUnusedSymbol*/
 .search-input :deep(.el-input__wrapper) {
   transition: all 0.3s ease;
   border-radius: 20px;
@@ -135,6 +136,7 @@ const handleKeyPress = (event: Event | KeyboardEvent) => {
   background: #fafafa;
 }
 
+/*noinspection CssUnusedSymbol*/
 .search-input :deep(.el-input__wrapper:hover) {
   border-color: #e0e0e0;
   background: #ffffff;
@@ -142,6 +144,7 @@ const handleKeyPress = (event: Event | KeyboardEvent) => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+/*noinspection CssUnusedSymbol*/
 .search-input :deep(.el-input__wrapper.is-focus) {
   border-color: #409eff;
   background: #ffffff;

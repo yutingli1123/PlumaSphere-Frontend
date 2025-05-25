@@ -209,17 +209,20 @@ defineExpose({ fetchLike })
   align-items: flex-end;
 }
 
+/*noinspection CssUnusedSymbol*/
 .reply-expand-enter-active,
 .reply-expand-leave-active {
   transition: max-height 0.3s linear;
   overflow: hidden;
 }
 
+/*noinspection CssUnusedSymbol*/
 .reply-expand-enter-from,
 .reply-expand-leave-to {
   max-height: 0;
 }
 
+/*noinspection CssUnusedSymbol*/
 .reply-expand-enter-to,
 .reply-expand-leave-from {
   max-height: 200px;
