@@ -4,6 +4,9 @@ import PostView from '@/views/PostView.vue'
 import SetupView from '@/views/SetupView.vue'
 import CreateOrEditPostView from '@/views/CreateOrEditPostView.vue'
 import SearchView from '@/views/SearchView.vue'
+import SettingView from '@/views/SettingView.vue'
+import SystemSettingView from '@/views/settings/SystemSettingView.vue'
+import PersonalSettingView from '@/views/settings/PersonalSettingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +43,21 @@ const router = createRouter({
       name: 'search',
       component: SearchView,
       props: (route) => ({ query: route.query.q, page: parseInt(route.query.page as string) || 1 }),
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingView,
+      children: [
+        {
+          path: 'system',
+          component: SystemSettingView,
+        },
+        {
+          path: 'personal',
+          component: PersonalSettingView,
+        },
+      ],
     },
   ],
   scrollBehavior: (to, from, savedPosition) => {
