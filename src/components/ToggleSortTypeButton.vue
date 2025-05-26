@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import IEpSort from '~icons/ep/sort'
 import { SortBy } from '@/constant'
 
 defineProps<{
@@ -10,9 +9,9 @@ defineProps<{
 
 <template>
   <el-button class="switch-sort-type-button" @click="toggleSortBy">
-    <span :class="['sort-icon', { rotated: sortBy === SortBy.LIKE }]">
-      <IEpSort />
-    </span>
+    <el-icon :class="['sort-icon', { rotated: sortBy === SortBy.LIKE }]">
+      <i-ep-sort />
+    </el-icon>
     Sort by: <span class="sort-type">{{ sortBy }}</span>
   </el-button>
 </template>
