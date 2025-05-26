@@ -18,4 +18,10 @@ export const systemApi = {
   async getStatusVersion(): Promise<string | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.SYSTEM_STATUS_VERSION))
   },
+
+  async updateSettings(settings: Config[]): Promise<void> {
+    await axiosInstance.post(getPath(ApiEndpoint.SYSTEM_UPDATE_SETTINGS), settings, {
+      requiresAuth: true,
+    })
+  },
 }

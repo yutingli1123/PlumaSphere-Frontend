@@ -11,6 +11,7 @@ export enum ApiEndpoint {
   SYSTEM_STATUS_VERSION = '/status/version',
   SYSTEM_INIT = '/init',
   SYSTEM_INIT_CODE_VERIFY = `${SYSTEM_INIT}/verify-code`,
+  SYSTEM_UPDATE_SETTINGS = '/settings',
 
   POST_BASE = '/post',
   POST_GET_ALL = `${POST_BASE}`,

@@ -1,13 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Config } from '@/types'
 import { systemApi } from '@/api/system.ts'
-
-export enum ConfigFiled {
-  INITIALIZED = 'INITIALIZED',
-  BLOG_TITLE = 'BLOG_TITLE',
-  BLOG_SUBTITLE = 'BLOG_SUBTITLE',
-  CONFIG_VERSION = 'CONFIG_VERSION',
-}
+import { ConfigFiled } from '@/constant'
 
 export const useConfigStore = defineStore('config', () => {
   const config = ref<Config[] | undefined>()
@@ -51,10 +45,23 @@ export const useConfigStore = defineStore('config', () => {
     return configItem?.configValue ?? null
   }
 
+  const refreshConfig = async () => {
+    const newConfigData = await systemApi.getStatus()
+    if (newConfigData) {
+      config.value = newConfigData
+      newConfigData.push({
+        configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
+        configValue: await systemApi.getStatusVersion(),
+      } as Config)
+      localStorage.setItem('config', JSON.stringify(newConfigData))
+    }
+  }
+
   return {
     getConfig,
     loaded,
     initialConfig,
     resetConfig,
+    refreshConfi,
   }
 })
