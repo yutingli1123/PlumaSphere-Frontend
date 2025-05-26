@@ -4,6 +4,7 @@ import type { InitSystemParams } from '@/types'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useConfigStore } from '@/stores/config.ts'
+import type { FormInstance, FormRules } from 'element-plus'
 
 const router = useRouter()
 
