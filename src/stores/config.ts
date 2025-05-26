@@ -62,6 +62,6 @@ export const useConfigStore = defineStore('config', () => {
     loaded,
     initialConfig,
     resetConfig,
-    refreshConfi,
+    refreshConfig,
   }
 })
