@@ -3,6 +3,7 @@ import LoginDialog from '@/components/LoginDialog.vue'
 import { useAuthStore } from '@/stores/auth.ts'
 import { useRouter } from 'vue-router'
 import IEpSearch from '~icons/ep/search'
+import IEpSetting from '~icons/ep/setting'
 import { ConfigFiled, useConfigStore } from '@/stores/config.ts'
 
 const authStore = useAuthStore()
@@ -15,6 +16,10 @@ const searchQuery = ref('')
 
 const navigateToCreatePost = () => {
   router.push({ path: '/create-post' })
+}
+
+const navigateToSettings = () => {
+  router.push({ path: '/settings' })
 }
 
 const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
@@ -75,6 +80,7 @@ const handleKeyPress = (event: Event | KeyboardEvent) => {
         <el-button class="login-button" type="danger" @click="authStore.logout()"
           >Logout
         </el-button>
+        <el-button :icon="IEpSetting" @click="navigateToSettings" />
       </div>
     </div>
   </div>

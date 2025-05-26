@@ -34,25 +34,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-container>
-    <el-header style="padding: 0">
-      <TopNavigation />
-    </el-header>
-    <el-main style="min-height: 90dvh">
-      <CreateOrEditPost
-        v-if="!!post"
-        :content-in="post.content"
-        :post-id="postId"
-        :title-in="post.title"
-        :tags-in="post.tags"
-        style="max-width: 90%; margin: 40px auto 0 auto"
-      />
-      <CreateOrEditPost v-else style="max-width: 90%; margin: 40px auto 0 auto" />
-    </el-main>
-    <el-footer style="padding: 0">
-      <PageFooter />
-    </el-footer>
-  </el-container>
+  <TopNavigation />
+  <div style="min-height: 80dvh">
+    <CreateOrEditPost
+      v-if="!!post"
+      :content-in="post.content"
+      :post-id="postId"
+      :tags-in="post.tags"
+      :title-in="post.title"
+      style="max-width: 90%; margin: 40px auto 0 auto"
+    />
+    <CreateOrEditPost v-else style="max-width: 90%; margin: 40px auto 0 auto" />
+  </div>
+  <PageFooter />
 </template>
 
 <style scoped></style>

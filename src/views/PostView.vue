@@ -164,166 +164,160 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <el-container>
-    <el-header style="padding: 0">
-      <TopNavigation />
-    </el-header>
+  <TopNavigation />
 
-    <div v-if="loaded">
-      <div v-if="article === undefined">
-        <el-main style="min-height: 90dvh">
-          <el-empty style="margin-top: 100px">
-            <template #description>
-              <p>Not Found</p>
-              <el-button style="margin-top: 10px" @click="goHome">Go Home</el-button>
-            </template>
-          </el-empty>
-        </el-main>
-        <el-footer style="padding: 0">
-          <PageFooter />
-        </el-footer>
-      </div>
+  <div v-if="loaded">
+    <div v-if="article === undefined">
+      <el-main style="min-height: 90dvh">
+        <el-empty style="margin-top: 100px">
+          <template #description>
+            <p>Not Found</p>
+            <el-button style="margin-top: 10px" @click="goHome">Go Home</el-button>
+          </template>
+        </el-empty>
+      </el-main>
+      <PageFooter />
+    </div>
 
-      <div v-else>
-        <el-main class="article-content">
-          <div class="article-main">
-            <!-- Title -->
-            <h1 class="article-title">{{ article.title }}</h1>
+    <div v-else>
+      <el-main class="article-content">
+        <div class="article-main">
+          <!-- Title -->
+          <h1 class="article-title">{{ article.title }}</h1>
 
-            <!-- Author Info -->
-            <div class="author-info">
-              <el-avatar
-                :size="40"
-                :src="author?.avatarUrl"
-                :style="{ backgroundColor: !author?.avatarUrl ? author?.avatarColor : undefined }"
+          <!-- Author Info -->
+          <div class="author-info">
+            <el-avatar
+              :size="40"
+              :src="author?.avatarUrl"
+              :style="{ backgroundColor: !author?.avatarUrl ? author?.avatarColor : undefined }"
+            >
+              <div class="comment-name">
+                {{ !author?.avatarUrl ? author?.initials : undefined }}
+              </div>
+            </el-avatar>
+            <div class="author-details">
+              <div class="author-name">
+                {{ author ? (author.nickname ?? author.username) : 'Unknown' }}
+              </div>
+              <div v-if="author !== undefined && author.bio?.length !== 0" class="author-title">
+                {{ author.bio }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata -->
+          <div class="article-info">
+            <div class="meta-info">
+              <span
+                ><el-icon><IEpCalendar /></el-icon>Published:
+                {{
+                  DateTime.fromISO(article.createdAt)
+                    .toLocal()
+                    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}</span
               >
-                <div class="comment-name">
-                  {{ !author?.avatarUrl ? author?.initials : undefined }}
-                </div>
-              </el-avatar>
-              <div class="author-details">
-                <div class="author-name">
-                  {{ author ? (author.nickname ?? author.username) : 'Unknown' }}
-                </div>
-                <div v-if="author !== undefined && author.bio?.length !== 0" class="author-title">
-                  {{ author.bio }}
-                </div>
-              </div>
-            </div>
-
-            <!-- Metadata -->
-            <div class="article-info">
-              <div class="meta-info">
-                <span
-                  ><el-icon><IEpCalendar /></el-icon>Published:
-                  {{
-                    DateTime.fromISO(article.createdAt)
-                      .toLocal()
-                      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                  }}</span
-                >
-                <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
-                  ><el-icon><IEpCalendar /></el-icon>Updated:
-                  {{
-                    DateTime.fromISO(article.updatedAt)
-                      .toLocal()
-                      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                  }}</span
-                >
-                <!--            <span-->
-                <!--              ><el-icon><View /></el-icon> 12,483-->
-                <!--            </span>-->
-                <!--            <span-->
-                <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
-                <!--            </span>-->
-              </div>
-              <div v-if="authStore.isLoggedIn" class="article-action">
-                <el-button :icon="IEpEdit" size="small" type="primary" @click="editPost"
-                  >Edit
-                </el-button>
-                <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
-                  <template #reference>
-                    <el-button :icon="IEpDelete" size="small" type="danger">Delete</el-button>
-                  </template>
-                </el-popconfirm>
-              </div>
-            </div>
-
-            <!-- Tags -->
-            <div class="article-tags">
-              <el-tag
-                v-for="(tag, index) in article.tags"
-                :key="index"
-                :type="tagTypes[index % tagTypes.length]"
-                size="small"
-                >{{ tag }}
-              </el-tag>
-            </div>
-
-            <!-- Body -->
-            <div class="article-body">
-              <div ref="articleContent" />
-            </div>
-            <div class="like-section">
-              <el-button
-                :icon="isLiked ? IMdiThumbUp : IMdiThumbUpOutline"
-                :loading="likeLoading"
-                :type="isLiked ? 'primary' : 'default'"
-                class="like-button"
-                size="large"
-                @click="toggleLike"
+              <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
+                ><el-icon><IEpCalendar /></el-icon>Updated:
+                {{
+                  DateTime.fromISO(article.updatedAt)
+                    .toLocal()
+                    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}</span
               >
-                {{ likeCount }}
+              <!--            <span-->
+              <!--              ><el-icon><View /></el-icon> 12,483-->
+              <!--            </span>-->
+              <!--            <span-->
+              <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
+              <!--            </span>-->
+            </div>
+            <div v-if="authStore.isLoggedIn" class="article-action">
+              <el-button :icon="IEpEdit" size="small" type="primary" @click="editPost"
+                >Edit
               </el-button>
+              <el-popconfirm title="Are you sure to delete this post?" @confirm="deletePost">
+                <template #reference>
+                  <el-button :icon="IEpDelete" size="small" type="danger">Delete</el-button>
+                </template>
+              </el-popconfirm>
             </div>
           </div>
-        </el-main>
-        <el-footer style="padding: 0">
-          <div class="footer">
-            <!-- Comments Section -->
-            <div class="comments-section">
-              <div class="comments-section-title">
-                <h3>Comments ({{ totalComments }})</h3>
-                <el-button
-                  v-if="newCommentsCount > 0"
-                  :disabled="commentRefreshing"
-                  class="refresh-button"
-                  type="success"
-                  @click="refreshComment"
-                >
-                  <el-icon :class="{ 'is-refreshing': commentRefreshing }" class="refresh-icon">
-                    <IEpRefreshRight class="refresh-icon-content" />
-                  </el-icon>
-                  {{ newCommentsCount }} New
-                </el-button>
-                <ToggleSortTypeButton :sort-by="sortBy" :toggle-sort-by="toggleSortBy" />
-              </div>
-              <CommentList
-                ref="commentListRef"
-                :comments="comments"
-                :delete-comment="deleteComment"
-              />
-              <el-pagination
-                v-if="totalCommentPages !== 0"
-                v-model:current-page="commentPage"
-                :page-count="totalCommentPages"
-                :total="totalComments"
-                layout="prev, pager, next, total, jumper"
-                style="justify-content: center; margin-top: 10px"
-                @update:current-page="getComments"
-              />
-              <CommentForm :post-id="postId" class="comment-form" />
-            </div>
+
+          <!-- Tags -->
+          <div class="article-tags">
+            <el-tag
+              v-for="(tag, index) in article.tags"
+              :key="index"
+              :type="tagTypes[index % tagTypes.length]"
+              size="small"
+              >{{ tag }}
+            </el-tag>
           </div>
-          <!-- Page Footer -->
-          <PageFooter />
-        </el-footer>
-      </div>
+
+          <!-- Body -->
+          <div class="article-body">
+            <div ref="articleContent" />
+          </div>
+          <div class="like-section">
+            <el-button
+              :icon="isLiked ? IMdiThumbUp : IMdiThumbUpOutline"
+              :loading="likeLoading"
+              :type="isLiked ? 'primary' : 'default'"
+              class="like-button"
+              size="large"
+              @click="toggleLike"
+            >
+              {{ likeCount }}
+            </el-button>
+          </div>
+        </div>
+      </el-main>
+      <el-footer style="padding: 0">
+        <div class="footer">
+          <!-- Comments Section -->
+          <div class="comments-section">
+            <div class="comments-section-title">
+              <h3>Comments ({{ totalComments }})</h3>
+              <el-button
+                v-if="newCommentsCount > 0"
+                :disabled="commentRefreshing"
+                class="refresh-button"
+                type="success"
+                @click="refreshComment"
+              >
+                <el-icon :class="{ 'is-refreshing': commentRefreshing }" class="refresh-icon">
+                  <IEpRefreshRight class="refresh-icon-content" />
+                </el-icon>
+                {{ newCommentsCount }} New
+              </el-button>
+              <ToggleSortTypeButton :sort-by="sortBy" :toggle-sort-by="toggleSortBy" />
+            </div>
+            <CommentList
+              ref="commentListRef"
+              :comments="comments"
+              :delete-comment="deleteComment"
+            />
+            <el-pagination
+              v-if="totalCommentPages !== 0"
+              v-model:current-page="commentPage"
+              :page-count="totalCommentPages"
+              :total="totalComments"
+              layout="prev, pager, next, total, jumper"
+              style="justify-content: center; margin-top: 10px"
+              @update:current-page="getComments"
+            />
+            <CommentForm :post-id="postId" class="comment-form" />
+          </div>
+        </div>
+        <!-- Page Footer -->
+        <PageFooter />
+      </el-footer>
     </div>
-    <div v-else class="article-content" style="margin-top: 80px">
-      <el-skeleton :rows="18" animated />
-    </div>
-  </el-container>
+  </div>
+  <div v-else class="article-content" style="margin-top: 80px">
+    <el-skeleton :rows="18" animated />
+  </div>
 </template>
 
 <style scoped>

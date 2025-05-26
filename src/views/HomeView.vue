@@ -62,10 +62,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <TopNavigation />
   <el-container>
-    <el-header style="padding: 0; height: 71px">
-      <TopNavigation />
-    </el-header>
     <el-main v-if="loaded">
       <el-container>
         <el-aside width="280px" style="padding-right: 14px">
@@ -88,10 +86,8 @@ onMounted(() => {
     <el-main v-else style="min-height: 85dvh; width: 90%; margin: 20px auto 0 auto">
       <!--      <el-skeleton animated :rows="10" />-->
     </el-main>
-    <el-footer style="padding: 0">
-      <PageFooter />
-    </el-footer>
   </el-container>
+  <PageFooter />
 </template>
 
 <style scoped></style>
