@@ -5,6 +5,7 @@ export enum ConfigFiled {
   BLOG_TITLE = 'BLOG_TITLE',
   BLOG_SUBTITLE = 'BLOG_SUBTITLE',
   CONFIG_VERSION = 'CONFIG_VERSION',
+  PAGE_SIZE = 'PAGE_SIZE',
 }
 
 export enum WebSocketMessageType {
