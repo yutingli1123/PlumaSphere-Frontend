@@ -1,11 +1,27 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const router = useRouter()
 const route = useRoute()
 
+const authStore = useAuthStore()
+
+watch(
+  () => authStore.isLoggedIn,
+  (isLoggedIn) => {
+    if (!isLoggedIn) {
+      router.push({ path: '/' })
+    }
+  },
+)
+
 onMounted(() => {
+  if (!authStore.isLoggedIn) {
+    router.push({ path: '/' })
+    return
+  }
   if (route.path === '/settings') {
     router.replace('/settings/system')
   }
