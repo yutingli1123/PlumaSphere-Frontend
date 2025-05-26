@@ -4,7 +4,8 @@ import { useAuthStore } from '@/stores/auth.ts'
 import { useRouter } from 'vue-router'
 import IEpSearch from '~icons/ep/search'
 import IEpSetting from '~icons/ep/setting'
-import { ConfigFiled, useConfigStore } from '@/stores/config.ts'
+import { useConfigStore } from '@/stores/config.ts'
+import { ConfigFiled } from '@/constant'
 
 const authStore = useAuthStore()
 const configStore = useConfigStore()

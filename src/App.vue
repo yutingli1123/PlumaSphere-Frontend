@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import router from '@/router'
-import { ConfigFiled, useConfigStore } from '@/stores/config.ts'
+import { useConfigStore } from '@/stores/config.ts'
+import { ConfigFiled } from '@/constant'
 
 onMounted(async () => {
   const configStore = useConfigStore()
