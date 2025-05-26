@@ -17,6 +17,15 @@ watch(
   },
 )
 
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/settings') {
+      router.replace('/settings/system')
+    }
+  },
+)
+
 onMounted(() => {
   if (!authStore.isLoggedIn) {
     router.push({ path: '/' })

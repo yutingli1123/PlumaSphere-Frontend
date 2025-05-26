@@ -5,7 +5,6 @@ export enum ApiEndpoint {
   LOGIN = '/login',
   TOKEN_REFRESH = '/refresh-token',
   IDENTITY = '/get-identity',
-  TOKEN_VALIDATION = '/check-token-validation',
 
   SYSTEM_STATUS = '/status',
   SYSTEM_STATUS_VERSION = '/status/version',
@@ -32,6 +31,7 @@ export enum ApiEndpoint {
   USER_GET_ALL = `${USER_BASE}`,
   USER_GET_ME = `${USER_BASE}/me`,
   USER_GET_BY_ID = `${USER_BASE}/:userId`,
+  USER_UPLOAD_AVATAR = `${USER_BASE}/avatar`,
 
   COMMENT_BASE = '/comment',
   COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,
@@ -67,4 +67,11 @@ export const getPath = (path: ApiEndpoint, params?: Record<string, string | numb
   }
 
   return pathString
+}
+
+export const getFullPath = (
+  path: ApiEndpoint,
+  params?: Record<string, string | number>,
+): string => {
+  return `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${getPath(path, params)}`
 }
