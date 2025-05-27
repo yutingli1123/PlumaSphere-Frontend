@@ -27,4 +27,11 @@ export const userApi = {
       })) !== null
     )
   },
+  async updateUserInfo(user: User): Promise<boolean> {
+    return (
+      (await axiosInstance.put(getPath(ApiEndpoint.USER_UPDATE), user, {
+        requiresAuth: true,
+      })) !== null
+    )
+  },
 }

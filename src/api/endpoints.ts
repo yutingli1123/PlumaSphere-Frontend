@@ -32,6 +32,7 @@ export enum ApiEndpoint {
   USER_GET_ME = `${USER_BASE}/me`,
   USER_GET_BY_ID = `${USER_BASE}/:userId`,
   USER_UPLOAD_AVATAR = `${USER_BASE}/avatar`,
+  USER_UPDATE = `${USER_BASE}`,
 
   COMMENT_BASE = '/comment',
   COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,
