@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, UploadFile } from 'element-plus'
 import { useUserStore } from '@/stores/user.ts'
-import { ApiEndpoint, getFullPath } from '@/api/endpoints.ts'
-import { useAuthStore } from '@/stores/auth.ts'
+import 'vue-cropper/dist/index.css'
+import { VueCropper } from 'vue-cropper'
+import { userApi } from '@/api/user.ts'
 
 const userStore = useUserStore()
-const authStore = useAuthStore()
 const formData = ref({
   nickname: '',
   bio: '',
@@ -26,6 +26,10 @@ const submitLoading = ref(false)
 const avatarUrl = ref('')
 const uploadDialogVisible = ref(false)
 
+const cropper = ref()
+const currentImg = ref('')
+const cropperLoading = ref(false)
+
 const submitChanges = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
@@ -41,48 +45,146 @@ const isChanged = computed(() => {
   )
 })
 
-const beforeUpload = (file: File) => {
-  const isImage = file.type.startsWith('image/')
-  if (!isImage) {
-    ElMessage.error('Only image files are allowed.')
+const handleImageChange = (data: UploadFile) => {
+  if (!data.raw) {
+    ElMessage.error('No image file selected')
+    return
   }
-  return isImage
+  loadFile(data.raw)
+    .then((res) => {
+      currentImg.value = res
+    })
+    .catch((e) => {
+      console.error(e)
+      ElMessage.error('Failed to load image')
+    })
 }
 
-const finishUpdateAvatar = () => {
+const handleImageUpload = (img: string) => {
+  currentImg.value = img
+}
+
+const confirmCrop = async () => {
+  if (!cropper.value) {
+    ElMessage.error('Cropper not initialized')
+    return
+  }
+
+  cropperLoading.value = true
+  try {
+    cropper.value.getCropData((data: string) => {
+      fetch(data)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' })
+          return uploadAvatar(file)
+        })
+        .catch((error) => {
+          console.error('Crop failed:', error)
+          ElMessage.error('Crop failed')
+        })
+        .finally(() => {
+          cropperLoading.value = false
+        })
+    })
+  } catch (error) {
+    console.error('Crop failed:', error)
+    ElMessage.error('Crop failed')
+    cropperLoading.value = false
+  }
+}
+
+const uploadAvatar = async (file: File) => {
+  try {
+    if (await userApi.updateAvatar(file)) {
+      ElMessage.success('Avatar uploaded successfully')
+      await finishUpdateAvatar()
+    }
+  } catch (error) {
+    console.error('Upload avatar failed:', error)
+    ElMessage.error('Avatar upload failed')
+  }
+}
+
+const loadFile = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        resolve(e.target.result as string)
+      } else {
+        reject(new Error('File read failed'))
+      }
+    }
+    reader.onerror = () => reject(new Error('File read error'))
+    reader.readAsDataURL(file)
+  })
+}
+
+const finishUpdateAvatar = async () => {
   uploadDialogVisible.value = false
-  userStore.fetchUserInfo()
+  currentImg.value = ''
+  await userStore.fetchUserInfo()
+  await refreshUserInfo()
 }
 
-onMounted(async () => {
+const refreshUserInfo = async () => {
   const user = await userStore.getUserInfo()
   formData.value.nickname = user?.nickname ?? ''
   formData.value.bio = user?.bio ?? ''
   formData.value.dob = user?.dob ?? ''
   avatarUrl.value = user?.avatarUrl ?? ''
   initialFormData.value = { ...formData.value }
+}
+
+onMounted(async () => {
+  await refreshUserInfo()
 })
 </script>
 
 <template>
-  <el-dialog v-model="uploadDialogVisible" center destroy-on-close show-close title="Upload Avatar">
-    <el-upload
-      :action="getFullPath(ApiEndpoint.USER_UPLOAD_AVATAR)"
-      :before-upload="beforeUpload"
-      :headers="{
-        Authorization: `Bearer ${authStore.getAccessToken}`,
-      }"
-      :on-success="finishUpdateAvatar"
-      :show-file-list="false"
-      class="avatar-uploader"
-      drag
-      method="put"
-    >
-      <el-icon class="el-icon--upload">
-        <i-ep-upload-filled />
-      </el-icon>
-      <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-    </el-upload>
+  <el-dialog
+    v-model="uploadDialogVisible"
+    center
+    destroy-on-close
+    show-close
+    title="Upload Avatar"
+    width="600px"
+  >
+    <vue-cropper
+      ref="cropper"
+      :autoCrop="true"
+      :autoCropHeight="200"
+      :autoCropWidth="200"
+      :canMoveBox="false"
+      :centerBox="true"
+      :fixedBox="true"
+      :img="currentImg"
+      style="height: 400px"
+      @img-upload="handleImageUpload"
+    />
+
+    <div class="cropper-controls" style="margin-top: 20px; text-align: center">
+      <el-upload
+        :auto-upload="false"
+        :show-file-list="false"
+        accept="image/*"
+        style="display: inline-block; margin-right: 10px"
+        @change="handleImageChange"
+      >
+        <template #trigger>
+          <el-button type="primary">Select Image</el-button>
+        </template>
+      </el-upload>
+      <el-button
+        :disabled="!currentImg"
+        :loading="cropperLoading"
+        type="success"
+        @click="confirmCrop"
+      >
+        Confirm Upload
+      </el-button>
+    </div>
   </el-dialog>
   <div class="system-setting-view">
     <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px">
