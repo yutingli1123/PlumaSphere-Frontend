@@ -51,6 +51,12 @@ export interface User {
   lastLoginAt: string
 }
 
+export interface UserUpdate {
+  nickname: string
+  bio: string
+  dob: string
+}
+
 export interface LoginParams {
   username: string
   password: string

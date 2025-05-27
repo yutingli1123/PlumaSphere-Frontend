@@ -1,4 +1,4 @@
-import type { User } from '@/types'
+import type { User, UserUpdate } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
@@ -27,7 +27,7 @@ export const userApi = {
       })) !== null
     )
   },
-  async updateUserInfo(user: User): Promise<boolean> {
+  async updateUserInfo(user: UserUpdate): Promise<boolean> {
     return (
       (await axiosInstance.put(getPath(ApiEndpoint.USER_UPDATE), user, {
         requiresAuth: true,

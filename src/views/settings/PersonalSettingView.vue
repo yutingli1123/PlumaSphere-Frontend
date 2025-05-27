@@ -33,6 +33,25 @@ const cropperLoading = ref(false)
 const submitChanges = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
+      submitLoading.value = true
+      try {
+        if (
+          await userApi.updateUserInfo({
+            nickname: formData.value.nickname,
+            bio: formData.value.bio,
+            dob: formData.value.dob,
+          })
+        ) {
+          await userStore.fetchUserInfo()
+          await refreshUserInfo()
+          ElMessage.success('Changes saved successfully')
+        }
+      } catch (error) {
+        console.error('Update failed:', error)
+        ElMessage.error('Failed to save changes')
+      } finally {
+        submitLoading.value = false
+      }
     }
   })
 }
@@ -201,7 +220,7 @@ onMounted(async () => {
             <el-input v-model="formData.bio" placeholder="Enter your biography" />
           </el-form-item>
           <el-form-item label="Date of Birth" prop="dob">
-            <el-date-picker v-model="formData.dob" />
+            <el-date-picker v-model="formData.dob" type="date" value-format="YYYY-MM-DD" />
           </el-form-item>
           <el-form-item>
             <div class="save-button">
