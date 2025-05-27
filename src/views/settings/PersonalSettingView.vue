@@ -163,7 +163,6 @@ onMounted(async () => {
       style="height: 400px"
       @img-upload="handleImageUpload"
     />
-
     <div class="cropper-controls" style="margin-top: 20px; text-align: center">
       <el-upload
         :auto-upload="false"
