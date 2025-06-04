@@ -92,3 +92,9 @@ export interface WebSocketMessage {
   type: WebSocketMessageType
   data: object
 }
+
+export interface BanRequest {
+  userId: number
+  reason: string
+  expiresAt?: string
+}
