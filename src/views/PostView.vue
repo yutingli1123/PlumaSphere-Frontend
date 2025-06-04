@@ -133,6 +133,11 @@ const showBanDialog = (userId: number) => {
   banDialogVisible.value = true
 }
 
+const hideBanDialog = () => {
+  banUserId.value = undefined
+  banDialogVisible.value = false
+}
+
 watch(articleContent, () => {
   if (article.value?.content) {
     if (articleContent.value) {
@@ -179,7 +184,7 @@ onBeforeUnmount(() => {
     style="max-width: 500px"
     title="Restrict User Access"
   >
-    <BanDialog :user-id="banUserId" />
+    <BanDialog :close-dialog="hideBanDialog" :user-id="banUserId" />
   </el-dialog>
 
   <TopNavigation />
