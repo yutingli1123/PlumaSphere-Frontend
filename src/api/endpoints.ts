@@ -56,6 +56,14 @@ export enum ApiEndpoint {
 
   FILE_UPLOAD = '/file/upload',
   IMAGE_FETCH = '/file/fetch',
+
+  ADMIN_BASE = '/admin',
+  BAN_USER = `${ADMIN_BASE}/ban-user`,
+  UNBAN_USER = `${ADMIN_BASE}/unban-user`,
+  BAN_IP_BY_USER_ID = `${ADMIN_BASE}/mark-user-for-ip-ban`,
+  UNBAN_IP_BY_USER_ID = `${ADMIN_BASE}/unmark-user-ip-ban`,
+  GET_BANNED_USERS = `${ADMIN_BASE}/banned-users`,
+  GET_BANNED_IPS = `${ADMIN_BASE}/banned-ips`,
 }
 
 export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
@@ -68,11 +76,4 @@ export const getPath = (path: ApiEndpoint, params?: Record<string, string | numb
   }
 
   return pathString
-}
-
-export const getFullPath = (
-  path: ApiEndpoint,
-  params?: Record<string, string | number>,
-): string => {
-  return `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${getPath(path, params)}`
 }
