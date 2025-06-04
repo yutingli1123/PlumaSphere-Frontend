@@ -170,7 +170,27 @@ onMounted(async () => {
     title="Upload Avatar"
     width="600px"
   >
+    <div
+      v-if="!currentImg"
+      style="height: 400px; display: flex; align-items: center; justify-content: center"
+    >
+      <el-upload
+        :auto-upload="false"
+        :show-file-list="false"
+        accept="image/*"
+        drag
+        style="width: 100%"
+        @change="handleImageChange"
+      >
+        <el-icon class="el-icon--upload">
+          <i-ep-upload-filled />
+        </el-icon>
+        <div class="el-upload__text">Drop image here or <em>click to upload</em></div>
+      </el-upload>
+    </div>
+
     <vue-cropper
+      v-else
       ref="cropper"
       :autoCrop="true"
       :autoCropHeight="200"
@@ -182,6 +202,7 @@ onMounted(async () => {
       style="height: 400px"
       @img-upload="handleImageUpload"
     />
+
     <div class="cropper-controls" style="margin-top: 20px; text-align: center">
       <el-upload
         :auto-upload="false"
@@ -190,11 +211,9 @@ onMounted(async () => {
         style="display: inline-block; margin-right: 10px"
         @change="handleImageChange"
       >
-        <template #trigger>
-          <el-button type="primary">Select Image</el-button>
-        </template>
       </el-upload>
       <el-button
+        v-if="currentImg"
         :disabled="!currentImg"
         :loading="cropperLoading"
         type="success"
@@ -202,6 +221,7 @@ onMounted(async () => {
       >
         Confirm Upload
       </el-button>
+      <el-button v-if="currentImg" type="default" @click="currentImg = ''"> Clear </el-button>
     </div>
   </el-dialog>
   <div class="system-setting-view">
