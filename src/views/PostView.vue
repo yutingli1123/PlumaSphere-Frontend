@@ -172,7 +172,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <el-dialog v-model="banDialogVisible" style="max-width: 500px" title="Restrict User Access">
+  <el-dialog
+    v-model="banDialogVisible"
+    center
+    destroy-on-close
+    style="max-width: 500px"
+    title="Restrict User Access"
+  >
     <BanDialog :user-id="banUserId" />
   </el-dialog>
 
