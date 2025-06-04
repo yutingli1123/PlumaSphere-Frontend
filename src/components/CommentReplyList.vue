@@ -24,6 +24,7 @@ const sortBy: Ref<SortBy> = ref(SortBy.TIME)
 const { commentId } = defineProps<{
   commentId: string
   replyComment: (receiver: string) => void
+  showBanDialog: (userId: number) => void
 }>()
 
 const toggleSortBy = () => {
@@ -170,9 +171,16 @@ onUnmounted(async () => {
           @confirm="deleteComment(comment.id)"
         >
           <template #reference>
-            <el-link type="primary" underline="never">Delete</el-link>
+            <el-link type="danger" underline="never">Delete</el-link>
           </template>
         </el-popconfirm>
+        <el-link
+          v-if="authStore.isLoggedIn && comment.authorId !== selfUserId"
+          type="danger"
+          underline="never"
+          @click="showBanDialog(comment.authorId)"
+          >Ban
+        </el-link>
       </div>
     </div>
   </div>

@@ -9,6 +9,7 @@ import { useUserStore } from '@/stores/user.ts'
 const { comments } = defineProps<{
   comments: Comment[] | undefined
   deleteComment: (commentId: number) => void
+  showBanDialog: (userId: number) => void
 }>()
 
 const authStore = useAuthStore()
@@ -137,9 +138,16 @@ defineExpose({ fetchLike })
         @confirm="deleteComment(comment.id)"
       >
         <template #reference>
-          <el-link type="primary" underline="never">Delete</el-link>
+          <el-link type="danger" underline="never">Delete</el-link>
         </template>
       </el-popconfirm>
+      <el-link
+        v-if="authStore.isLoggedIn && comment.authorId !== selfUserId"
+        type="danger"
+        underline="never"
+        @click="showBanDialog(comment.authorId)"
+        >Ban
+      </el-link>
     </div>
     <transition name="reply-expand">
       <div v-if="commentReplying[comment.id]" class="comment-reply-container">
@@ -161,6 +169,7 @@ defineExpose({ fetchLike })
       <CommentReplyList
         :comment-id="comment.id.toString()"
         :reply-comment="(receiver: string) => replyComment(receiver, comment.id)"
+        :show-ban-dialog="showBanDialog"
       />
     </div>
   </div>

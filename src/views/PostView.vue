@@ -21,6 +21,7 @@ import 'vditor/dist/index.css'
 import { SortBy, tagTypes, WebSocketMessageType } from '@/constant'
 import { useUserStore } from '@/stores/user.ts'
 import ToggleSortTypeButton from '@/components/ToggleSortTypeButton.vue'
+import BanDialog from '@/components/BanDialog.vue'
 
 const { postId } = defineProps<{
   postId: string
@@ -44,6 +45,8 @@ const likeLoading: Ref<boolean> = ref(false)
 const articleContent = ref<HTMLDivElement | undefined>()
 const commentListRef = ref<InstanceType<typeof CommentList>>()
 const sortBy: Ref<SortBy> = ref(SortBy.TIME)
+const banDialogVisible = ref(false)
+const banUserId = ref<number | undefined>()
 
 const goHome = () => {
   router.push('/')
@@ -125,6 +128,11 @@ const toggleSortBy = async () => {
   await refreshComment()
 }
 
+const showBanDialog = (userId: number) => {
+  banUserId.value = userId
+  banDialogVisible.value = true
+}
+
 watch(articleContent, () => {
   if (article.value?.content) {
     if (articleContent.value) {
@@ -164,6 +172,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <el-dialog v-model="banDialogVisible" style="max-width: 500px" title="Restrict User Access">
+    <BanDialog :user-id="banUserId" />
+  </el-dialog>
+
   <TopNavigation />
 
   <div v-if="loaded">
@@ -297,6 +309,7 @@ onBeforeUnmount(() => {
               ref="commentListRef"
               :comments="comments"
               :delete-comment="deleteComment"
+              :show-ban-dialog="showBanDialog"
             />
             <el-pagination
               v-if="totalCommentPages !== 0"
