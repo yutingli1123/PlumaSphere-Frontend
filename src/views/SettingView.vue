@@ -54,6 +54,12 @@ onMounted(() => {
           </el-icon>
           Personal Info
         </el-menu-item>
+        <el-menu-item index="/settings/user-management">
+          <el-icon>
+            <i-ep-stamp />
+          </el-icon>
+          User Management
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>

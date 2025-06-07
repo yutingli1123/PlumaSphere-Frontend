@@ -7,6 +7,7 @@ import SearchView from '@/views/SearchView.vue'
 import SettingView from '@/views/SettingView.vue'
 import SystemSettingView from '@/views/settings/SystemSettingView.vue'
 import PersonalSettingView from '@/views/settings/PersonalSettingView.vue'
+import UserManagementView from '@/views/settings/UserManagementView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,10 @@ const router = createRouter({
         {
           path: 'personal',
           component: PersonalSettingView,
+        },
+        {
+          path: 'user-management',
+          component: UserManagementView,
         },
       ],
     },
