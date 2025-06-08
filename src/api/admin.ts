@@ -22,7 +22,7 @@ export const adminApi = {
     return await axiosInstance.delete(
       `${getPath(ApiEndpoint.UNBAN_IP_BY_USER_ID)}?userId=${userId}`,
       {
-        reuiresAuth: true,
+        requiresAuth: true,
       },
     )
   },
