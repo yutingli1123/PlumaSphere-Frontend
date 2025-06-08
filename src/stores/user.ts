@@ -11,13 +11,15 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = newUserInfo
   }
 
+  const user = computed(() => userInfo.value)
+
   const getUserInfo = async () => {
     if (userInfo.value) return userInfo.value
     return await fetchUserInfo()
   }
 
   const fetchUserInfo = async () => {
-    if (!authStore.hasToken) return null
+    if (!authStore.hasToken()) return null
 
     try {
       const info = await userApi.getSelfInfo()
@@ -34,6 +36,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
+    user,
     clearUserInfo,
     getUserInfo,
     fetchUserInfo,

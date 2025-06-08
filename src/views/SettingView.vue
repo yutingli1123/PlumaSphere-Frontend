@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.ts'
 
@@ -9,7 +8,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 watch(
-  () => authStore.isLoggedIn,
+  () => authStore.isLoggedIn(),
   (isLoggedIn) => {
     if (!isLoggedIn) {
       router.push({ path: '/' })
@@ -27,7 +26,7 @@ watch(
 )
 
 onMounted(() => {
-  if (!authStore.isLoggedIn) {
+  if (!authStore.isLoggedIn()) {
     router.push({ path: '/' })
     return
   }

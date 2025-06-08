@@ -55,7 +55,7 @@ const goHome = () => {
 const getLikes = async () => {
   likeLoading.value = true
   likeCount.value = await likeApi.getLikesByPostId(postId)
-  if (authStore.hasToken) {
+  if (authStore.hasToken()) {
     isLiked.value = await likeApi.checkPostLikeState(postId)
   } else {
     isLiked.value = false
@@ -65,20 +65,20 @@ const getLikes = async () => {
 
 const toggleLike = async () => {
   likeLoading.value = true
-  if (!authStore.hasToken) await authStore.getNewIdentity()
+  if (!authStore.hasToken()) await authStore.getNewIdentity()
   await likeApi.likePost(postId)
   await getLikes()
   likeLoading.value = false
 }
 
 const deletePost = async () => {
-  if (!authStore.isLoggedIn) return
+  if (!authStore.isLoggedIn()) return
   await postApi.deletePost(postId)
   await router.push('/')
 }
 
 const editPost = async () => {
-  if (!authStore.isLoggedIn) return
+  if (!authStore.isLoggedIn()) return
   await router.push({ path: `/edit-post/${postId}` })
 }
 
@@ -149,9 +149,12 @@ watch(articleContent, () => {
   }
 })
 
-watch(userStore.getUserInfo, () => {
-  getLikes()
-})
+watch(
+  () => userStore.user,
+  () => {
+    getLikes()
+  ,
+)
 
 onMounted(async () => {
   const articleEntity = await postApi.getPostById(postId)
@@ -255,7 +258,7 @@ onBeforeUnmount(() => {
               <!--              ><el-icon><ChatLineRound /></el-icon> 238-->
               <!--            </span>-->
             </div>
-            <div v-if="authStore.isLoggedIn" class="article-action">
+            <div v-if="authStore.isLoggedIn()" class="article-action">
               <el-button :icon="IEpEdit" size="small" type="primary" @click="editPost"
                 >Edit
               </el-button>

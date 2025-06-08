@@ -52,7 +52,7 @@ const getLike = async (commentId: number | string) => {
 
 const likeComment = async (commentId: number | string) => {
   likeLoading.value[commentId] = true
-  if (!authStore.hasToken) await authStore.getNewIdentity()
+  if (!authStore.hasToken()) await authStore.getNewIdentity()
   await likeApi.likeComment(commentId)
   likeLoading.value[commentId] = false
 }
@@ -79,7 +79,7 @@ const contentNotEmpty = (commentId: number): boolean => {
 const replyPost = async (commentId: number) => {
   if (!contentNotEmpty(commentId)) return
   replyLoading.value[commentId] = true
-  if (!authStore.hasToken) await authStore.getNewIdentity()
+  if (!authStore.hasToken()) await authStore.getNewIdentity()
   if (
     await commentApi.replyComment(
       {
@@ -104,9 +104,12 @@ const fetchSelfUserId = async () => {
 }
 
 watch(() => comments, fetchLikes)
-watch(userStore.getUserInfo, async () => {
-  await fetchSelfUserId()
-})
+watch(
+  () => userStore.user,
+  async () => {
+    await fetchSelfUserId()
+  },
+)
 
 onMounted(async () => {
   await fetchSelfUserId()
@@ -133,7 +136,7 @@ defineExpose({ fetchLike })
         >Reply
       </el-link>
       <el-popconfirm
-        v-if="comment.authorId === selfUserId || authStore.isLoggedIn"
+        v-if="comment.authorId === selfUserId || authStore.isLoggedIn()"
         title="Are you sure to delete this comment?"
         @confirm="deleteComment(comment.id)"
       >
@@ -142,7 +145,7 @@ defineExpose({ fetchLike })
         </template>
       </el-popconfirm>
       <el-link
-        v-if="authStore.isLoggedIn && comment.authorId !== selfUserId"
+        v-if="authStore.isLoggedIn() && comment.authorId !== selfUserId"
         type="warning"
         underline="never"
         @click="showBanDialog(comment.authorId)"

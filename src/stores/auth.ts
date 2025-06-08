@@ -10,37 +10,37 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loggedIn = ref(false)
 
-  const isLoggedIn = computed(() => hasToken.value && loggedIn.value)
+  const isLoggedIn = () => hasToken() && loggedIn.value
 
-  const hasToken = computed(() => !!tokenPair.value && !isRefreshTokenExpired.value)
+  const hasToken = () => !!tokenPair.value && !isRefreshTokenExpired()
 
-  const isAccessTokenExpired = computed(() => {
+  const isAccessTokenExpired = () => {
     if (!tokenPair.value?.accessToken.expiresAt) return false
     const expireTime: DateTime = DateTime.fromISO(tokenPair.value.accessToken.expiresAt)
     return expireTime.diffNow().milliseconds <= 0
-  })
+  }
 
-  const isRefreshTokenExpired = computed(() => {
+  const isRefreshTokenExpired = () => {
     if (!tokenPair.value?.refreshToken.expiresAt) return false
     const expireTime: DateTime = DateTime.fromISO(tokenPair.value.refreshToken.expiresAt)
     return expireTime.diffNow().milliseconds <= 0
-  })
+  }
 
-  const getRefreshToken = computed(() => {
-    if (isRefreshTokenExpired.value || !tokenPair.value) return null
+  const getRefreshToken = () => {
+    if (isRefreshTokenExpired() || !tokenPair.value) return null
     return tokenPair.value.refreshToken.token
-  })
+  }
 
-  const getAccessToken = computed(async () => {
-    if (!isAccessTokenExpired.value && tokenPair.value) return tokenPair.value.accessToken.token
-    if (isRefreshTokenExpired.value) {
+  const getAccessToken = async () => {
+    if (!isAccessTokenExpired() && tokenPair.value) return tokenPair.value.accessToken.token
+    if (isRefreshTokenExpired()) {
       logout()
       return null
     }
     const newTokenPair = await refreshTokens()
     if (!newTokenPair) return null
     return newTokenPair.accessToken.token
-  })
+  }
 
   const setLoggedIn = () => {
     loggedIn.value = true
@@ -75,13 +75,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const refreshTokens = async (): Promise<TokenPair | null> => {
-    if (!getRefreshToken.value) {
+    const refreshToken = getRefreshToken()
+    if (!refreshToken) {
       logout()
       console.error('No refresh token or expired')
       return null
     }
     try {
-      const response = await authApi.refreshToken(getRefreshToken.value)
+      const response = await authApi.refreshToken(refreshToken)
       if (!response) {
         console.error('Refresh token failed')
         return null
@@ -96,7 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (username: string, password: string): Promise<TokenPair | null> => {
-    if (isLoggedIn.value) {
+    if (isLoggedIn()) {
       setLoggedIn()
       return tokenPair.value
     }
@@ -119,7 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const getNewIdentity = async () => {
-    if (hasToken.value) {
+    if (hasToken()) {
       return tokenPair.value
     }
     try {

@@ -30,7 +30,7 @@ axiosInstance.interceptors.request.use(
     const requiresAuth = config.requiresAuth === true
     if (requiresAuth) {
       const authStore = useAuthStore()
-      const token = await authStore.getAccessToken
+      const token = await authStore.getAccessToken()
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`

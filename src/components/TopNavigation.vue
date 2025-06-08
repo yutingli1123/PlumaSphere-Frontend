@@ -12,7 +12,6 @@ const configStore = useConfigStore()
 const router = useRouter()
 
 const loginDialogVisible = ref(false)
-const isLoggedIn = computed(() => authStore.isLoggedIn)
 const searchQuery = ref('')
 
 const navigateToCreatePost = () => {
@@ -70,7 +69,7 @@ const handleKeyPress = (event: Event | KeyboardEvent) => {
         </template>
       </el-input>
       <el-button
-        v-if="!isLoggedIn"
+        v-if="!authStore.isLoggedIn()"
         class="login-button"
         type="primary"
         @click="loginDialogVisible = true"

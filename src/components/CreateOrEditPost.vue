@@ -140,7 +140,7 @@ onMounted(async () => {
       url: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${ApiEndpoint.FILE_UPLOAD}`,
       linkToImgUrl: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}${ApiEndpoint.IMAGE_FETCH}`,
       headers: {
-        Authorization: `Bearer ${await authStore.getAccessToken}`,
+        Authorization: `Bearer ${await authStore.getAccessToken()}`,
       },
     },
   })

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user.ts'
-import type { CommentRequest, User as UserInfo } from '@/types'
+import type { CommentRequest } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
 
@@ -11,7 +11,7 @@ const { postId } = defineProps<{
 const commentContent = ref('')
 const userStore = useUserStore()
 const authStore = useAuthStore()
-const userInfo: Ref<UserInfo | null> = ref(null)
+const userInfo = computed(() => userStore.user)
 const loadingIdentity: Ref<boolean> = ref(false)
 const postingComment: Ref<boolean> = ref(false)
 
@@ -32,12 +32,8 @@ const postComment = async () => {
   postingComment.value = false
 }
 
-watch(userStore.getUserInfo, async () => {
-  userInfo.value = await userStore.getUserInfo()
-})
-
-onMounted(async () => {
-  userInfo.value = await userStore.getUserInfo()
+onMounted(() => {
+  userStore.getUserInfo()
 })
 </script>
 <template>

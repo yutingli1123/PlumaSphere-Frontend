@@ -16,14 +16,16 @@ const post: Ref<Article | undefined> = ref()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const isLoggedIn = computed(() => authStore.isLoggedIn)
-watch(isLoggedIn, (value: boolean) => {
-  if (!value) {
-    router.push({ path: '/' })
-  }
-})
+watch(
+  () => authStore.isLoggedIn(),
+  (value: boolean) => {
+    if (!value) {
+      router.push({ path: '/' })
+    }
+  },
+)
 onMounted(async () => {
-  if (!isLoggedIn.value) {
+  if (!authStore.isLoggedIn()) {
     await router.push({ path: '/' })
     return
   }
