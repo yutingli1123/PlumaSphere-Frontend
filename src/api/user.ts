@@ -1,4 +1,4 @@
-import type { User, UserUpdate, UserWithBanInfo } from '@/types'
+import type { User, UserUpdate, UserWithAdminInfo } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
@@ -8,7 +8,7 @@ export const userApi = {
       requiresAuth: true,
     })
   },
-  async getAllUsers(page: number): Promise<UserWithBanInfo[] | undefined> {
+  async getAllUsers(page: number): Promise<UserWithAdminInfo[] | undefined> {
     return await axiosInstance.get(`${getPath(ApiEndpoint.USER_GET_ALL)}?page=${page}`, {
       requiresAuth: true,
     })
@@ -47,8 +47,15 @@ export const userApi = {
   async updateUserInfo(user: UserUpdate): Promise<boolean> {
     return (
       (await axiosInstance.put(getPath(ApiEndpoint.USER_UPDATE), user, {
-        requiresAuth: tru,
+        requiresAuth: true,
       })) !== null
     )
   },
+  async deleteUser(userId: number): Promise<boolean> {
+    return (
+      (await axiosInstance.delete(getPath(ApiEndpoint.USER_DELETE, { userId }), {
+        requiresAuth: tru,
+      })) !== null
+    )
+  ,
 }

@@ -57,7 +57,7 @@ const banIp = async () => {
         expiresAt: expirationDate ?? undefined,
       }
 
-      const result = await adminApi.banIPByUserId(banRequest)
+      const result = await adminApi.banIPForUser(banRequest)
       loading.value = false
 
       if (result) {

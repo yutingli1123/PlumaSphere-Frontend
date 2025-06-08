@@ -51,7 +51,7 @@ export interface User {
   lastLoginAt: string
 }
 
-export interface UserWithBanInfo extends User {
+export interface UserWithAdminInfo extends User {
   isBanned: boolean
   banReason: string
   bannedAt: string
@@ -59,6 +59,7 @@ export interface UserWithBanInfo extends User {
   isPendingIpBan: boolean
   ipBanReason: string
   ipBanExpiresAt: string | null
+  isAdmin: boolean
 }
 
 export interface BannedIp {

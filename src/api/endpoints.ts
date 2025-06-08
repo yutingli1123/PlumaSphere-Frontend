@@ -35,6 +35,7 @@ export enum ApiEndpoint {
   USER_GET_BY_ID = `${USER_BASE}/:userId`,
   USER_UPLOAD_AVATAR = `${USER_BASE}/avatar`,
   USER_UPDATE = `${USER_BASE}`,
+  USER_DELETE = `${USER_BASE}/:userId`,
 
   COMMENT_BASE = '/comment',
   COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,
@@ -70,6 +71,8 @@ export enum ApiEndpoint {
   GET_BANNED_IPS = `${ADMIN_BASE}/banned-ips`,
   GET_BANNED_IPS_PAGE_COUNT = `${ADMIN_BASE}/banned-ips/count-page`,
   GET_BANNED_IPS_COUNT = `${ADMIN_BASE}/banned-ips/count`,
+  BAN_IP = `${ADMIN_BASE}/ban-ip`,
+  UNBAN_IP = `${ADMIN_BASE}/unban-ip`,
 }
 
 export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
