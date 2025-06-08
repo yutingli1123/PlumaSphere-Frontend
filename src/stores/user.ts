@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
     if (!authStore.hasToken) return null
 
     try {
-      const info = await userApi.getUserInfo()
+      const info = await userApi.getSelfInfo()
       if (!info) return null
       setUserInfo(info)
       return info

@@ -1,15 +1,32 @@
-import type { User, UserUpdate } from '@/types'
+import type { User, UserUpdate, UserWithBanInfo } from '@/types'
 import axiosInstance from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
 
 export const userApi = {
-  async getUserInfo(): Promise<User | undefined> {
+  async getSelfInfo(): Promise<User | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ME), {
       requiresAuth: true,
     })
   },
-  async getAllUsers(): Promise<User[] | undefined> {
-    return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ALL))
+  async getAllUsers(page: number): Promise<UserWithBanInfo[] | undefined> {
+    return await axiosInstance.get(`${getPath(ApiEndpoint.USER_GET_ALL)}?page=${page}`, {
+      requiresAuth: true,
+    })
+  },
+  async getAllUsersCount(): Promise<{ totalCount: number; totalPages: number } | undefined> {
+    const totalPages: number = await axiosInstance.get(
+      getPath(ApiEndpoint.USER_GET_ALL_PAGE_COUNT),
+      {
+        requiresAuth: true,
+      },
+    )
+    const totalCount: number = await axiosInstance.get(getPath(ApiEndpoint.USER_GET_ALL_COUNT), {
+      requiresAuth: true,
+    })
+    return {
+      totalCount: totalCount,
+      totalPages: totalPages,
+    }
   },
   async getUserById(userId: number): Promise<User | undefined> {
     return await axiosInstance.get(getPath(ApiEndpoint.USER_GET_BY_ID, { userId }))
@@ -21,7 +38,7 @@ export const userApi = {
     return (
       (await axiosInstance.put(getPath(ApiEndpoint.USER_UPLOAD_AVATAR), formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-dta',
         },
         requiresAuth: true,
       })) !== null
@@ -30,7 +47,7 @@ export const userApi = {
   async updateUserInfo(user: UserUpdate): Promise<boolean> {
     return (
       (await axiosInstance.put(getPath(ApiEndpoint.USER_UPDATE), user, {
-        requiresAuth: true,
+        requiresAuth: tru,
       })) !== null
     )
   },
