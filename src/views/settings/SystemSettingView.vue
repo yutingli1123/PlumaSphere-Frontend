@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useConfigStore } from '@/stores/config.ts'
-import { onMounted } from 'vue'
 import { ConfigFiled } from '@/constant'
 import { systemApi } from '@/api/system.ts'
 import type { FormInstance } from 'element-plus'

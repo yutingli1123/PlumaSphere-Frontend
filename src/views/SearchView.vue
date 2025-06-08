@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { Article } from '@/types'
-import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { postApi } from '@/api/post.ts'
 

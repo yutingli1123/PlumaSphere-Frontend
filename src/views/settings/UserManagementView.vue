@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue'
 import { userApi } from '@/api/user'
 import { adminApi } from '@/api/admin'
 import type { BannedIp, UserWithAdminInfo } from '@/types'

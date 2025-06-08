@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 import type { FormInstance, FormRules, UploadFile } from 'element-plus'
 import { useUserStore } from '@/stores/user.ts'
 import 'vue-cropper/dist/index.css'

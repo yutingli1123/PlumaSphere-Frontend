@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { DateTime } from 'luxon'
 import type { Comment, User } from '@/types'
-import { onMounted } from 'vue'
 import { userApi } from '@/api/user.ts'
 
 const { comment } = defineProps<{
