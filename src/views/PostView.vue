@@ -153,7 +153,7 @@ watch(
   () => userStore.user,
   () => {
     getLikes()
-  ,
+  },
 )
 
 onMounted(async () => {
