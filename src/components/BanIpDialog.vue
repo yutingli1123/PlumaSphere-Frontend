@@ -2,10 +2,9 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { adminApi } from '@/api/admin.ts'
 import { DateTime } from 'luxon'
-import type { BanRequest } from '@/types'
+import type { BanIpRequest } from '@/types'
 
-const { userId, closeDialog } = defineProps<{
-  userId: number | undefined
+const { closeDialog } = defineProps<{
   closeDialog: () => void
 }>()
 
@@ -13,51 +12,27 @@ const expiration = ref<Date | undefined>()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 
-const formData = ref({ reason: '' })
+const formData = reactive({ address: '', reason: '' })
 
 const rules: FormRules = {
+  address: [{ required: true, message: 'Please enter the IP address', trigger: 'blur' }],
   reason: [{ required: true, message: 'Please enter the reason', trigger: 'blur' }],
-}
-
-const banUser = async () => {
-  formRef.value?.validate(async (valid: boolean) => {
-    if (valid) {
-      loading.value = true
-      if (!userId) return
-      let expirationDate
-      if (expiration.value !== undefined)
-        expirationDate = DateTime.fromJSDate(expiration.value).toISO()
-      const banRequest: BanRequest = {
-        userId,
-        reason: formData.value.reason,
-        expiresAt: expirationDate ?? undefined,
-      }
-      const result = await adminApi.banUser(banRequest)
-      loading.value = false
-      if (result) {
-        ElMessage.info(result)
-        closeDialog()
-      }
-    }
-  })
 }
 
 const banIp = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       loading.value = true
-
-      if (!userId) return
       let expirationDate
       if (expiration.value !== undefined)
         expirationDate = DateTime.fromJSDate(expiration.value).toISO()
-      const banRequest: BanRequest = {
-        userId,
-        reason: formData.value.reason,
+      const banIpRequest: BanIpRequest = {
+        ipAddress: formData.address,
+        reason: formData.reason,
         expiresAt: expirationDate ?? undefined,
       }
 
-      const result = await adminApi.banIPForUser(banRequest)
+      const result = await adminApi.banIp(banIpRequest)
       loading.value = false
 
       if (result) {
@@ -71,23 +46,18 @@ const banIp = async () => {
 
 <template>
   <el-form ref="formRef" :model="formData" :rules="rules" class="form">
-    <el-form-item label="User ID" label-width="80px">
-      <el-input :model-value="userId" disabled />
+    <el-form-item label="IP Address" label-width="100px" prop="address">
+      <el-input v-model="formData.address" placeholder="Input the IP address for banning" />
     </el-form-item>
-    <el-form-item label="Reason" label-width="80px" prop="reason">
+    <el-form-item label="Reason" label-width="100px" prop="reason">
       <el-input v-model="formData.reason" placeholder="Input the reason for banning" />
     </el-form-item>
-    <el-form-item label="Expiration" label-width="80px">
+    <el-form-item label="Expiration" label-width="100px">
       <el-date-picker v-model="expiration" clearable type="datetime" />
     </el-form-item>
     <el-form-item class="button-container">
       <div class="buttons-wrapper">
-        <el-popconfirm title="Are you sure to ban this user?" @confirm="banUser">
-          <template #reference>
-            <el-button :loading="loading" type="danger">Ban</el-button>
-          </template>
-        </el-popconfirm>
-        <el-popconfirm title="Are you sure to ban IP of this user?" @confirm="banIp">
+        <el-popconfirm title="Are you sure to ban this IP?" @confirm="banIp">
           <template #reference>
             <el-button :loading="loading" type="danger">Ban IP</el-button>
           </template>
