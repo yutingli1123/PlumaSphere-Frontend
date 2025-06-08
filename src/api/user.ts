@@ -54,8 +54,8 @@ export const userApi = {
   async deleteUser(userId: number): Promise<boolean> {
     return (
       (await axiosInstance.delete(getPath(ApiEndpoint.USER_DELETE, { userId }), {
-        requiresAuth: tru,
+        requiresAuth: true,
       })) !== null
     )
-  ,
+  },
 }
