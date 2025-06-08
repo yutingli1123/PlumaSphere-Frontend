@@ -220,7 +220,7 @@ onMounted(async () => {
       >
         Confirm Upload
       </el-button>
-      <el-button v-if="currentImg" type="default" @click="currentImg = ''"> Clear </el-button>
+      <el-button v-if="currentImg" @click="currentImg = ''"> Clear</el-button>
     </div>
   </el-dialog>
   <div class="system-setting-view">
