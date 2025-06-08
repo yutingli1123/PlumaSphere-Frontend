@@ -66,12 +66,12 @@ export const adminApi = {
       totalPages: totalPages,
     }
   },
-  async geMarkedUsers(page: number): Promise<UserWithAdminInfo[]> {
+  async getMarkedUsers(page: number): Promise<UserWithAdminInfo[]> {
     return await axiosInstance.get(`${getPath(ApiEndpoint.GET_MARKED_USERS)}?page=${page}`, {
       requiresAuth: true,
     })
   },
-  async gtMarkedUsersCount(): Promise<{ totalCount: number; totalPages: number }> {
+  async getMarkedUsersCount(): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
       getPath(ApiEndpoint.GET_MARKED_USERS_PAGE_COUNT),
       {
