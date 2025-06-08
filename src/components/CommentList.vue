@@ -143,7 +143,7 @@ defineExpose({ fetchLike })
       </el-popconfirm>
       <el-link
         v-if="authStore.isLoggedIn && comment.authorId !== selfUserId"
-        type="danger"
+        type="warning"
         underline="never"
         @click="showBanDialog(comment.authorId)"
         >Ban
