@@ -78,30 +78,26 @@ export const adminApi = {
         requiresAuth: true,
       },
     )
-    cost totalount: number = await axiosInstance.get(
+    const totalCount: number = await axiosInstance.get(
       getPath(ApiEndpoint.GET_MARKED_USERS_COUNT),
       {
         requiresAuth: true,
       },
     )
-    reurn {
-     totalCount: totalCount,
+    return {
+      totalCount: totalCount,
       totalPages: totalPages,
     }
   },
   async banIp(banRequest: BanIpRequest): Promise<string> {
-    return await axiosInstance.post(
-      getPath(ApiEndpoint.BAN_IP),
-      banRequest,
-      {
-        requiresAuth: true,
-      },
-    )
+    return await axiosInstance.post(getPath(ApiEndpoint.BAN_IP), banRequest, {
+      requiresAuth: true,
+    })
   },
   async unbanIp(ipAddress: string): Promise<boolean> {
     return (
       (await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_IP)}?ipAddress=${ipAddress}`, {
-        requiresAuth: true
+        requiresAuth: true,
       })) !== null
     )
   },
