@@ -38,8 +38,10 @@ export enum ApiEndpoint {
   USER_DELETE = `${USER_BASE}/:userId`,
 
   COMMENT_BASE = '/comment',
-  COMMENT_GET_BY_ID = `${COMMENT_BASE}/:id`,
   COMMENT_GET_ALL_BY_POST_ID = `${POST_BASE}/:postId/comment`,
+  COMMENT_GET_ALL_BY_USER_ID = `${USER_BASE}/:userId/comment`,
+  COMMENT_GET_ALL_BY_USER_ID_PAGE_COUNT = `${COMMENT_GET_ALL_BY_USER_ID}/count-page`,
+  COMMENT_GET_ALL_BY_USER_ID_COUNT = `${COMMENT_GET_ALL_BY_USER_ID}/count`,
   COMMENT_CREATE_BY_POST_ID = `${POST_BASE}/:postId/comment`,
   COMMENT_PAGE_COUNT_BY_POST_ID = `${COMMENT_GET_ALL_BY_POST_ID}/count-page`,
   COMMENT_COUNT_BY_POST_ID = `${POST_BASE}/:postId/comment/count`,

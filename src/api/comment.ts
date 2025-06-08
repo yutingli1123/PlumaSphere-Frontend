@@ -4,9 +4,6 @@ import axiosInstance from '@/utils/axios.ts'
 import { SortBy } from '@/constant'
 
 export const commentApi = {
-  async getCommentById(id: number): Promise<Comment | undefined> {
-    return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_GET_BY_ID, { id }))
-  },
   async getCommentsByPostId(
     postId: number | string,
     page: number | string,
@@ -21,6 +18,34 @@ export const commentApi = {
   },
   async getCommentCount(postId: number | string): Promise<number> {
     return await axiosInstance.get(getPath(ApiEndpoint.COMMENT_COUNT_BY_POST_ID, { postId }))
+  },
+  async getCommentsByUserId(userId: number | string, page: number): Promise<Comment[]> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.COMMENT_GET_ALL_BY_USER_ID, { userId })}?page=${page}`,
+      {
+        requiresAuth: true,
+      },
+    )
+  },
+  async getCommentCountByUserId(
+    userId: number | string,
+  ): Promise<{ totalCount: number; totalPages: number }> {
+    const totalCount: number = await axiosInstance.get(
+      getPath(ApiEndpoint.COMMENT_GET_ALL_BY_USER_ID_COUNT, { userId }),
+      {
+        requiresAuth: true,
+      },
+    )
+    const totalPages: number = await axiosInstance.get(
+      getPath(ApiEndpoint.COMMENT_GET_ALL_BY_USER_ID_PAGE_COUNT, { userId }),
+      {
+        requiresAuth: true,
+      },
+    )
+    return {
+      totalCount: totalCount,
+      totalPages: totalPages,
+    }
   },
   async addComment(comment: CommentRequest, postId: number | string): Promise<void> {
     await axiosInstance.post(getPath(ApiEndpoint.COMMENT_CREATE_BY_POST_ID, { postId }), comment, {
