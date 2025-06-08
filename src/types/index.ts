@@ -118,6 +118,12 @@ export interface BanRequest {
   expiresAt?: string
 }
 
+export interface BanIpRequest {
+  ipAddress: string
+  reason: string
+  expiresAt?: string
+}
+
 export interface BannedIp {
   id: number
   ipAddress: string

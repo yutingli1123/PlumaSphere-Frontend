@@ -71,6 +71,9 @@ export enum ApiEndpoint {
   GET_BANNED_IPS = `${ADMIN_BASE}/banned-ips`,
   GET_BANNED_IPS_PAGE_COUNT = `${ADMIN_BASE}/banned-ips/count-page`,
   GET_BANNED_IPS_COUNT = `${ADMIN_BASE}/banned-ips/count`,
+  GET_MARKED_USERS = `${ADMIN_BASE}/marked-users`,
+  GET_MARKED_USERS_PAGE_COUNT = `${ADMIN_BASE}/marked-users/count-page`,
+  GET_MARKED_USERS_COUNT = `${ADMIN_BASE}/marked-users/count`,
   BAN_IP = `${ADMIN_BASE}/ban-ip`,
   UNBAN_IP = `${ADMIN_BASE}/unban-ip`,
 }

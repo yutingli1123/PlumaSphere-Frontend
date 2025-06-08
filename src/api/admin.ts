@@ -1,6 +1,6 @@
 import axiosInstance from '@/utils/axios.ts'
 import { ApiEndpoint, getPath } from '@/api/endpoints.ts'
-import type { BannedIp, BanRequest, UserWithAdminInfo } from '@/types'
+import type { BanIpRequest, BannedIp, BanRequest, UserWithAdminInfo } from '@/types'
 
 export const adminApi = {
   async banUser(banRequest: BanRequest): Promise<string> {
@@ -9,7 +9,7 @@ export const adminApi = {
     })
   },
   async unbanUser(userId: number): Promise<string> {
-    return await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_USER)}?userId=${userId}`, {
+    return await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_USER)}?id=${userId}`, {
       requiresAuth: true,
     })
   },
@@ -19,12 +19,9 @@ export const adminApi = {
     })
   },
   async unbanIPForUser(userId: number): Promise<string> {
-    return await axiosInstance.delete(
-      `${getPath(ApiEndpoint.UNBAN_IP_BY_USER_ID)}?userId=${userId}`,
-      {
-        requiresAuth: true,
-      },
-    )
+    return await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_IP_BY_USER_ID)}?id=${userId}`, {
+      requiresAuth: true,
+    })
   },
   async getBannedUsers(page: number): Promise<UserWithAdminInfo[]> {
     return await axiosInstance.get(`${getPath(ApiEndpoint.GET_BANNED_USERS)}?page=${page}`, {
@@ -69,18 +66,43 @@ export const adminApi = {
       totalPages: totalPages,
     }
   },
-  async banIp(banRequest: BanRequest): Promise<BannedIp> {
+  async geMarkedUsers(page: number): Promise<UserWithAdminInfo[]> {
+    return await axiosInstance.get(`${getPath(ApiEndpoint.GET_MARKED_USERS)}?page=${page}`, {
+      requiresAuth: true,
+    })
+  },
+  async gtMarkedUsersCount(): Promise<{ totalCount: number; totalPages: number }> {
+    const totalPages: number = await axiosInstance.get(
+      getPath(ApiEndpoint.GET_MARKED_USERS_PAGE_COUNT),
+      {
+        requiresAuth: true,
+      },
+    )
+    cost totalount: number = await axiosInstance.get(
+      getPath(ApiEndpoint.GET_MARKED_USERS_COUNT),
+      {
+        requiresAuth: true,
+      },
+    )
+    reurn {
+     totalCount: totalCount,
+      totalPages: totalPages,
+    }
+  },
+  async banIp(banRequest: BanIpRequest): Promise<string> {
     return await axiosInstance.post(
       getPath(ApiEndpoint.BAN_IP),
-      { banRequest },
+      banRequest,
       {
         requiresAuth: true,
       },
     )
   },
   async unbanIp(ipAddress: string): Promise<boolean> {
-    return await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_IP)}?ipAddress=${ipAddress}`, {
-      requiresAuth: true,
-    })
+    return (
+      (await axiosInstance.delete(`${getPath(ApiEndpoint.UNBAN_IP)}?ipAddress=${ipAddress}`, {
+        requiresAuth: true
+      })) !== null
+    )
   },
 }
