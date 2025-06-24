@@ -40,7 +40,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run build
+      - name: Lint
+        run: pnpm run lint --if-present
+
+      - name: Format check
+        run: pnpm run format --if-present
+
+      - name: Type Check
+        run: pnpm run type-check --if-present
+
+      - name: Build
         run: pnpm run build --if-present
 
       - name: Run tests
