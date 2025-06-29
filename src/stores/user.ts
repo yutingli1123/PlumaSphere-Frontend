@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', () => {
       if (!info) return null
       setUserInfo(info)
       return info
-    } catch (error) {
+    } catch {
       return null
     }
   }
