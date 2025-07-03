@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia } from 'pinia'
 import LoginDialog from '../LoginDialog.vue'
@@ -66,7 +66,8 @@ describe('LoginDialog', () => {
             props: ['type', 'placeholder'],
           },
           'el-button': {
-            template: '<button :loading="loading" @click="$emit(\'click\')"><slot /></button>',
+            template:
+              '<button :class="{ loading: loading }" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading'],
           },
         },

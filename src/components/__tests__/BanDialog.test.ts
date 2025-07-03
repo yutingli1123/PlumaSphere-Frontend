@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BanDialog from '../BanDialog.vue'
 import { adminApi } from '@/api/admin'
@@ -63,7 +63,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -103,7 +103,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -143,7 +143,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -190,7 +190,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -244,7 +244,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -296,7 +296,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
@@ -338,7 +338,7 @@ describe('BanDialog', () => {
           },
           'el-button': {
             template:
-              '<button :loading="loading" :type="type" @click="$emit(\'click\')"><slot /></button>',
+              '<button :class="{ \'loading\': loading }" :type="type" @click="$emit(\'click\')"><slot /></button>',
             props: ['loading', 'type'],
           },
         },
