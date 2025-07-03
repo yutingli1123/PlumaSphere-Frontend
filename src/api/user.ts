@@ -38,7 +38,7 @@ export const userApi = {
     return (
       (await axiosInstance.put(getPath(ApiEndpoint.USER_UPLOAD_AVATAR), formData, {
         headers: {
-          'Content-Type': 'multipart/form-dta',
+          'Content-Type': 'multipart/form-data',
         },
         requiresAuth: true,
       })) !== null
