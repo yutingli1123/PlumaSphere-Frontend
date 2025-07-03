@@ -155,7 +155,7 @@ defineExpose({ fetchLike })
     <transition name="reply-expand">
       <div v-if="commentReplying[comment.id]" class="comment-reply-container">
         <el-input
-          :ref="(el) => setInputRef(comment.id, el)"
+          :ref="(el: Element | ComponentPublicInstance | null) => setInputRef(comment.id, el)"
           v-model="commentReplyingContent[comment.id]"
           :rows="4"
           resize="none"

@@ -17,11 +17,19 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     AutoImport({
-      imports: ['vue'],
+      imports: [
+        'vue',
+        'vue-router',
+        {
+          'element-plus': ['ElMessage', 'ElNotification', 'ElMessageBox'],
+        },
+      ],
       resolvers: [ElementPlusResolver()],
+      dts: true,
     }),
     Components({
-      resolvers: [ElementPlusResolver(), IconsResolver()],
+      resolvers: [EementPlusResolver(), IconsResolver()],
+      dts: true,
     }),
     Icons({ compiler: 'vue3' }),
   ],

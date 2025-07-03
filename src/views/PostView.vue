@@ -118,7 +118,7 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
 
 const deleteComment = async (commentId: number) => {
   if (await commentApi.deleteComment(commentId)) {
-    comments.value = comments.value?.filter((c) => c.id !== commentId)
+    comments.value = comments.value?.filter((c: Comment) => c.id !== commentId)
     await refreshComment()
   }
 }
@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
           <div class="article-info">
             <div class="meta-info">
               <span
-                ><el-icon><IEpCalendar /></el-icon>Published:
+                ><el-icon> <IEpCalendar /> </el-icon>Published:
                 {{
                   DateTime.fromISO(article.createdAt)
                     .toLocal()
@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
                 }}</span
               >
               <span v-if="article.updatedAt && article.updatedAt !== article.createdAt"
-                ><el-icon><IEpCalendar /></el-icon>Updated:
+                ><el-icon> <IEpCalendar /> </el-icon>Updated:
                 {{
                   DateTime.fromISO(article.updatedAt)
                     .toLocal()
@@ -498,6 +498,7 @@ onBeforeUnmount(() => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

@@ -55,7 +55,7 @@ const handleTagSelect = (tagName: string) => {
   if (!newPostParams.value.tags.includes(tagName)) {
     newPostParams.value.tags.push(tagName)
   } else {
-    newPostParams.value.tags = newPostParams.value.tags.filter((tag) => tag !== tagName)
+    newPostParams.value.tags = newPostParams.value.tags.filter((tag: string) => tag !== tagName)
   }
 }
 
