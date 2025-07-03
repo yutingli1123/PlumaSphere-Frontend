@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import TagSidebar from '../TagSidebar.vue'
 import type { Tag } from '@/types'

@@ -1,10 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia } from 'pinia'
 import CommentForm from '../CommentForm.vue'
 import { useUserStore } from '@/stores/user'
 import { useAuthStore } from '@/stores/auth'
-import { commentApi } from '@/api/comment'
 import ElementPlus from 'element-plus'
 
 // Mock the APIs and stores

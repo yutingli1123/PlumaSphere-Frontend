@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
 import { commentApi } from '../comment'
 import axiosInstance from '@/utils/axios'
-import type { Comment, CommentRequest } from '@/types'
+import type { Comment } from '@/types'
 import { SortBy } from '@/constant'
 
 // Mock axios instance

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { WebSocketServiceInstance } from '../webSocketService'
 import type { WebSocketMessage } from '@/types'
 import { WebSocketMessageType } from '@/constant'
@@ -8,7 +8,6 @@ class MockWebSocket {
   public onmessage: ((event: MessageEvent) => void) | null = null
   public onclose: (() => void) | null = null
   public onopen: (() => void) | null = null
-  public onerror: ((event: Event) => void) | null = null
   public readyState: number = WebSocket.CONNECTING
   public url: string
 
@@ -26,9 +25,9 @@ class MockWebSocket {
     if (this.onclose) this.onclose()
   }
 
-  send(data: string) {
-    // Mock implementation
-  }
+  // send(data: string) {
+  //   // Mock implementation
+  // }
 
   // Helper method to simulate receiving messages
   simulateMessage(data: string) {

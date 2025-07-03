@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { ApiEndpoint, getPath } from '../endpoints'
 
 describe('endpoints', () => {

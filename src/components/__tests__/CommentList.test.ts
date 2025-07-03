@@ -1,12 +1,11 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import CommentList from '@/components/CommentList.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import { likeApi } from '@/api/like'
 import { commentApi } from '@/api/comment'
 import type { Comment } from '@/types'
-import { ElMessage } from 'element-plus'
 import ElementPlus from 'element-plus'
 
 vi.mock('element-plus', async () => {

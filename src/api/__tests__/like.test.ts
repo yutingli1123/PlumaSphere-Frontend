@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { likeApi } from '../like'
 import axiosInstance from '@/utils/axios'
-import { ApiEndpoint, getPath } from '@/api/endpoints'
 
 // Mock axios instance
 vi.mock('@/utils/axios', () => ({

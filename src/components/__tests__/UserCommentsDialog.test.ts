@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { DateTime } from 'luxon'
 import UserCommentsDialog from '../UserCommentsDialog.vue'
 import { commentApi } from '@/api/comment'
 import type { Comment } from '@/types'
@@ -61,7 +60,7 @@ describe('UserCommentsDialog', () => {
   })
 
   it('does not fetch comments when userId is undefined', async () => {
-    const wrapper = mount(UserCommentsDialog, {
+    mount(UserCommentsDialog, {
       props: {
         userId: undefined,
       },
@@ -123,7 +122,7 @@ describe('UserCommentsDialog', () => {
     vi.mocked(commentApi.getCommentCountByUserId).mockResolvedValue(mockCounts)
     vi.mocked(commentApi.getCommentsByUserId).mockResolvedValue([])
 
-    const wrapper = mount(UserCommentsDialog, {
+    mount(UserCommentsDialog, {
       props: {
         userId: 1,
       },
