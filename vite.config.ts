@@ -17,11 +17,13 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     AutoImport({
-      imports: ['vue'],
+      imports: ['vue', 'vue-router'],
       resolvers: [ElementPlusResolver()],
+      dts: true,
     }),
     Components({
       resolvers: [ElementPlusResolver(), IconsResolver()],
+      dts: true,
     }),
     Icons({ compiler: 'vue3' }),
   ],

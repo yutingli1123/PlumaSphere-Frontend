@@ -58,10 +58,10 @@ export const useAuthStore = defineStore('auth', () => {
     loggedIn.value = localStorage.getItem('loggedIn') === 'true'
     if (!tokenPairJson) return
 
-    const parsedTokenPair = JSON.parse(tokenPairJson)
+    const parsedTokenPair = JSON.parse(tokenPairJson) as TokenPair
     if (
-      parsedTokenPair.refreshToken.expiresAt != null &&
-      Date.now() >= parsedTokenPair.refreshToken.expiresAt
+      parsedTokenPair.refreshToken?.expiresAt &&
+      DateTime.fromISO(parsedTokenPair.refreshToken.expiresAt).diffNow().milliseconds <= 0
     ) {
       clearTokens()
     } else {

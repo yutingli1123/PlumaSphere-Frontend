@@ -30,11 +30,14 @@ export const useConfigStore = defineStore('config', () => {
       const newConfigData = await systemApi.getStatus()
       if (newConfigData) {
         config.value = newConfigData
-        newConfigData.push({
-          configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
-          configValue: version,
-        } as Config)
-        localStorage.setItem('config', JSON.stringify(newConfigData))
+        const configWithVersion = [
+          ...newConfigData,
+          {
+            configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
+            configValue: version,
+          } as Config
+        ]
+        localStorage.setItem('config', JSON.stringify(configWithVersion))
       }
     })()
     await initialPromise
@@ -57,11 +60,14 @@ export const useConfigStore = defineStore('config', () => {
     const newConfigData = await systemApi.getStatus()
     if (newConfigData) {
       config.value = newConfigData
-      newConfigData.push({
-        configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
-        configValue: await systemApi.getStatusVersion(),
-      } as Config)
-      localStorage.setItem('config', JSON.stringify(newConfigData))
+      const configWithVersion = [
+        ...newConfigData,
+        {
+          configKey: ConfigFiled.CONFIG_VERSION.toLowerCase(),
+          configValue: await systemApi.getStatusVersion(),
+        } as Config
+      ]
+      localStorage.setItem('config', JSON.stringify(configWithVersion))
     }
   }
 
