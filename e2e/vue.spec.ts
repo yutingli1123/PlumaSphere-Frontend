@@ -2,6 +2,12 @@
 // https://playwright.dev/docs/intro
 
 import { expect, test } from '@playwright/test'
+import { setupApiMocks } from './mocks/api-mocks.js'
+
+// Global beforeEach to enable mock in all environments
+test.beforeEach(async ({ page }) => {
+  await setupApiMocks(page)
+})
 
 // Basic homepage tests
 test.describe('Homepage functionality tests', () => {
