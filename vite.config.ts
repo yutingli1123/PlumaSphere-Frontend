@@ -17,13 +17,7 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        {
-          'element-plus': ['ElMessage', 'ElNotification', 'ElMessageBox'],
-        },
-      ],
+      imports: ['vue', 'vue-router'],
       resolvers: [ElementPlusResolver()],
       dts: true,
     }),
