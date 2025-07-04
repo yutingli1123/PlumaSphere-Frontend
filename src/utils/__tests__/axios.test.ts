@@ -28,6 +28,13 @@ vi.mock('axios', () => ({
 }))
 vi.mock('@/stores/auth')
 
+// Mock ElNotification
+const mockElNotification = {
+  closeAll: vi.fn(),
+  error: vi.fn(),
+}
+;(globalThis as Record<string, unknown>).ElNotification = mockElNotification
+
 const mockAxios = axios as typeof axios
 const mockAuthStore = {
   getAccessToken: vi.fn(),
