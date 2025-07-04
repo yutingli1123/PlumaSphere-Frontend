@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import axios, {
   type AxiosError,
-  type InternalAxiosRequestConfig,
   type AxiosInstance,
   type AxiosResponse,
+  type InternalAxiosRequestConfig,
 } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
@@ -33,13 +33,6 @@ const mockAuthStore = {
   getAccessToken: vi.fn(),
   logout: vi.fn(),
 }
-
-// Import the axios instance after setting up mocks
-let axiosInstance: AxiosInstance
-
-beforeAll(async () => {
-  axiosInstance = (await import('../axios')).default
-})
 
 describe('axios utils', () => {
   beforeEach(() => {

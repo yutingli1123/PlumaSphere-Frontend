@@ -1,9 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="page-footer">
+  <footer class="page-footer">
     <p class="page-footer-content">© 2025 PlumaSphere. All rights reserved.</p>
-  </div>
+  </footer>
 </template>
 
 <style scoped>

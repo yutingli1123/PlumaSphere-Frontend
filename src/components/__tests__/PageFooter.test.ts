@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import PageFooter from '../PageFooter.vue'
 
@@ -22,7 +22,7 @@ describe('PageFooter', () => {
   it('renders as a div element', () => {
     const wrapper = mount(PageFooter)
 
-    expect(wrapper.element.tagName).toBe('DIV')
+    expect(wrapper.element.tagName).toBe('FOOTER')
     expect(wrapper.classes()).toContain('page-footer')
   })
 })
