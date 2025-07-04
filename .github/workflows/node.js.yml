@@ -52,5 +52,8 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
       - name: Run tests
-        run: pnpm test -- --verbose
+        run: pnpm test
