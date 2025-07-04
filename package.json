@@ -10,7 +10,7 @@
     "test:unit": "vitest --run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
-    "test": "run-p test:unit test:e2e",
+    "test": "run-s test:unit test:e2e",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
