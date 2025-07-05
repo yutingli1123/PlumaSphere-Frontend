@@ -91,13 +91,13 @@ class WebSocketService {
 
   /**
    * Disconnects from the comment web socket.
-   * @param postId - The post ID.
+   * @param commentId - The comment ID.
    */
-  disconnectCommentWebSocket(postId: string) {
-    const webSocket = this.commentWebSockets.get(postId)
+  disconnectCommentWebSocket(commentId: string) {
+    const webSocket = this.commentWebSockets.get(commentId)
     if (webSocket) {
       webSocket.close()
-      this.commentWebSockets.delete(postId)
+      this.commentWebSockets.delete(commentId)
     }
   }
 }

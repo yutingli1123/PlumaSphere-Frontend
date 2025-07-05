@@ -87,17 +87,6 @@ export interface UserWithAdminInfo extends User {
 }
 
 /**
- * The banned IP type.
- */
-export interface BannedIp {
-  id: number
-  ipAddress: string
-  reason: string
-  bannedAt: string
-  expiresAt: string | null
-}
-
-/**
  * The user update type.
  */
 export interface UserUpdate {
