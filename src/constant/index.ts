@@ -1,5 +1,8 @@
 export const tagTypes = ['primary', 'success', 'warning', 'danger'] as const
 
+/**
+ * The config file fields.
+ */
 export enum ConfigFiled {
   INITIALIZED = 'INITIALIZED',
   BLOG_TITLE = 'BLOG_TITLE',
@@ -8,12 +11,18 @@ export enum ConfigFiled {
   PAGE_SIZE = 'PAGE_SIZE',
 }
 
+/**
+ * The web socket message types.
+ */
 export enum WebSocketMessageType {
   NEW_COMMENT = 'NEW_COMMENT',
   LIKE_POST = 'LIKE_POST',
   LIKE_COMMENT = 'LIKE_COMMENT',
 }
 
+/**
+ * The sort by types.
+ */
 export enum SortBy {
   TIME = 'Time',
   LIKE = 'Like',

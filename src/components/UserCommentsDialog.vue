@@ -3,15 +3,18 @@ import type { Comment } from '@/types'
 import { commentApi } from '@/api/comment.ts'
 import { DateTime } from 'luxon'
 
+// props
 const { userId } = defineProps<{
   userId: number | undefined
 }>()
 
+// refs
 const page = ref(1)
 const pageCount = ref(0)
 const totalCount = ref(0)
 const comments = ref<Comment[]>([])
 
+// fetch comments function
 const fetchComments = async () => {
   if (!userId) return
 
@@ -29,6 +32,7 @@ const fetchComments = async () => {
   }
 }
 
+// on mounted
 onMounted(fetchComments)
 </script>
 

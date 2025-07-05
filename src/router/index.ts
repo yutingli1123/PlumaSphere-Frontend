@@ -9,6 +9,9 @@ import SystemSettingView from '@/views/settings/SystemSettingView.vue'
 import PersonalSettingView from '@/views/settings/PersonalSettingView.vue'
 import UserManagementView from '@/views/settings/UserManagementView.vue'
 
+/**
+ * The router configuration.
+ */
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -65,6 +68,7 @@ const router = createRouter({
       ],
     },
   ],
+  // scroll behavior
   scrollBehavior: (to, from, savedPosition) => {
     if (to.path === '/' && from.path.startsWith('/posts/')) {
       return savedPosition ?? { top: 0 }

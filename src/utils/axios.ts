@@ -3,6 +3,9 @@ import axios, { type AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.ts'
 import { ApiEndpoint } from '@/api/endpoints.ts'
 
+/**
+ * The axios request config type.
+ */
 declare module 'axios' {
   interface AxiosRequestConfig {
     requiresAuth?: boolean
@@ -13,11 +16,18 @@ declare module 'axios' {
   }
 }
 
+/**
+ * Show error notification.
+ * @param errorMessage - The error message.
+ */
 const showError = (errorMessage: string) => {
   ElNotification.closeAll()
   ElNotification.error(errorMessage)
 }
 
+/**
+ * The axios instance.
+ */
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}${ApiEndpoint.BASE_API}`,
   headers: {
@@ -25,6 +35,9 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 })
 
+/**
+ * The axios request interceptor.
+ */
 axiosInstance.interceptors.request.use(
   async (config) => {
     const requiresAuth = config.requiresAuth === true
@@ -42,6 +55,9 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
+/**
+ * The axios response interceptor.
+ */
 axiosInstance.interceptors.response.use(
   (response) => {
     return response.data

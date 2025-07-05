@@ -3,6 +3,7 @@ import { tagTypes } from '@/constant'
 import { DateTime } from 'luxon'
 import type { Article } from '@/types'
 
+// props
 defineProps<{
   article: Article
 }>()

@@ -2,15 +2,18 @@
 import type { Tag } from '@/types'
 import { tagTypes } from '@/constant'
 
+// props
 defineProps<{
   tags?: Tag[]
   activeTag?: string
 }>()
 
+// emits
 const emit = defineEmits<{
   (e: 'tagClick', tagName: string): void
 }>()
 
+// handle tag click function
 const handleTagClick = (tagName: string) => {
   emit('tagClick', tagName)
 }

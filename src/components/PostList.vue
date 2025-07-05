@@ -2,6 +2,7 @@
 import type { Article } from '@/types'
 import PostContent from '@/components/PostContent.vue'
 
+// props
 defineProps<{
   articles: Article[] | undefined
   refresh: () => void

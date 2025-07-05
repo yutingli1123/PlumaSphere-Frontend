@@ -4,21 +4,26 @@ import { adminApi } from '@/api/admin.ts'
 import { DateTime } from 'luxon'
 import type { BanIpRequest } from '@/types'
 
+// props
 const { closeDialog } = defineProps<{
   closeDialog: () => void
 }>()
 
+// refs
 const expiration = ref<Date | undefined>()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 
+// form data
 const formData = reactive({ address: '', reason: '' })
 
+// rules for the form
 const rules: FormRules = {
   address: [{ required: true, message: 'Please enter the IP address', trigger: 'blur' }],
   reason: [{ required: true, message: 'Please enter the reason', trigger: 'blur' }],
 }
 
+// ban ip function
 const banIp = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {

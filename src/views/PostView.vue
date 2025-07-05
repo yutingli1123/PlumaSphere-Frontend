@@ -25,10 +25,12 @@ import { useUserStore } from '@/stores/user.ts'
 import ToggleSortTypeButton from '@/components/ToggleSortTypeButton.vue'
 import BanDialog from '@/components/BanDialog.vue'
 
+// props
 const { postId } = defineProps<{
   postId: string
 }>()
 
+// refs
 const authStore = useAuthStore()
 const userStore = useUserStore()
 
@@ -50,10 +52,12 @@ const sortBy: Ref<SortBy> = ref(SortBy.TIME)
 const banDialogVisible = ref(false)
 const banUserId = ref<number | undefined>()
 
+// go home
 const goHome = () => {
   router.push('/')
 }
 
+// get likes
 const getLikes = async () => {
   likeLoading.value = true
   likeCount.value = await likeApi.getLikesByPostId(postId)
@@ -65,6 +69,7 @@ const getLikes = async () => {
   likeLoading.value = false
 }
 
+// toggle like
 const toggleLike = async () => {
   likeLoading.value = true
   if (!authStore.hasToken()) await authStore.getNewIdentity()
@@ -73,17 +78,20 @@ const toggleLike = async () => {
   likeLoading.value = false
 }
 
+// delete post
 const deletePost = async () => {
   if (!authStore.isLoggedIn()) return
   await postApi.deletePost(postId)
   await router.push('/')
 }
 
+// edit post
 const editPost = async () => {
   if (!authStore.isLoggedIn()) return
   await router.push({ path: `/edit-post/${postId}` })
 }
 
+// get comments
 const getComments = async (page: number) => {
   const commentEntity = await commentApi.getCommentsByPostId(postId, page - 1, sortBy.value)
   if (commentEntity) {
@@ -91,6 +99,7 @@ const getComments = async (page: number) => {
   }
 }
 
+// refresh comment
 const refreshComment = async () => {
   commentRefreshing.value = true
   commentPage.value = 1
@@ -104,6 +113,7 @@ const refreshComment = async () => {
   commentRefreshing.value = false
 }
 
+// on web socket message
 const onWebSocketMessage = (message: WebSocketMessage) => {
   const { type } = message
   if (type === WebSocketMessageType.NEW_COMMENT) {
@@ -118,6 +128,7 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
   }
 }
 
+// delete comment
 const deleteComment = async (commentId: number) => {
   if (await commentApi.deleteComment(commentId)) {
     comments.value = comments.value?.filter((c: Comment) => c.id !== commentId)
@@ -125,21 +136,25 @@ const deleteComment = async (commentId: number) => {
   }
 }
 
+// toggle sort by
 const toggleSortBy = async () => {
   sortBy.value = sortBy.value === SortBy.TIME ? SortBy.LIKE : SortBy.TIME
   await refreshComment()
 }
 
+// show ban dialog
 const showBanDialog = (userId: number) => {
   banUserId.value = userId
   banDialogVisible.value = true
 }
 
+// hide ban dialog
 const hideBanDialog = () => {
   banUserId.value = undefined
   banDialogVisible.value = false
 }
 
+// watch article content
 watch(articleContent, () => {
   if (article.value?.content) {
     if (articleContent.value) {
@@ -151,6 +166,7 @@ watch(articleContent, () => {
   }
 })
 
+// watch user store
 watch(
   () => userStore.user,
   () => {
@@ -158,6 +174,7 @@ watch(
   },
 )
 
+// on mounted
 onMounted(async () => {
   const articleEntity = await postApi.getPostById(postId)
   if (!articleEntity) {
@@ -176,6 +193,7 @@ onMounted(async () => {
   loaded.value = true
 })
 
+// on before unmount
 onBeforeUnmount(() => {
   WebSocketServiceInstance.disconnectPostWebSocket(postId)
 })

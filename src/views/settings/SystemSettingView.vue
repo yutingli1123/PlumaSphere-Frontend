@@ -4,6 +4,7 @@ import { ConfigFiled } from '@/constant'
 import { systemApi } from '@/api/system.ts'
 import type { FormInstance } from 'element-plus'
 
+// refs
 const configStore = useConfigStore()
 const formData = ref({
   blogTitle: '',
@@ -13,15 +14,17 @@ const formData = ref({
 
 const initialFormData = ref({ blogTitle: '', blogSubtitle: '', pageSize: 5 })
 
+const formRef = ref<FormInstance>()
+const submitLoading = ref(false)
+
+// rules
 const rules = {
   blogTitle: [{ required: true, message: 'Title is required', trigger: 'blur' }],
   blogSubtitle: [{ required: true, message: 'Subtitle is required', trigger: 'blur' }],
   pageSize: [{ required: true, message: 'Page size is required', trigger: 'change' }],
 }
 
-const formRef = ref<FormInstance>()
-const submitLoading = ref(false)
-
+// submit changes function
 const submitChanges = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
@@ -47,6 +50,7 @@ const submitChanges = async () => {
   })
 }
 
+// check if any field is changed
 const isChanged = computed(() => {
   return (
     formData.value.blogTitle !== initialFormData.value.blogTitle ||
@@ -55,6 +59,7 @@ const isChanged = computed(() => {
   )
 })
 
+// on mounted
 onMounted(async () => {
   if (!configStore.loaded) {
     await configStore.initialConfig()

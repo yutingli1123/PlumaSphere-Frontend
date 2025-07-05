@@ -6,14 +6,15 @@ import { useAuthStore } from '@/stores/auth.ts'
 import { useConfigStore } from '@/stores/config.ts'
 import type { FormInstance, FormRules } from 'element-plus'
 
+// refs
 const router = useRouter()
-
 const currentStep = ref(1)
 const formRef = ref<FormInstance>()
 const setupLoading = ref(false)
 const authStore = useAuthStore()
 const configStore = useConfigStore()
 
+// init info
 const initInfo = reactive<InitSystemParams>({
   verificationCode: '',
   blogTitle: '',
@@ -23,6 +24,7 @@ const initInfo = reactive<InitSystemParams>({
   adminPassword: '',
 })
 
+// rules
 const rules = reactive<FormRules>({
   verificationCode: [
     {
@@ -68,6 +70,7 @@ const rules = reactive<FormRules>({
   ],
 })
 
+// get current step rules
 const getCurrentStepRules = () => {
   if (currentStep.value === 1) {
     return {
@@ -87,6 +90,7 @@ const getCurrentStepRules = () => {
   }
 }
 
+// next step
 const nextStep = () => {
   formRef.value?.validate(async (valid) => {
     if (valid) {
@@ -112,13 +116,14 @@ const nextStep = () => {
   })
 }
 
-// Go back to the previous step
+// go back to the previous step
 const prevStep = () => {
   if (currentStep.value > 1) {
     currentStep.value--
   }
 }
 
+// on mounted
 onMounted(() => {
   authStore.logout()
   configStore.resetConfig()

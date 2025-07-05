@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { SortBy } from '@/constant'
 
+// props
 defineProps<{
   toggleSortBy: () => void
   sortBy: SortBy

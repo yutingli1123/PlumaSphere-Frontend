@@ -10,13 +10,7 @@ import type { FormInstance, FormItemRule, FormRules } from 'element-plus'
 import { useAuthStore } from '@/stores/auth.ts'
 import { ApiEndpoint } from '@/api/endpoints.ts'
 
-const authStore = useAuthStore()
-const editor = ref<Vditor | undefined>()
-const allTags = ref<Tag[] | undefined>()
-const contentError: Ref<boolean> = ref(false)
-
-const posting = ref(false)
-const router = useRouter()
+// props
 const { titleIn, contentIn, postId, tagsIn } = defineProps<{
   titleIn?: string
   contentIn?: string
@@ -24,8 +18,18 @@ const { titleIn, contentIn, postId, tagsIn } = defineProps<{
   tagsIn?: string[]
 }>()
 
+// refs
+const authStore = useAuthStore()
+const editor = ref<Vditor | undefined>()
+const allTags = ref<Tag[] | undefined>()
+const contentError: Ref<boolean> = ref(false)
+
+const posting = ref(false)
+const router = useRouter()
+
 const isEditing = computed(() => !!postId)
 
+// validate content function
 const validateContent: FormItemRule['validator'] = (rule, value, callback) => {
   const content = editor.value ? editor.value.getValue().trim() : value.trim()
   if (!content || content === '') {
@@ -36,6 +40,8 @@ const validateContent: FormItemRule['validator'] = (rule, value, callback) => {
     callback()
   }
 }
+
+// new post params
 const newPostParams: Ref<{ title: string; tags: string[]; content: string }> = ref({
   title: '',
   tags: [],
@@ -47,10 +53,12 @@ const rules: FormRules = {
   content: [{ trigger: 'blur', validator: validateContent }],
 }
 
+// load all tags function
 const loadAllTags = async () => {
   allTags.value = await tagApi.getAllTags()
 }
 
+// handle tag select function
 const handleTagSelect = (tagName: string) => {
   if (!newPostParams.value.tags.includes(tagName)) {
     newPostParams.value.tags.push(tagName)
@@ -59,6 +67,7 @@ const handleTagSelect = (tagName: string) => {
   }
 }
 
+// submit post function
 const submitPost = () => {
   if (editor.value) {
     newPostParams.value.content = editor.value.getValue()
@@ -102,6 +111,7 @@ const submitPost = () => {
   })
 }
 
+// on mounted
 onMounted(async () => {
   if (titleIn) {
     newPostParams.value.title = titleIn
@@ -146,6 +156,7 @@ onMounted(async () => {
   })
 })
 
+// on before unmount
 onBeforeUnmount(() => {
   editor.value?.destroy()
 })

@@ -4,9 +4,10 @@ import router from '@/router'
 import { useConfigStore } from '@/stores/config.ts'
 import { ConfigFiled } from '@/constant'
 
+// refs
 const configStore = useConfigStore()
 
-// Watch for config changes and update page title
+// watch config changes and update page title
 watch(
   () => configStore.loaded,
   (loaded) => {
@@ -20,6 +21,7 @@ watch(
   { immediate: true },
 )
 
+// on mounted
 onMounted(async () => {
   await configStore.initialConfig()
   if (configStore.loaded && !configStore.getConfig(ConfigFiled.INITIALIZED)) {

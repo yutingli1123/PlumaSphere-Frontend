@@ -7,6 +7,14 @@ import { SortBy, WebSocketMessageType } from '@/constant'
 import { WebSocketServiceInstance } from '@/service/webSocketService.ts'
 import { useUserStore } from '@/stores/user.ts'
 
+// props
+const { commentId } = defineProps<{
+  commentId: string
+  replyComment: (receiver: string) => void
+  showBanDialog: (userId: number) => void
+}>()
+
+// refs
 const authStore = useAuthStore()
 const userStore = useUserStore()
 
@@ -21,17 +29,13 @@ const replyRefreshing: Ref<boolean> = ref(false)
 const selfUserId: Ref<number | null | undefined> = ref()
 const sortBy: Ref<SortBy> = ref(SortBy.TIME)
 
-const { commentId } = defineProps<{
-  commentId: string
-  replyComment: (receiver: string) => void
-  showBanDialog: (userId: number) => void
-}>()
-
+// toggle sort by function
 const toggleSortBy = () => {
   sortBy.value = sortBy.value === SortBy.TIME ? SortBy.LIKE : SortBy.TIME
   refreshComment()
 }
 
+// load more function
 const loadMore = async () => {
   loading.value = true
   page.value += 1
@@ -39,6 +43,7 @@ const loadMore = async () => {
   loading.value = false
 }
 
+// load comment function
 const loadComment = async () => {
   const commentsData = await commentApi.getCommentReplies(commentId, page.value, sortBy.value)
   if (commentsData.length === 0) {
@@ -50,6 +55,7 @@ const loadComment = async () => {
   comments.value.push(...newComments)
 }
 
+// refresh comment function
 const refreshComment = async () => {
   replyRefreshing.value = true
   page.value = 0
@@ -60,6 +66,7 @@ const refreshComment = async () => {
   replyRefreshing.value = false
 }
 
+// like comment function
 const likeComment = async (commentId: number) => {
   likeLoading.value[commentId] = true
   if (!authStore.hasToken()) await authStore.getNewIdentity()
@@ -67,6 +74,7 @@ const likeComment = async (commentId: number) => {
   likeLoading.value[commentId] = false
 }
 
+// fetch likes function
 const fetchLikes = async () => {
   if (!comments) return
   for (const comment of comments.value) {
@@ -74,14 +82,17 @@ const fetchLikes = async () => {
   }
 }
 
+// fetch like function
 const fetchLike = async (id: string) => {
   likeCounts.value[Number.parseInt(id)] = await getLike(id)
 }
 
+// get like function
 const getLike = async (commentId: number | string) => {
   return (await likeApi.getLikesByCommentId(commentId)) ?? 0
 }
 
+// on web socket message function
 const onWebSocketMessage = (message: WebSocketMessage) => {
   const { type } = message
   if (type === WebSocketMessageType.LIKE_COMMENT) {
@@ -92,15 +103,18 @@ const onWebSocketMessage = (message: WebSocketMessage) => {
   }
 }
 
+// fetch user id function
 const fetchUserId = async () => {
   selfUserId.value = (await userStore.getUserInfo())?.id
 }
 
+// delete comment function
 const deleteComment = async (commentId: number) => {
   if (await commentApi.deleteComment(commentId))
     comments.value = comments.value.filter((comment) => comment.id !== commentId)
 }
 
+// watch comment id
 watch(
   () => commentId,
   async () => {
@@ -110,22 +124,27 @@ watch(
   },
 )
 
+// watch comments
 watch(
   () => comments,
   async () => await fetchLikes(),
   { deep: true },
 )
+
+// watch user store
 watch(
   () => userStore.user,
   async () => await fetchUserId(),
 )
 
+// on mounted
 onMounted(async () => {
   await fetchUserId()
   await refreshComment()
   WebSocketServiceInstance.connectCommentWebSocket(commentId, onWebSocketMessage)
 })
 
+// on unmounted
 onUnmounted(async () => {
   WebSocketServiceInstance.disconnectCommentWebSocket(commentId)
 })

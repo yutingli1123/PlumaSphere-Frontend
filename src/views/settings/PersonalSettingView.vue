@@ -5,6 +5,7 @@ import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { userApi } from '@/api/user.ts'
 
+// refs
 const userStore = useUserStore()
 const formData = ref({
   nickname: '',
@@ -29,6 +30,7 @@ const cropper = ref()
 const currentImg = ref('')
 const cropperLoading = ref(false)
 
+// submit changes function
 const submitChanges = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
@@ -55,6 +57,7 @@ const submitChanges = async () => {
   })
 }
 
+// check if changed
 const isChanged = computed(() => {
   return (
     formData.value.nickname !== initialFormData.value.nickname ||
@@ -63,6 +66,7 @@ const isChanged = computed(() => {
   )
 })
 
+// handle image change
 const handleImageChange = (data: UploadFile) => {
   if (!data.raw) {
     ElMessage.error('No image file selected')
@@ -78,10 +82,12 @@ const handleImageChange = (data: UploadFile) => {
     })
 }
 
+// handle image upload
 const handleImageUpload = (img: string) => {
   currentImg.value = img
 }
 
+// confirm crop
 const confirmCrop = async () => {
   if (!cropper.value) {
     ElMessage.error('Cropper not initialized')
@@ -112,6 +118,7 @@ const confirmCrop = async () => {
   }
 }
 
+// upload avatar
 const uploadAvatar = async (file: File) => {
   try {
     if (await userApi.updateAvatar(file)) {
@@ -124,6 +131,7 @@ const uploadAvatar = async (file: File) => {
   }
 }
 
+// load file
 const loadFile = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -139,6 +147,7 @@ const loadFile = (file: File): Promise<string> => {
   })
 }
 
+// finish update avatar
 const finishUpdateAvatar = async () => {
   uploadDialogVisible.value = false
   currentImg.value = ''
@@ -146,6 +155,7 @@ const finishUpdateAvatar = async () => {
   await refreshUserInfo()
 }
 
+// refresh user info
 const refreshUserInfo = async () => {
   const user = await userStore.getUserInfo()
   formData.value.nickname = user?.nickname ?? ''
@@ -155,6 +165,7 @@ const refreshUserInfo = async () => {
   initialFormData.value = { ...formData.value }
 }
 
+// on mounted
 onMounted(async () => {
   await refreshUserInfo()
 })
