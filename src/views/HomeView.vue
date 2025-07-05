@@ -7,6 +7,7 @@ import type { Article, Tag } from '@/types'
 import { postApi } from '@/api/post.ts'
 import { tagApi } from '@/api/tag.ts'
 
+// refs
 const currentPage: Ref<number> = ref(1)
 const totalPostPages: Ref<number> = ref(0)
 const totalPostCount: Ref<number> = ref(0)
@@ -16,6 +17,7 @@ const activeTag: Ref<string | undefined> = ref()
 const tags: Ref<Tag[] | undefined> = ref()
 const articles: Ref<Article[] | undefined> = ref()
 
+// refresh articles
 const refreshArticles = async () => {
   if (activeTag.value) {
     totalPostPages.value = await postApi.getPostPageCountByTag(activeTag.value)
@@ -28,15 +30,18 @@ const refreshArticles = async () => {
   }
 }
 
+// refresh tags
 const refreshTags = async () => {
   tags.value = await tagApi.getAllTags()
 }
 
+// refresh content
 const refreshContent = async () => {
   await Promise.all([refreshArticles(), refreshTags()])
   loaded.value = true
 }
 
+// get articles
 const getArticles = async (page: number) => {
   if (activeTag.value) {
     articles.value = await postApi.getAllPostsByTag(activeTag.value, page - 1)
@@ -45,6 +50,7 @@ const getArticles = async (page: number) => {
   }
 }
 
+// handle tag click
 const handleTagClick = async (tagName: string) => {
   currentPage.value = 1
   if (activeTag.value === tagName) {
@@ -56,6 +62,7 @@ const handleTagClick = async (tagName: string) => {
   await refreshContent()
 }
 
+// on mounted
 onMounted(() => {
   refreshContent()
 })

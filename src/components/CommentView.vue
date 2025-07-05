@@ -3,21 +3,26 @@ import { DateTime } from 'luxon'
 import type { Comment, User } from '@/types'
 import { userApi } from '@/api/user.ts'
 
+// props
 const { comment } = defineProps<{
   comment: Comment
 }>()
 
+// refs
 const user: Ref<User | undefined> = ref()
 
+// fetch user function
 const fetchUser = async () => {
   user.value = await userApi.getUserById(comment.authorId)
 }
 
+// watch comment
 watch(
   () => comment,
   async () => await fetchUser(),
 )
 
+// on mounted
 onMounted(async () => await fetchUser())
 </script>
 

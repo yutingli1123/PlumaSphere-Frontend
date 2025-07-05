@@ -6,12 +6,14 @@ import { commentApi } from '@/api/comment.ts'
 import CommentReplyList from '@/components/CommentReplyList.vue'
 import { useUserStore } from '@/stores/user.ts'
 
+// props
 const { comments } = defineProps<{
   comments: Comment[] | undefined
   deleteComment: (commentId: number) => void
   showBanDialog: (userId: number) => void
 }>()
 
+// refs
 const authStore = useAuthStore()
 const userStore = useUserStore()
 
@@ -23,10 +25,12 @@ const replyLoading = ref<Record<number, boolean>>({})
 const inputRefList = ref<Record<number, Element | ComponentPublicInstance | null>>({})
 const selfUserId = ref<number | null | undefined>()
 
+// set input ref function
 const setInputRef = (commentId: number, inputRef: Element | ComponentPublicInstance | null) => {
   inputRefList.value[commentId] = inputRef
 }
 
+// scroll to input function
 const scrollToInput = (commentId: number) => {
   nextTick(() => {
     const ref = inputRefList.value[commentId]
@@ -35,6 +39,7 @@ const scrollToInput = (commentId: number) => {
   })
 }
 
+// fetch likes function
 const fetchLikes = async () => {
   if (!comments) return
   for (const comment of comments) {
@@ -42,14 +47,17 @@ const fetchLikes = async () => {
   }
 }
 
+// fetch like function
 const fetchLike = async (id: string) => {
   likeCounts.value[id] = await getLike(id)
 }
 
+// get like function
 const getLike = async (commentId: number | string) => {
   return (await likeApi.getLikesByCommentId(commentId)) ?? 0
 }
 
+// like comment function
 const likeComment = async (commentId: number | string) => {
   likeLoading.value[commentId] = true
   if (!authStore.hasToken()) await authStore.getNewIdentity()
@@ -57,6 +65,7 @@ const likeComment = async (commentId: number | string) => {
   likeLoading.value[commentId] = false
 }
 
+// switch reply comment function
 const switchReplyComment = async (commentId: number) => {
   if (commentReplying.value[commentId]) {
     commentReplying.value[commentId] = false
@@ -66,6 +75,7 @@ const switchReplyComment = async (commentId: number) => {
   }
 }
 
+// check if the content is not empty function
 const contentNotEmpty = (commentId: number): boolean => {
   const content = commentReplyingContent.value[commentId] || ''
   const lines = content
@@ -76,6 +86,7 @@ const contentNotEmpty = (commentId: number): boolean => {
   return lines.length > 0
 }
 
+// reply post function
 const replyPost = async (commentId: number) => {
   if (!contentNotEmpty(commentId)) return
   replyLoading.value[commentId] = true
@@ -93,16 +104,19 @@ const replyPost = async (commentId: number) => {
   replyLoading.value[commentId] = false
 }
 
+// reply comment function
 const replyComment = (receiver: string, commentId: number) => {
   commentReplying.value[commentId] = true
   commentReplyingContent.value[commentId] = `> ${receiver}\n`
   scrollToInput(commentId)
 }
 
+// fetch self user id function
 const fetchSelfUserId = async () => {
   selfUserId.value = (await userStore.getUserInfo())?.id
 }
 
+// watch comments
 watch(() => comments, fetchLikes)
 watch(
   () => userStore.user,
@@ -111,6 +125,7 @@ watch(
   },
 )
 
+// on mounted
 onMounted(async () => {
   await fetchSelfUserId()
   await fetchLikes()

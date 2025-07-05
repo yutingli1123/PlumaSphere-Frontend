@@ -2,11 +2,13 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.ts'
 
+// refs
 const router = useRouter()
 const route = useRoute()
 
 const authStore = useAuthStore()
 
+// watch auth store
 watch(
   () => authStore.isLoggedIn(),
   (isLoggedIn) => {
@@ -16,6 +18,7 @@ watch(
   },
 )
 
+// watch route path
 watch(
   () => route.path,
   (newPath) => {
@@ -25,6 +28,7 @@ watch(
   },
 )
 
+// on mounted
 onMounted(() => {
   if (!authStore.isLoggedIn()) {
     router.push({ path: '/' })

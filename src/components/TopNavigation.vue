@@ -7,6 +7,7 @@ import IEpSetting from '~icons/ep/setting'
 import { useConfigStore } from '@/stores/config.ts'
 import { ConfigFiled } from '@/constant'
 
+// refs
 const authStore = useAuthStore()
 const configStore = useConfigStore()
 const router = useRouter()
@@ -14,17 +15,21 @@ const router = useRouter()
 const loginDialogVisible = ref(false)
 const searchQuery = ref('')
 
+// computed
+const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
+const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? undefined)
+
+// navigate to create post function
 const navigateToCreatePost = () => {
   router.push({ path: '/create-post' })
 }
 
+// navigate to settings function
 const navigateToSettings = () => {
   router.push({ path: '/settings' })
 }
 
-const title = computed(() => configStore.getConfig(ConfigFiled.BLOG_TITLE) ?? undefined)
-const subtitle = computed(() => configStore.getConfig(ConfigFiled.BLOG_SUBTITLE) ?? undefined)
-
+// handle search function
 const handleSearch = async () => {
   if (!searchQuery.value.trim()) return
   await router.push({
@@ -34,6 +39,7 @@ const handleSearch = async () => {
   searchQuery.value = ''
 }
 
+// handle key press function
 const handleKeyPress = (event: Event | KeyboardEvent) => {
   if ('key' in event && event.key === 'Enter') {
     handleSearch()

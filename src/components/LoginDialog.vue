@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useAuthStore } from '@/stores/auth.ts'
 
+// props
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -8,8 +9,10 @@ const props = defineProps({
   },
 })
 
+// emits
 const emit = defineEmits(['update:visible'])
 
+// computed
 const dialogVisible = computed({
   get: () => props.visible,
   set: (value) => {
@@ -18,6 +21,7 @@ const dialogVisible = computed({
   },
 })
 
+// refs
 const loginParams = ref({
   username: '',
   password: '',
@@ -32,6 +36,7 @@ const rules = {
   password: [{ required: true, message: 'Please enter password', trigger: 'blur' }],
 }
 
+// handle login function
 const handleLogin = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (!valid) return
@@ -49,12 +54,14 @@ const handleLogin = async () => {
   })
 }
 
+// reset form function
 const resetForm = () => {
   formRef.value?.resetFields()
   loginParams.value.username = ''
   loginParams.value.password = ''
 }
 
+// close dialog function
 const closeDialog = () => {
   emit('update:visible', false)
 }

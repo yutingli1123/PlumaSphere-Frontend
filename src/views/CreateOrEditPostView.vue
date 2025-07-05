@@ -7,15 +7,17 @@ import { useRouter } from 'vue-router'
 import { postApi } from '@/api/post.ts'
 import type { Article } from '@/types'
 
+// props
 const { postId } = defineProps<{
   postId?: string
 }>()
 
+// refs
 const post: Ref<Article | undefined> = ref()
-
 const authStore = useAuthStore()
 const router = useRouter()
 
+// watch auth store
 watch(
   () => authStore.isLoggedIn(),
   (value: boolean) => {
@@ -24,6 +26,8 @@ watch(
     }
   },
 )
+
+// on mounted
 onMounted(async () => {
   if (!authStore.isLoggedIn()) {
     await router.push({ path: '/' })

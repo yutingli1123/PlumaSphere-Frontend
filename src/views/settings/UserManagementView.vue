@@ -8,6 +8,7 @@ import type { TabPaneName } from 'element-plus'
 import IEpPlus from '~icons/ep/plus'
 import BanIpDialog from '@/components/BanIpDialog.vue'
 
+// refs
 const activeTab = ref('users')
 const users = ref<UserWithAdminInfo[]>([])
 const bannedUsers = ref<UserWithAdminInfo[]>([])
@@ -21,11 +22,13 @@ const loading = ref(false)
 const searchKeyword = ref('')
 const banIpDialogVisible = ref(false)
 
+// show ban dialog
 const showBanDialog = (userId: number) => {
   banUserId.value = userId
   banDialogVisible.value = true
 }
 
+// hide ban dialog
 const hideBanDialog = () => {
   banUserId.value = undefined
   banDialogVisible.value = false
@@ -33,20 +36,24 @@ const hideBanDialog = () => {
   loadBannedUsers()
 }
 
+// show ban ip dialog
 const showBanIpDialog = () => {
   banIpDialogVisible.value = true
 }
 
+// hide ban ip dialog
 const hideBanIpDialog = () => {
   banIpDialogVisible.value = false
   loadBannedIPs()
 }
 
+// show user comments dialog
 const showUserCommentsDialog = (userId: number) => {
   userIdForComments.value = userId
   userCommentsDialogVisible.value = true
 }
 
+// pagination
 const pagination = reactive({
   users: {
     currentPage: 1,
@@ -70,14 +77,17 @@ const pagination = reactive({
   },
 })
 
+// view comments
 const viewComments = (user: UserWithAdminInfo) => {
   showUserCommentsDialog(user.id)
 }
 
+// ban user
 const banUser = async (user: UserWithAdminInfo) => {
   showBanDialog(user.id)
 }
 
+// unban user
 const unbanUser = async (user: UserWithAdminInfo) => {
   try {
     await ElMessageBox.confirm(
@@ -102,6 +112,7 @@ const unbanUser = async (user: UserWithAdminInfo) => {
   }
 }
 
+// unmark ban ip for user
 const unmarkBanIpForUser = async (user: UserWithAdminInfo) => {
   try {
     await ElMessageBox.confirm(
@@ -126,7 +137,7 @@ const unmarkBanIpForUser = async (user: UserWithAdminInfo) => {
   }
 }
 
-// Delete user
+// delete user
 const deleteUser = async (user: UserWithAdminInfo) => {
   try {
     await ElMessageBox.confirm(
@@ -152,7 +163,7 @@ const deleteUser = async (user: UserWithAdminInfo) => {
   }
 }
 
-// Unban IP
+// unban ip
 const unbanIP = async (ip: BannedIp) => {
   try {
     await ElMessageBox.confirm(`Are you sure to unban IP ${ip.ipAddress}?`, 'Unban Confirmation', {
@@ -174,7 +185,7 @@ const unbanIP = async (ip: BannedIp) => {
   }
 }
 
-// Load users data
+// load users data
 const loadUsers = async () => {
   loading.value = true
   try {
@@ -200,7 +211,7 @@ const loadUsers = async () => {
   }
 }
 
-// Load banned users data
+// load banned users data
 const loadBannedUsers = async () => {
   loading.value = true
   try {
@@ -225,7 +236,7 @@ const loadBannedUsers = async () => {
   }
 }
 
-// Load banned IPs data
+// load banned ips data
 const loadBannedIPs = async () => {
   loading.value = true
   try {
@@ -250,6 +261,7 @@ const loadBannedIPs = async () => {
   }
 }
 
+// load marked users data
 const loadMarkedUsers = async () => {
   loading.value = true
   try {
@@ -274,18 +286,18 @@ const loadMarkedUsers = async () => {
   }
 }
 
-// Search (implement when backend supports search)
+// search
 const handleSearch = () => {
   if (activeTab.value === 'users') {
-    loadUsers()
+    // TODO: implement when backend supports search
   } else if (activeTab.value === 'bannedUsers') {
-    loadBannedUsers()
+    // TODO: implement when backend supports search
   } else {
-    loadBannedIPs()
+    // TODO: implement when backend supports search
   }
 }
 
-// Page change
+// page change
 const handlePageChange = (page: number) => {
   if (activeTab.value === 'users') {
     pagination.users.currentPage = page
@@ -302,7 +314,7 @@ const handlePageChange = (page: number) => {
   }
 }
 
-// Tab change
+// tab change
 const handleTabChange = (tabName: TabPaneName) => {
   searchKeyword.value = ''
   if (tabName === 'users') {
@@ -316,12 +328,12 @@ const handleTabChange = (tabName: TabPaneName) => {
   }
 }
 
-// Format date for display
+// format date for display
 const formatDate = (dateString: string) => {
   return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
 }
 
-// Get user status display
+// get user status display
 const getUserStatus = (
   user: UserWithAdminInfo,
 ): {
@@ -337,6 +349,7 @@ const getUserStatus = (
   return { text: 'Active', type: 'success' }
 }
 
+// on mounted
 onMounted(() => {
   loadUsers()
 })

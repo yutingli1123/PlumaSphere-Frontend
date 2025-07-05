@@ -4,10 +4,12 @@ import type { CommentRequest } from '@/types'
 import { useAuthStore } from '@/stores/auth.ts'
 import { commentApi } from '@/api/comment.ts'
 
+// props
 const { postId } = defineProps<{
   postId: string
 }>()
 
+// refs
 const commentContent = ref('')
 const userStore = useUserStore()
 const authStore = useAuthStore()
@@ -15,12 +17,14 @@ const userInfo = computed(() => userStore.user)
 const loadingIdentity: Ref<boolean> = ref(false)
 const postingComment: Ref<boolean> = ref(false)
 
+// get new identity function
 const getNewIdentity = async () => {
   loadingIdentity.value = true
   await authStore.getNewIdentity()
   loadingIdentity.value = false
 }
 
+// post comment function
 const postComment = async () => {
   if (commentContent.value.trim().length === 0) return
   postingComment.value = true
@@ -32,6 +36,7 @@ const postComment = async () => {
   postingComment.value = false
 }
 
+// on mounted
 onMounted(() => {
   userStore.getUserInfo()
 })

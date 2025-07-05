@@ -3,18 +3,20 @@ import type { Article } from '@/types'
 import { useRouter } from 'vue-router'
 import { postApi } from '@/api/post.ts'
 
+// props
 const { query, page } = defineProps<{
   query: string
   page: number
 }>()
 
+// refs
 const router = useRouter()
-
 const loaded: Ref<boolean> = ref(false)
 const posts: Ref<Article[]> = ref([])
 const postsCount: Ref<number> = ref(0)
 const postsPageCount: Ref<number> = ref(0)
 
+// goto page
 const gotoPage = (newPage: number) => {
   router.push({
     name: 'search',
@@ -22,11 +24,13 @@ const gotoPage = (newPage: number) => {
   })
 }
 
+// fetch posts
 const fetchPosts = async (pageNum: number) => {
   if (!query) return
   posts.value = await postApi.getAllPostsBySearchQuery(query, pageNum - 1)
 }
 
+// search
 const search = async () => {
   if (!query) await router.push({ path: '/' })
   postsCount.value = await postApi.getPostCountBySearchQuery(query)
@@ -34,6 +38,7 @@ const search = async () => {
   await fetchPosts(page)
 }
 
+// watch query
 watch(
   () => query,
   async () => {
@@ -41,6 +46,7 @@ watch(
   },
 )
 
+// watch page
 watch(
   () => page,
   async () => {
@@ -48,6 +54,7 @@ watch(
   },
 )
 
+// on mounted
 onMounted(async () => {
   await search()
   loaded.value = true

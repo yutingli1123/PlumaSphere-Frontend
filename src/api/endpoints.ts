@@ -1,3 +1,6 @@
+/**
+ * The API endpoints.
+ */
 export enum ApiEndpoint {
   BASE_API = '/api/v1',
   BASE_WEB_SOCKET = '/ws',
@@ -80,6 +83,12 @@ export enum ApiEndpoint {
   UNBAN_IP = `${ADMIN_BASE}/unban-ip`,
 }
 
+/**
+ * Get the path for the API endpoint.
+ * @param path - The API endpoint.
+ * @param params - The parameters to replace in the path.
+ * @returns The path.
+ */
 export const getPath = (path: ApiEndpoint, params?: Record<string, string | number>): string => {
   let pathString: string = path.toString()
 

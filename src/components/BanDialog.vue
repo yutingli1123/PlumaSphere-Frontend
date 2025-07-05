@@ -4,21 +4,26 @@ import { adminApi } from '@/api/admin.ts'
 import { DateTime } from 'luxon'
 import type { BanRequest } from '@/types'
 
+// props
 const { userId, closeDialog } = defineProps<{
   userId: number | undefined
   closeDialog: () => void
 }>()
 
+// refs
 const expiration = ref<Date | undefined>()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 
+// form data
 const formData = ref({ reason: '' })
 
+// rules for the form
 const rules: FormRules = {
   reason: [{ required: true, message: 'Please enter the reason', trigger: 'blur' }],
 }
 
+// ban user function
 const banUser = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
@@ -42,6 +47,7 @@ const banUser = async () => {
   })
 }
 
+// ban ip function
 const banIp = async () => {
   formRef.value?.validate(async (valid: boolean) => {
     if (valid) {
