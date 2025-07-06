@@ -29,6 +29,7 @@ const handleTagClick = (tagName: string) => {
       <el-menu-item
         v-for="(tag, index) in tags"
         :key="index"
+        :index="tag.name"
         :class="{ 'active-tag': tag.name === activeTag }"
         class="tag-item"
         @click="handleTagClick(tag.name)"
