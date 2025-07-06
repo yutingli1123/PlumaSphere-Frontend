@@ -219,7 +219,7 @@ export const adminApi = {
    * @returns The count and total pages of the users.
    */
   async searchMarkedUsersCount(
-    keyword: strin,
+    keyword: string,
   ): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
       `${getPath(ApiEndpoint.SEARCH_MARKED_USERS_PAGE_COUNT)}?keyword=${keyword}`,
