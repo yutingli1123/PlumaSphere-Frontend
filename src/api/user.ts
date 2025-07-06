@@ -100,25 +100,28 @@ export const userApi = {
    * @param page - The page number to get.
    * @returns The users.
    */
-  async searchUsers(keyword: string, page: number): Promise<User[]> {
-    return await axiosInstance.get(`${getPath(ApiEndpoint.USER_SEARCH)}?keyword=${keyword}&page=${page}`, {
-      requiresAuth: true,
-    })
+  async searchUsers(keyword: string, page: number): Promise<UserWithAdminInfo[]> {
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.USER_SEARCH)}?keyword=${keyword}&page=${page}`,
+      {
+        requiresAuth: true,
+      },
+    )
   },
   /**
    * Search users count.
    * @param keyword - The keyword to search.
    * @returns The count and total pages of the users.
    */
-  async searchUsersCount(keyword: string): Promise<{totalCount: number; totalPages: number}> {
+  async searchUsersCount(keyword: string): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
-      getPath(ApiEndpoint.USER_SEARCH_PAGE_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.USER_SEARCH_PAGE_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
     )
     const totalCount: number = await axiosInstance.get(
-      getPath(ApiEndpoint.USER_SEARCH_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.USER_SEARCH_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },

@@ -167,24 +167,29 @@ export const adminApi = {
    * @returns The users.
    */
   async searchBannedUsers(keyword: string, page: number): Promise<UserWithAdminInfo[]> {
-    return await axiosInstance.get(`${getPath(ApiEndpoint.SEARCH_BANNED_USERS)}?keyword=${keyword}&page=${page}`, {
-      requiresAuth: true,
-    })
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.SEARCH_BANNED_USERS)}?keyword=${keyword}&page=${page}`,
+      {
+        requiresAuth: true,
+      },
+    )
   },
   /**
    * Search banned users count.
    * @param keyword - The keyword to search.
    * @returns The count and total pages of the users.
    */
-  async searchBannedUsersCount(keyword: string): Promise<{totalCount: number; totalPages: number}> {
+  async searchBannedUsersCount(
+    keyword: strig,
+  ): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_BANNED_USERS_PAGE_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_BANNED_USERS_PAGE_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
     )
     const totalCount: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_BANNED_USERS_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_BANNED_USERS_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
@@ -201,24 +206,29 @@ export const adminApi = {
    * @returns The users.
    */
   async searchMarkedUsers(keyword: string, page: number): Promise<UserWithAdminInfo[]> {
-    return await axiosInstance.get(`${getPath(ApiEndpoint.SEARCH_MARKED_USERS)}?keyword=${keyword}&page=${page}`, {
-      requiresAuth: true,
-    })
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.SEARCH_MARKED_USERS)}?keyword=${keyword}&page=${page}`,
+      {
+        requiresAuth: true,
+      },
+    )
   },
   /**
    * Search marked users count.
    * @param keyword - The keyword to search.
    * @returns The count and total pages of the users.
    */
-  async searchMarkedUsersCount(keyword: string): Promise<{totalCount: number; totalPages: number}> {
+  async searchMarkedUsersCount(
+    keyword: strig,
+  ): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_MARKED_USERS_PAGE_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_MARKED_USERS_PAGE_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
     )
     const totalCount: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_MARKED_USERS_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_MARKED_USERS_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
@@ -235,24 +245,27 @@ export const adminApi = {
    * @returns The IPs.
    */
   async searchBannedIps(keyword: string, page: number): Promise<BannedIp[]> {
-    return await axiosInstance.get(`${getPath(ApiEndpoint.SEARCH_BANNED_IPS)}?keyword=${keyword}&page=${page}`, {
-      requiresAuth: true,
-    })
+    return await axiosInstance.get(
+      `${getPath(ApiEndpoint.SEARCH_BANNED_IPS)}?keyword=${keyword}&page=${page}`,
+      {
+        requiresAuth: true,
+      },
+    )
   },
   /**
    * Search banned IPs count.
    * @param keyword - The keyword to search.
    * @returns The count and total pages of the IPs.
    */
-  async searchBannedIpsCount(keyword: string): Promise<{totalCount: number; totalPages: number}> {
+  async searchBannedIpsCount(keyword: string): Promise<{ totalCount: number; totalPages: number }> {
     const totalPages: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_BANNED_IPS_PAGE_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_BANNED_IPS_PAGE_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
     )
     const totalCount: number = await axiosInstance.get(
-      getPath(ApiEndpoint.SEARCH_BANNED_IPS_COUNT, { keyword }),
+      `${getPath(ApiEndpoint.SEARCH_BANNED_IPS_COUNT)}?keyword=${keyword}`,
       {
         requiresAuth: true,
       },
