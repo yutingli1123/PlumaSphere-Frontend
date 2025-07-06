@@ -39,6 +39,9 @@ export enum ApiEndpoint {
   USER_UPLOAD_AVATAR = `${USER_BASE}/avatar`,
   USER_UPDATE = `${USER_BASE}`,
   USER_DELETE = `${USER_BASE}/:userId`,
+  USER_SEARCH = `${USER_BASE}/search`,
+  USER_SEARCH_COUNT = `${USER_SEARCH}/count`,
+  USER_SEARCH_PAGE_COUNT = `${USER_SEARCH}/count-page`,
 
   COMMENT_BASE = '/comment',
   COMMENT_GET_ALL_BY_POST_ID = `${POST_BASE}/:postId/comment`,
@@ -81,6 +84,15 @@ export enum ApiEndpoint {
   GET_MARKED_USERS_COUNT = `${ADMIN_BASE}/marked-users/count`,
   BAN_IP = `${ADMIN_BASE}/ban-ip`,
   UNBAN_IP = `${ADMIN_BASE}/unban-ip`,
+  SEARCH_BANNED_USERS = `${GET_BANNED_USERS}/search`,
+  SEARCH_BANNED_USERS_COUNT = `${SEARCH_BANNED_USERS}/count`,
+  SEARCH_BANNED_USERS_PAGE_COUNT = `${SEARCH_BANNED_USERS}/count-page`,
+  SEARCH_MARKED_USERS = `${GET_MARKED_USERS}/search`,
+  SEARCH_MARKED_USERS_COUNT = `${SEARCH_MARKED_USERS}/count`,
+  SEARCH_MARKED_USERS_PAGE_COUNT = `${SEARCH_MARKED_USERS}/count-page`,
+  SEARCH_BANNED_IPS = `${GET_BANNED_IPS}/search`,
+  SEARCH_BANNED_IPS_COUNT = `${SEARCH_BANNED_IPS}/count`,
+  SEARCH_BANNED_IPS_PAGE_COUNT = `${SEARCH_BANNED_IPS}/count-page`,
 }
 
 /**
