@@ -21,6 +21,7 @@ const userIdForComments = ref<number | undefined>()
 const loading = ref(false)
 const searchKeyword = ref('')
 const banIpDialogVisible = ref(false)
+const isSearching = ref(false)
 
 // show ban dialog
 const showBanDialog = (userId: number) => {
@@ -189,19 +190,32 @@ const unbanIP = async (ip: BannedIp) => {
 const loadUsers = async () => {
   loading.value = true
   try {
-    // Get total count first
-    const countInfo = await userApi.getAllUsersCount()
-    if (countInfo) {
-      pagination.users.total = countInfo.totalCount
-      pagination.users.pageCount = countInfo.totalPages
-    }
-
-    // Get current page data (API expects 0-based page)
     const apiPage = pagination.users.currentPage - 1
-    const response = await userApi.getAllUsers(apiPage)
-    if (response) {
-      // Filter out banned users for the users tab
-      users.value = response
+
+    if (isSearching.value && searchKeyword.value.trim()) {
+      // Search mode
+      const countInfo = await userApi.searchUsersCount(searchKeyword.value.trim())
+      if (countInfo) {
+        pagination.users.total = countInfo.totalCount
+        pagination.users.pageCount = countInfo.totalPages
+      }
+
+      const response = await userApi.searchUsers(searchKeyword.value.trim(), apiPage)
+      if (response) {
+        users.value = response
+      }
+    } else {
+      // Normal mode
+      const countInfo = await userApi.getAllUsersCount()
+      if (countInfo) {
+        pagination.users.total = countInfo.totalCount
+        pagination.users.pageCount = countInfo.totalPages
+      }
+
+      const response = await userApi.getAllUsers(apiPage)
+      if (response) {
+        users.value = response
+      }
     }
   } catch (error) {
     ElMessage.error('Failed to load users data')
@@ -215,18 +229,32 @@ const loadUsers = async () => {
 const loadBannedUsers = async () => {
   loading.value = true
   try {
-    // Get total count first
-    const countInfo = await adminApi.getBannedUsersCount()
-    if (countInfo) {
-      pagination.bannedUsers.total = countInfo.totalCount
-      pagination.bannedUsers.pageCount = countInfo.totalPages
-    }
-
-    // Get current page data (API expects 0-based page)
     const apiPage = pagination.bannedUsers.currentPage - 1
-    const response = await adminApi.getBannedUsers(apiPage)
-    if (response) {
-      bannedUsers.value = response
+
+    if (isSearching.value && searchKeyword.value.trim()) {
+      // Search mode
+      const countInfo = await adminApi.searchBannedUsersCount(searchKeyword.value.trim())
+      if (countInfo) {
+        pagination.bannedUsers.total = countInfo.totalCount
+        pagination.bannedUsers.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.searchBannedUsers(searchKeyword.value.trim(), apiPage)
+      if (response) {
+        bannedUsers.value = response
+      }
+    } else {
+      // Normal mode
+      const countInfo = await adminApi.getBannedUsersCount()
+      if (countInfo) {
+        pagination.bannedUsers.total = countInfo.totalCount
+        pagination.bannedUsers.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.getBannedUsers(apiPage)
+      if (response) {
+        bannedUsers.value = response
+      }
     }
   } catch (error) {
     ElMessage.error('Failed to load banned users data')
@@ -240,18 +268,32 @@ const loadBannedUsers = async () => {
 const loadBannedIPs = async () => {
   loading.value = true
   try {
-    // Get total count first
-    const countInfo = await adminApi.getBannedIpsCount()
-    if (countInfo) {
-      pagination.bannedIPs.total = countInfo.totalCount
-      pagination.bannedIPs.pageCount = countInfo.totalPages
-    }
-
-    // Get current page data (API expects 0-based page)
     const apiPage = pagination.bannedIPs.currentPage - 1
-    const response = await adminApi.getBannedIps(apiPage)
-    if (response) {
-      bannedIPs.value = response
+
+    if (isSearching.value && searchKeyword.value.trim()) {
+      // Search mode
+      const countInfo = await adminApi.searchBannedIpsCount(searchKeyword.value.trim())
+      if (countInfo) {
+        pagination.bannedIPs.total = countInfo.totalCount
+        pagination.bannedIPs.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.searchBannedIps(searchKeyword.value.trim(), apiPage)
+      if (response) {
+        bannedIPs.value = response
+      }
+    } else {
+      // Normal mode
+      const countInfo = await adminApi.getBannedIpsCount()
+      if (countInfo) {
+        pagination.bannedIPs.total = countInfo.totalCount
+        pagination.bannedIPs.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.getBannedIps(apiPage)
+      if (response) {
+        bannedIPs.value = response
+      }
     }
   } catch (error) {
     ElMessage.error('Failed to load banned IPs data')
@@ -265,18 +307,32 @@ const loadBannedIPs = async () => {
 const loadMarkedUsers = async () => {
   loading.value = true
   try {
-    // Get total count first
-    const countInfo = await adminApi.getMarkedUsersCount()
-    if (countInfo) {
-      pagination.markedUsers.total = countInfo.totalCount
-      pagination.markedUsers.pageCount = countInfo.totalPages
-    }
-
-    // Get current page data (API expects 0-based page)
     const apiPage = pagination.markedUsers.currentPage - 1
-    const response = await adminApi.getMarkedUsers(apiPage)
-    if (response) {
-      markedUsers.value = response
+
+    if (isSearching.value && searchKeyword.value.trim()) {
+      // Search mode
+      const countInfo = await adminApi.searchMarkedUsersCount(searchKeyword.value.trim())
+      if (countInfo) {
+        pagination.markedUsers.total = countInfo.totalCount
+        pagination.markedUsers.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.searchMarkedUsers(searchKeyword.value.trim(), apiPage)
+      if (response) {
+        markedUsers.value = response
+      }
+    } else {
+      // Normal mode
+      const countInfo = await adminApi.getMarkedUsersCount()
+      if (countInfo) {
+        pagination.markedUsers.total = countInfo.totalCount
+        pagination.markedUsers.pageCount = countInfo.totalPages
+      }
+
+      const response = await adminApi.getMarkedUsers(apiPage)
+      if (response) {
+        markedUsers.value = response
+      }
     }
   } catch (error) {
     ElMessage.error('Failed to load marked users data')
@@ -286,14 +342,50 @@ const loadMarkedUsers = async () => {
   }
 }
 
-// search
-const handleSearch = () => {
+// reset to normal mode and load data
+const resetToNormalMode = async () => {
+  isSearching.value = false
   if (activeTab.value === 'users') {
-    // TODO: implement when backend supports search
+    await loadUsers()
   } else if (activeTab.value === 'bannedUsers') {
-    // TODO: implement when backend supports search
+    await loadBannedUsers()
+  } else if (activeTab.value === 'markedUsers') {
+    await loadMarkedUsers()
   } else {
-    // TODO: implement when backend supports search
+    await loadBannedIPs()
+  }
+}
+
+// search input handler
+const handleSearchInput = async () => {
+  if (!searchKeyword.value.trim()) {
+    // If search keyword is empty, reset to normal loading
+    await resetToNormalMode()
+  }
+}
+
+// search
+const handleSearch = async () => {
+  if (!searchKeyword.value.trim()) {
+    // If search keyword is empty, reset to normal loading
+    await resetToNormalMode()
+    return
+  }
+
+  isSearching.value = true
+  // Reset to first page when searching
+  if (activeTab.value === 'users') {
+    pagination.users.currentPage = 1
+    await loadUsers()
+  } else if (activeTab.value === 'bannedUsers') {
+    pagination.bannedUsers.currentPage = 1
+    await loadBannedUsers()
+  } else if (activeTab.value === 'markedUsers') {
+    pagination.markedUsers.currentPage = 1
+    await loadMarkedUsers()
+  } else {
+    pagination.bannedIPs.currentPage = 1
+    await loadBannedIPs()
   }
 }
 
@@ -317,6 +409,7 @@ const handlePageChange = (page: number) => {
 // tab change
 const handleTabChange = (tabName: TabPaneName) => {
   searchKeyword.value = ''
+  isSearching.value = false
   if (tabName === 'users') {
     loadUsers()
   } else if (tabName === 'bannedUsers') {
@@ -389,6 +482,7 @@ onMounted(() => {
           clearable
           placeholder="Search username, email or IP"
           style="width: 300px"
+          @input="handleSearchInput"
           @keyup.enter="handleSearch"
         >
           <template #append>
