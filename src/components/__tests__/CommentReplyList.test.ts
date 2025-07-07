@@ -9,6 +9,21 @@ import { useUserStore } from '@/stores/user'
 import ElementPlus from 'element-plus'
 import { computed } from 'vue'
 
+// Mock Element Plus notification
+vi.mock('element-plus', async () => {
+  const actual = await vi.importActual('element-plus')
+  return {
+    ...actual,
+    ElNotification: {
+      error: vi.fn(),
+      success: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn(),
+      closeAll: vi.fn(),
+    },
+  }
+})
+
 // Mock the APIs and stores
 vi.mock('@/api/comment', () => ({
   commentApi: {
