@@ -74,7 +74,7 @@ blogging experience with user management, commenting system, and administrative 
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - pnpm (recommended) or npm
 
 ### Clone the Repository
