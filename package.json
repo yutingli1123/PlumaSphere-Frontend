@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",
-    "@iconify/json": "^2.2.367",
+    "@iconify/json": "^2.2.375",
     "@tsconfig/node22": "^22.0.2",
     "@types/luxon": "^3.7.1",
     "@types/jsdom": "^21.1.7",
